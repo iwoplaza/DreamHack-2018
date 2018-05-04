@@ -1,0 +1,6 @@
+*.sln
+*.log
+*.csproj
+DreamHack 2018 - UnityProject/.vs/
+DreamHack 2018 - UnityProject/Library/
+DreamHack 2018 - UnityProject/Temp/
