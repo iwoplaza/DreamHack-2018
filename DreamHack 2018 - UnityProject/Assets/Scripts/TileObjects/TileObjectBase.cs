@@ -7,7 +7,7 @@ namespace Game.TileObjects
     public abstract class TileObjectBase
     {
         public bool Installed { get; private set; }
-        public TileData InstalledAt { get; private set; }
+        public Tile InstalledAt { get; private set; }
 
         public abstract string DisplayName { get; }
 
@@ -17,7 +17,7 @@ namespace Game.TileObjects
             InstalledAt = null;
         }
 
-        public void OnInstalledAt(TileData targetTile)
+        public void OnInstalledAt(Tile targetTile)
         {
             if(!Installed)
             {

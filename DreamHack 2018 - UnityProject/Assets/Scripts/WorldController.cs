@@ -12,15 +12,19 @@ namespace Game
         protected GameObject m_tilePrefab;
 
         public GameObject TilePrefab { get { return m_tilePrefab; } }
-        public TileMap MainTileMap { get; set; }
+        public GameState MainState { get; private set; }
+
+        void Awake()
+        {
+            Instance = this;
+        }
 
         // Use this for initialization
         void Start()
         {
-            Instance = this;
-
-            MainTileMap = new TileMap(10, 10);
-            MainTileMap.CreateGameObject();
+            MainState = new GameState();
+            MainState.TileMap.CreateGameObject();
+            SaveController.Instance.Save(MainState);
         }
 
         // Update is called once per frame

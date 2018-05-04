@@ -7,27 +7,62 @@ namespace Game
 {
     public class TileMap
     {
-        protected TileData[,] m_tiles;
-        protected int m_width;
-        protected int m_height;
+        protected Tile[,] m_tiles;
+
         protected GameObject m_mapObject;
 
-        public int Width { get { return m_width; } }
-        public int Height { get { return m_height; } }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
         public TileMap(int width, int height)
         {
-            m_width = width;
-            m_height = height;
-            m_tiles = new TileData[m_width, m_height];
+            Width = width;
+            Height = height;
+            m_tiles = new Tile[Width, Height];
 
-            for (int x = 0; x < m_width; ++x)
+            for (int x = 0; x < Width; ++x)
             {
-                for (int y = 0; y < m_height; ++y)
+                for (int y = 0; y < Height; ++y)
                 {
-                    m_tiles[x, y] = new TileData(x, y);
+                    m_tiles[x, y] = new Tile(x, y);
                 }
             }
+        }
+
+        public TileMap(Data.TileMapData data)
+        {
+            Width = data.width;
+            Height = data.height;
+            m_tiles = new Tile[Width, Height];
+
+            foreach(Tile tile in data.tiles)
+            {
+                m_tiles[tile.Position.X, tile.Position.Y] = tile;
+            }
+        }
+
+        /// <summary>
+        /// Returns the state of this TileMap in pure data form, ready to be serialized.
+        /// </summary>
+        /// <returns></returns>
+        public Data.TileMapData GetAsData()
+        {
+            var data = new Data.TileMapData();
+            data.width = Width;
+            data.height = Height;
+
+            for (int x = 0; x < Width; ++x)
+            {
+                for (int y = 0; y < Height; ++y)
+                {
+                    if(m_tiles[x, y] != null)
+                    {
+                        data.tiles.Add(m_tiles[x, y]);
+                    }
+                }
+            }
+
+            return data;
         }
 
         public GameObject CreateGameObject()
@@ -40,9 +75,9 @@ namespace Game
             m_mapObject = new GameObject("TileMap");
             m_mapObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 
-            for(int x = 0; x < m_width; ++x)
+            for(int x = 0; x < Width; ++x)
             {
-                for (int y = 0; y < m_height; ++y)
+                for (int y = 0; y < Height; ++y)
                 {
                     if (m_tiles[x, y] != null)
                     {
@@ -57,7 +92,7 @@ namespace Game
             return m_mapObject;
         }
 
-        public TileData TileAt(TilePosition position)
+        public Tile TileAt(TilePosition position)
         {
             if (position.X < 0 || position.X >= Width ||
                 position.Y < 0 || position.Y >= Height)
@@ -68,7 +103,7 @@ namespace Game
 
         public bool InstallAt(TileObjectBase objectToInstall, TilePosition targetPosition)
         {
-            TileData targetTile = TileAt(targetPosition);
+            Tile targetTile = TileAt(targetPosition);
             if (targetTile == null)
                 return false;
 

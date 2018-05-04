@@ -5,18 +5,18 @@ using Game.TileObjects;
 
 namespace Game
 {
-    public class TileData
+    public class Tile
     {
         public TilePosition Position { get; private set; }
         public TileObjectBase InstalledObject { get; private set; }
 
-        public TileData(TilePosition position)
+        public Tile(TilePosition position)
         {
             Position = position;
             InstalledObject = null;
         }
 
-        public TileData(int x, int y) : this(new TilePosition(x, y)) {}
+        public Tile(int x, int y) : this(new TilePosition(x, y)) {}
 
         /// <summary>
         /// Installs the specified object on this tile.
