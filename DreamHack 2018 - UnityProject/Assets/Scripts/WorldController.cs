@@ -18,12 +18,13 @@ namespace Game
         {
             Instance = this;
             Resources.LoadAll();
+            MainState = new GameState();
         }
 
         // Use this for initialization
         void Start()
         {
-            MainState = new GameState();
+            MainState.Start();
             SaveController.Instance.Load(MainState);
             MainState.TileMap.CreateGameObject();
         }

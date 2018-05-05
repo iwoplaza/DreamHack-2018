@@ -17,7 +17,10 @@ namespace Game
             TileMap = new TileMap(10, 10);
             Workers = new List<Worker>();
             Focus = new Focus();
+        }
 
+        public void Start()
+        {
             Worker worker1 = SpawnWorker();
             Focus.On(worker1);
         }
