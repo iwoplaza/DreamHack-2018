@@ -83,5 +83,20 @@ namespace Game
                 InstalledObject.Populate(installedObjectElement);
             }
         }
+
+        /// <summary>
+        /// Returns if the passer can go through this tile.
+        /// More in <see cref="TileObjectBase"/>
+        /// </summary>
+        /// <param name="passer"></param>
+        /// <param name="entryDirection"></param>
+        /// <returns></returns>
+        public bool IsPassableFor(Living passer, Direction entryDirection)
+        {
+            if (InstalledObject == null)
+                return true;
+            else
+                return InstalledObject.IsPassableFor(passer, entryDirection);
+        }
     }
 }

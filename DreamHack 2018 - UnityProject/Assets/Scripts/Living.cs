@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Game
 {
-    public abstract class Living : MonoBehaviour
+    public abstract class Living : FocusTarget
     {
-        private int m_health;
+        [SerializeField] private int m_health;
 
         public virtual int Health {
             get { return m_health; }
@@ -22,19 +22,20 @@ namespace Game
         public bool Alive { get; protected set; }
         public abstract int MaxHealth { get; }
 
-        public virtual void Awake()
+        protected override void Awake()
         {
             Alive = true;
+            m_health = MaxHealth;
         }
 
         // Use this for initialization
-        public virtual void Start()
+        protected virtual void Start()
         {
 
         }
 
         // Update is called once per frame
-        public virtual void Update()
+        protected virtual void Update()
         {
 
         }
@@ -42,7 +43,7 @@ namespace Game
         /// <summary>
         /// This is called whenever Health reaches 0
         /// </summary>
-        public virtual void OnDeath()
+        protected virtual void OnDeath()
         {
             Alive = false;
         }

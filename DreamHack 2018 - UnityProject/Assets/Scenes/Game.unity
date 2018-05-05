@@ -514,8 +514,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 196, y: -43}
-  m_SizeDelta: {x: 353.9, y: 63.8}
+  m_AnchoredPosition: {x: 247.39, y: -72.98}
+  m_SizeDelta: {x: 456.68, y: 123.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &887175589
 MonoBehaviour:
@@ -549,11 +549,16 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Use Right-Click to move around the map.
+  m_Text: 'Use Middle-Click to move around the map.
 
-    Use Middle-Click to rotate around.
+    Use Q and E to rotate around.
 
-    Use The Scroll Wheel to zoom in and out.'
+    Use The Scroll Wheel to zoom in and out.
+
+
+    Left-Click on a Worker to select him.
+
+    You can the right click on the map to instruct him to go there.'
 --- !u!222 &887175590
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -701,7 +706,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1467807817}
   - component: {fileID: 1467807820}
-  - component: {fileID: 1467807819}
   - component: {fileID: 1467807818}
   m_Layer: 0
   m_Name: Cube
@@ -758,18 +762,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &1467807819
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1467807816}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1467807820
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -806,6 +798,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_moveSpeedFactor: 0.5
   m_rotationSpeedFactor: 4.12
+  m_cameraTurnIncrement: 22.5
+  m_focusFollowSpeed: 0.361
   m_distance: 12
   m_minDistance: 5
   m_maxDistance: 70
@@ -817,7 +811,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1476166490}
-  m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

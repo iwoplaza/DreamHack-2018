@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 namespace Game
 {
@@ -12,6 +13,8 @@ namespace Game
 
         [SerializeField] protected float m_moveSpeedFactor = 1.0F;
         [SerializeField] protected float m_rotationSpeedFactor = 1.0F;
+        [SerializeField] protected float m_cameraTurnIncrement = 45.0F;
+        [SerializeField] protected float m_focusFollowSpeed = 0.7F;
         [Header("Distance")]
         [SerializeField] protected float m_distance = 7.8F;
         [SerializeField] protected float m_minDistance = 5.0F;
@@ -20,8 +23,12 @@ namespace Game
         [SerializeField] protected float m_scrollAccellerationFactor = 0.5F;
 
         protected float m_lastDistance = 0.0F;
+        protected Plane m_groundPlane = new Plane(Vector3.up, Vector3.zero);
+        protected FocusTarget m_focusTarget = null;
 
-        Plane m_groundPlane = new Plane(Vector3.up, Vector3.zero);
+        protected float m_yOrientation = 0.0F;
+        protected float m_nextYOrientation = 0.0F;
+        protected float m_yRotationProgress = 1.0F;
 
         void Awake()
         {
@@ -35,16 +42,34 @@ namespace Game
 
         void Start()
         {
+            WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_GAIN, OnFocusGained);
+            WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_LOSS, OnFocusLost);
+
             UpdateCameraPosition();
         }
 
         void Update()
         {
-            float horizontal = Input.GetAxis("Mouse X");
-            float vertical = Input.GetAxis("Mouse Y");
-            float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
+            float horizontal = CrossPlatformInputManager.GetAxis("Mouse X");
+            float vertical = CrossPlatformInputManager.GetAxis("Mouse Y");
+            float scrollWheel = CrossPlatformInputManager.GetAxis("Mouse ScrollWheel");
 
             if(Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hitInfo;
+
+                if(Physics.Raycast(ray, out hitInfo))
+                {
+                    if(hitInfo.collider != null)
+                    {
+                        FocusTarget focusTarget = hitInfo.collider.GetComponent<FocusTarget>();
+                        WorldController.Instance.MainState.Focus.On(focusTarget);
+                    }
+                }
+            }
+
+            if(Input.GetMouseButtonDown(1))
             {
                 //Create a ray from the Mouse click position
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -58,20 +83,29 @@ namespace Game
                     Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePosition);
                     if(targetTile != null)
                     {
-                        if(!targetTile.HasObject)
+                        if (!targetTile.HasObject)
+                        {
+                            Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
+                            if(selectedWorker != null)
+                            {
+                                selectedWorker.MoveTo(tilePosition);
+                            }
+                        }
+
+                        /*if(!targetTile.HasObject)
                         {
                             targetTile.Install(new WallTileObject());
                         }
                         else
                         {
                             targetTile.UninstallObject();
-                        }
+                        }*/
                     }
 
                 }
             }
 
-            if (Input.GetMouseButton(1))
+            if (Input.GetMouseButton(2))
             {
                 Vector3 forward = transform.forward;
                 forward.y = 0;
@@ -84,11 +118,18 @@ namespace Game
                 position += -right * horizontal * m_moveSpeedFactor;
                 position += -forward * vertical * m_moveSpeedFactor;
                 transform.position = position;
+
+                m_focusTarget = null;
             }
 
-            if(Input.GetMouseButton(2))
+            if(CrossPlatformInputManager.GetButtonDown("Turn Camera Left"))
             {
-                transform.Rotate(new Vector3(0, 1, 0), horizontal * m_rotationSpeedFactor, Space.World);
+                RotateBy(m_cameraTurnIncrement);
+            }
+
+            if (CrossPlatformInputManager.GetButtonDown("Turn Camera Right"))
+            {
+                RotateBy(-m_cameraTurnIncrement);
             }
 
             if (scrollWheel != 0 || m_lastDistance != m_distance)
@@ -97,12 +138,51 @@ namespace Game
                 UpdateCameraPosition();
                 m_lastDistance = m_distance;
             }
+
+            if(m_yRotationProgress < 1.0F)
+            {
+                m_yRotationProgress += Time.deltaTime * m_rotationSpeedFactor;
+                if (m_yRotationProgress > 1.0F)
+                    m_yRotationProgress = 1.0F;
+            }
+
+            transform.rotation = Quaternion.Euler(0, CalculateCurrentYOrientation(), 0);
+
+            if (m_focusTarget != null)
+            {
+                Vector3 difference = m_focusTarget.transform.position - transform.position;
+                float t = Mathf.Min(Mathf.Pow(m_focusFollowSpeed, Time.deltaTime * 100), 1);
+                transform.position += difference * (t);
+            }
         }
 
         void UpdateCameraPosition()
         {
             Vector3 direction = new Vector3(0, 1, -1).normalized;
             m_camera.transform.localPosition = direction * m_distance;
+        }
+
+        void RotateBy(float amount)
+        {
+            m_yOrientation = CalculateCurrentYOrientation();
+            m_nextYOrientation += amount;
+            m_yRotationProgress = 0.0F;
+        }
+
+        float CalculateCurrentYOrientation()
+        {
+            float t = 1 - Mathf.Pow(1 - m_yRotationProgress, 3);
+            return Mathf.LerpAngle(m_yOrientation, m_nextYOrientation, t);
+        }
+
+        void OnFocusGained(FocusTarget target)
+        {
+            m_focusTarget = target;
+        }
+
+        void OnFocusLost(FocusTarget target)
+        {
+            m_focusTarget = null;
         }
     }
 }

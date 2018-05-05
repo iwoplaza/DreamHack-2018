@@ -6,9 +6,10 @@ namespace Game.TileObjects
 {
     public class WallTileObject : TileObjectBase
     {
-        public override string DisplayName
+        public override string DisplayName { get { return "Wall"; } }
+        public override bool IsPassableFor(Living passer, Direction entryDirection)
         {
-            get { return "Wall"; }
+            return false;
         }
 
         public WallTileObject()

@@ -40,7 +40,6 @@ namespace Game
                 XElement gameStateElement = document.Element("GameState");
 
                 Debug.Log("Loading game state...");
-                Debug.Log(document.ToString());
 
                 try
                 {

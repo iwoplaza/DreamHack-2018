@@ -14,6 +14,20 @@ namespace Game.TileObjects
         public GameObject InstalledGameObject { get; set; }
 
         public abstract string DisplayName { get; }
+        /// <summary>
+        /// Determines if something/someone can pass through this TileObject.
+        /// Used for Path Finding.
+        /// </summary>
+        /// <param name="passer">The passer that's trying to pass through this object.</param>
+        /// <param name="entryDirection">The direction it's coming from.
+        ///                              (relative to the object, not the passer)</param>
+        /// <returns>Whether or not the passer can pass.</returns>
+        public abstract bool IsPassableFor(Living passer, Direction entryDirection);
+
+        /// <summary>
+        /// Used for determining how passable compared to others this object is.
+        /// </summary>
+        public virtual float PassWeight { get { return 1; } }
 
         public TileObjectBase()
         {
@@ -55,8 +69,6 @@ namespace Game.TileObjects
                 TileObjectBase tileObject = classType.Assembly.CreateInstance(classType.FullName) as TileObjectBase;
                 tileObject.Parse(element, optionalTile);
 
-                Debug.Log("Found an installed object." + tileObject);
-
                 return tileObject;
             }
 
@@ -65,7 +77,6 @@ namespace Game.TileObjects
 
         public virtual void Parse(XElement element, Tile optionalTile = null)
         {
-            Debug.Log("Parsing installed object.");
             if (optionalTile != null)
             {
                 InstalledAt = optionalTile;
