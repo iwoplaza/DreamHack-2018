@@ -17,19 +17,26 @@ namespace Game
         void Awake()
         {
             Instance = this;
+            Resources.LoadAll();
         }
 
         // Use this for initialization
         void Start()
         {
             MainState = new GameState();
+            SaveController.Instance.Load(MainState);
             MainState.TileMap.CreateGameObject();
-            SaveController.Instance.Save(MainState);
         }
 
         // Update is called once per frame
         void Update()
         {
+        }
+
+        void OnApplicationQuit()
+        {
+            Debug.Log("Shutting down...");
+            SaveController.Instance.Save(MainState);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Game.TileObjects;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ namespace Game
 
         protected float m_lastDistance = 0.0F;
 
+        Plane m_groundPlane = new Plane(Vector3.up, Vector3.zero);
+
         void Awake()
         {
             m_camera = GetComponentInChildren<Camera>();
@@ -40,6 +43,33 @@ namespace Game
             float horizontal = Input.GetAxis("Mouse X");
             float vertical = Input.GetAxis("Mouse Y");
             float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
+
+            if(Input.GetMouseButtonDown(0))
+            {
+                //Create a ray from the Mouse click position
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                //Initialise the enter variable
+                float enter = 0.0f;
+
+                if (m_groundPlane.Raycast(ray, out enter))
+                {
+                    Vector3 hitPoint = ray.GetPoint(enter);
+                    TilePosition tilePosition = TilePosition.FromWorldPosition(hitPoint);
+                    Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePosition);
+                    if(targetTile != null)
+                    {
+                        if(!targetTile.HasObject)
+                        {
+                            targetTile.Install(new WallTileObject());
+                        }
+                        else
+                        {
+                            targetTile.UninstallObject();
+                        }
+                    }
+
+                }
+            }
 
             if (Input.GetMouseButton(1))
             {

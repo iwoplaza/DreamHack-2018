@@ -1,27 +1,34 @@
-﻿using System.Collections;
+﻿using Game.TileObjects;
+using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace Game
 {
-    [System.Serializable]
     public class GameState
     {
         public TileMap TileMap { get; set; }
-
-        /// <summary>
-        /// Used only right before serialization.
-        /// </summary>
-        [SerializeField] protected Data.TileMapData m_tileMapData;
 
         public GameState()
         {
             TileMap = new TileMap(10, 10);
         }
 
-        public void PrepareForSerialization()
+        public void Parse(XElement element)
         {
-            m_tileMapData = TileMap.GetAsData();
+            if (element == null)
+                return;
+
+            XElement tileMapElement = element.Element("TileMap");
+            TileMap.Parse(tileMapElement);
+        }
+
+        public void Populate(XElement element)
+        {
+            XElement tileMapElement = new XElement("TileMap");
+            element.Add(tileMapElement);
+            TileMap.Populate(tileMapElement);
         }
     }
 }

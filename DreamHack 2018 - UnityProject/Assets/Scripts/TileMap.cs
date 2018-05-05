@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Game.TileObjects;
+using System.Xml.Linq;
+using System;
 
 namespace Game
 {
@@ -24,52 +26,57 @@ namespace Game
             {
                 for (int y = 0; y < Height; ++y)
                 {
-                    m_tiles[x, y] = new Tile(x, y);
+                    m_tiles[x, y] = new Tile(this, x, y);
                 }
             }
         }
 
-        public TileMap(Data.TileMapData data)
+        public void Parse(XElement element)
         {
-            Width = data.width;
-            Height = data.height;
-            m_tiles = new Tile[Width, Height];
+            if (element == null)
+                return;
 
-            foreach(Tile tile in data.tiles)
+            XAttribute widthAttrib = element.Attribute("width");
+            XAttribute heightAttrib = element.Attribute("height");
+
+            IEnumerable<XElement> tileElements = element.Elements("Tile");
+            foreach(XElement tileElement in tileElements)
             {
-                m_tiles[tile.Position.X, tile.Position.Y] = tile;
+                Tile tile = Tile.CreateAndParse(tileElement, this);
+                if (tile != null)
+                    m_tiles[tile.Position.X, tile.Position.Y] = tile;
             }
+
+            if(widthAttrib != null)
+                Width = Int32.Parse(widthAttrib.Value);
+            if (heightAttrib != null)
+                Height = Int32.Parse(heightAttrib.Value);
         }
 
-        /// <summary>
-        /// Returns the state of this TileMap in pure data form, ready to be serialized.
-        /// </summary>
-        /// <returns></returns>
-        public Data.TileMapData GetAsData()
+        public void Populate(XElement element)
         {
-            var data = new Data.TileMapData();
-            data.width = Width;
-            data.height = Height;
+            element.SetAttributeValue("width", Width);
+            element.SetAttributeValue("height", Height);
 
             for (int x = 0; x < Width; ++x)
             {
                 for (int y = 0; y < Height; ++y)
                 {
-                    if(m_tiles[x, y] != null)
+                    if (m_tiles[x, y] != null)
                     {
-                        data.tiles.Add(m_tiles[x, y]);
+                        XElement tileElement = new XElement("Tile");
+                        element.Add(tileElement);
+                        m_tiles[x, y].Populate(tileElement);
                     }
                 }
             }
-
-            return data;
         }
 
         public GameObject CreateGameObject()
         {
             if(m_mapObject != null)
             {
-                Object.Destroy(m_mapObject);
+                UnityEngine.Object.Destroy(m_mapObject);
             }
 
             m_mapObject = new GameObject("TileMap");
@@ -81,7 +88,7 @@ namespace Game
                 {
                     if (m_tiles[x, y] != null)
                     {
-                        GameObject tileObject = Object.Instantiate(WorldController.Instance.TilePrefab, m_mapObject.transform);
+                        GameObject tileObject = UnityEngine.Object.Instantiate(WorldController.Instance.TilePrefab, m_mapObject.transform);
                         tileObject.name = "Tile (" + x + "," + y + ")";
                         tileObject.transform.SetParent(m_mapObject.transform);
                         tileObject.transform.SetPositionAndRotation(new Vector3(x, 0, y), Quaternion.identity);
