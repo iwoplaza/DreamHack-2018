@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 
 namespace Game
 {
-    [ExecuteInEditMode]
     public class CameraController : MonoBehaviour
     {
         protected Camera m_camera;
