@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.EventSystems;
 
 namespace Game
 {
-    [ExecuteInEditMode]
     public class CameraController : MonoBehaviour
     {
         protected Camera m_camera;
@@ -57,7 +57,7 @@ namespace Game
             float vertical = CrossPlatformInputManager.GetAxis("Mouse Y");
             float scrollWheel = CrossPlatformInputManager.GetAxis("Mouse ScrollWheel");
 
-            if(Input.GetMouseButtonDown(0))
+            if(!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hitInfo;
