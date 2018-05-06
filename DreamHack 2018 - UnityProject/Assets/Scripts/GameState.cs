@@ -24,7 +24,6 @@ namespace Game
         public void Start()
         {
             Worker worker1 = SpawnWorker();
-            Focus.On(worker1);
         }
 
         public void Update(){

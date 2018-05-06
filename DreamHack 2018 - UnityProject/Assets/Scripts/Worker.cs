@@ -4,13 +4,14 @@ using UnityEngine;
 namespace Game
 {
     [RequireComponent(typeof(CharacterController))]
-    public class Worker : Living
+    public class Worker : Living, IFocusTarget
     {
         [Header("Worker")]
         [SerializeField] protected string m_name;
 
         override public int MaxHealth { get { return 100; } }
-        override public string DisplayName { get { return m_name; } }
+        string IFocusTarget.DisplayName { get { return m_name; } }
+        Vector3 IFocusTarget.Position { get { return transform.position; } }
 
         public TaskQueue TaskQueue { get; private set; }
         public TilePosition MoveToTarget { get; private set; }
@@ -118,6 +119,14 @@ namespace Game
         public void MoveTo(TilePosition target)
         {
             MoveToTarget = target;
+        }
+
+        void IFocusTarget.OnFocusGained()
+        {
+        }
+
+        void IFocusTarget.OnFocusLost()
+        {
         }
     }
 }

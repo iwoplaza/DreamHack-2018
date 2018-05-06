@@ -9,7 +9,7 @@ namespace Game.UI
     {
         [SerializeField] protected Text m_nameText;
 
-        protected FocusTarget m_focusTarget = null;
+        protected IFocusTarget m_focusTarget = null;
 
         void Awake()
         {
@@ -32,7 +32,7 @@ namespace Game.UI
 
         }
 
-        void OnFocusGained(FocusTarget focusTarget)
+        void OnFocusGained(IFocusTarget focusTarget)
         {
             gameObject.SetActive(true);
 
@@ -48,7 +48,7 @@ namespace Game.UI
             }
         }
 
-        void OnFocusLost(FocusTarget focusTarget)
+        void OnFocusLost(IFocusTarget focusTarget)
         {
             gameObject.SetActive(false);
         }
