@@ -24,7 +24,7 @@ namespace Game{
 			Color envColor = m_SunColorGradient.Evaluate(m_TimeSystem.dayProgress);
 			RenderSettings.ambientLight = envColor;
 			m_sun.color = envColor;
-			m_sun.intensity = m_SunColorGradient.Evaluate(m_TimeSystem.dayProgress).a;
+			m_sun.intensity = envColor.a;
 			m_sun.transform.localRotation = Quaternion.Euler(Mathf.Lerp(-90,270,m_TimeSystem.dayProgress), m_sunRotation, 0);
 		}
 	}
