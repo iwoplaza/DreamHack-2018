@@ -10,9 +10,11 @@ namespace Game{
 		[Tooltip("Light intensity is calculated via the alpha channel")]
 		Gradient m_SunColorGradient;
 
-		public Light m_sun;
+		[SerializeField] 
+		Light m_sun;
 
-		public float m_sunRotation;
+		[SerializeField]
+		 float m_sunRotation;
 
 		private TimeSystem m_TimeSystem;
 		
@@ -21,11 +23,11 @@ namespace Game{
 		}
 		
 		public override void UpdateComponent(){
-			Color envColor = m_SunColorGradient.Evaluate(m_TimeSystem.dayProgress);
+			Color envColor = m_SunColorGradient.Evaluate(m_TimeSystem.DayProgress);
 			RenderSettings.ambientLight = envColor;
 			m_sun.color = envColor;
 			m_sun.intensity = envColor.a;
-			m_sun.transform.localRotation = Quaternion.Euler(Mathf.Lerp(-90,270,m_TimeSystem.dayProgress), m_sunRotation, 0);
+			m_sun.transform.localRotation = Quaternion.Euler(Mathf.Lerp(-90,270,m_TimeSystem.DayProgress), m_sunRotation, 0);
 		}
 	}
 }

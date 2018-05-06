@@ -7,23 +7,23 @@ using System;
 namespace Game{
     public class TimeSystem {
 
-        public float m_Time{ get; private set; }
-        public float m_SecondsPerDay { get; private set; }
-        public int m_DayCount{ get; private set; }
-        public float dayProgress{ get{return m_Time/m_SecondsPerDay;}}
+        public float Time{ get; private set; }
+        public float SecondsPerDay { get; private set; }
+        public int DayCount{ get; private set; }
+        public float DayProgress{ get{return Time/SecondsPerDay;}}
         
         public TimeSystem(float time, float secperday){
-            m_Time = time;
-            m_SecondsPerDay = secperday;
+            Time = time;
+            SecondsPerDay = secperday;
         }
 
         public TimeSystem() : this(0,120){}
 
         public void Update(){
-            m_Time += UnityEngine.Time.deltaTime;
-            if(m_Time >= m_SecondsPerDay){
-                m_DayCount++;
-                m_Time %= m_SecondsPerDay;
+            Time += UnityEngine.Time.deltaTime;
+            if(Time >= SecondsPerDay){
+                DayCount++;
+                Time %= SecondsPerDay;
             }
         }
 
@@ -34,14 +34,14 @@ namespace Game{
             XAttribute dayAttribute = element.Attribute("DayCount");
 
             if(dayAttribute != null)
-                m_DayCount = Int32.Parse(dayAttribute.Value);
+                DayCount = Int32.Parse(dayAttribute.Value);
             if(timeAttribute != null)
-                m_Time = float.Parse(timeAttribute.Value) * m_SecondsPerDay;
+                Time = float.Parse(timeAttribute.Value) * SecondsPerDay;
         }
 
         public void Populate(XElement element) {
-            element.SetAttributeValue("CurrentTime", dayProgress);
-            element.SetAttributeValue("DayCount", m_DayCount);
+            element.SetAttributeValue("CurrentTime", DayProgress);
+            element.SetAttributeValue("DayCount", DayCount);
         }
     }
 }

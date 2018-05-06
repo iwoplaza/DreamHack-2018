@@ -11,7 +11,6 @@ namespace Game
         public TileMap TileMap { get; private set; }
         public List<Worker> Workers { get; private set; }
         public Focus Focus { get; private set; }
-
         public TimeSystem TimeSystem { get; private set; }
 
         public GameState()
