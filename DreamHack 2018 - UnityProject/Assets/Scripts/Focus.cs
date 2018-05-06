@@ -6,13 +6,13 @@ namespace Game
 {
     public class Focus
     {
-        public delegate void FocusHandler(FocusTarget focusTarget);
-        public FocusTarget Current { get; private set; }
+        public delegate void FocusHandler(IFocusTarget focusTarget);
+        public IFocusTarget Current { get; private set; }
 
         private FocusHandler m_focusGainHandlers;
         private FocusHandler m_focusLossHandlers;
 
-        public void On(FocusTarget newTarget)
+        public void On(IFocusTarget newTarget)
         {
             if (Current != null)
             {

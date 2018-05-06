@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public abstract class Living : FocusTarget
+    public abstract class Living : MonoBehaviour
     {
         [SerializeField] private int m_health;
 
@@ -22,7 +22,7 @@ namespace Game
         public bool Alive { get; protected set; }
         public abstract int MaxHealth { get; }
 
-        protected override void Awake()
+        protected virtual void Awake()
         {
             Alive = true;
             m_health = MaxHealth;

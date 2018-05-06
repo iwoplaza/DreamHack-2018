@@ -24,7 +24,7 @@ namespace Game
 
         protected float m_lastDistance = 0.0F;
         protected Plane m_groundPlane = new Plane(Vector3.up, Vector3.zero);
-        protected FocusTarget m_focusTarget = null;
+        protected IFocusTarget m_focusTarget = null;
 
         protected float m_yOrientation = 0.0F;
         protected float m_nextYOrientation = 0.0F;
@@ -66,7 +66,7 @@ namespace Game
                 {
                     if(hitInfo.collider != null)
                     {
-                        FocusTarget focusTarget = hitInfo.collider.GetComponent<FocusTarget>();
+                        IFocusTarget focusTarget = hitInfo.collider.GetComponent<IFocusTarget>();
                         WorldController.Instance.MainState.Focus.On(focusTarget);
                     }
                 }
@@ -153,7 +153,7 @@ namespace Game
 
             if (m_focusTarget != null)
             {
-                Vector3 difference = m_focusTarget.transform.position - transform.position;
+                Vector3 difference = m_focusTarget.Position - transform.position;
                 float t = Mathf.Min(Mathf.Pow(m_focusFollowSpeed, Time.deltaTime * 100), 1);
                 transform.position += difference * (t);
             }
@@ -178,12 +178,12 @@ namespace Game
             return Mathf.LerpAngle(m_yOrientation, m_nextYOrientation, t);
         }
 
-        void OnFocusGained(FocusTarget target)
+        void OnFocusGained(IFocusTarget target)
         {
             m_focusTarget = target;
         }
 
-        void OnFocusLost(FocusTarget target)
+        void OnFocusLost(IFocusTarget target)
         {
             m_focusTarget = null;
         }
