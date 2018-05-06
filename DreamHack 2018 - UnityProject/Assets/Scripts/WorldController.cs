@@ -13,6 +13,7 @@ namespace Game
 
         public GameObject TilePrefab { get { return m_tilePrefab; } }
         public GameState MainState { get; private set; }
+        public PlayMode Mode { get; private set; }
 
         void Awake()
         {
@@ -38,6 +39,17 @@ namespace Game
         {
             Debug.Log("Shutting down...");
             SaveController.Instance.Save(MainState);
+        }
+
+        void SwitchMode(PlayMode newMode)
+        {
+            Mode = newMode;
+        }
+
+        public enum PlayMode
+        {
+            DEFAULT_MODE,
+            BUILD_MODE
         }
     }
 }
