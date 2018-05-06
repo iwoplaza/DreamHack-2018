@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Game{
     public abstract class EnvironmentControlComponent : MonoBehaviour {
 
-        bool initialized = false;
+        bool m_initialized = false;
 
         void Start(){
             WorldController.Instance.AddEnvironmentControlObject(this);
@@ -14,7 +14,7 @@ namespace Game{
         public void Initialize(){
             Debug.Log(this.GetType().ToString() + " initialized.");
             InitializeComponent();
-            initialized = true;
+            m_initialized = true;
         }
 
         public virtual void InitializeComponent(){
@@ -22,7 +22,7 @@ namespace Game{
         }
 
         void Update(){
-            if(initialized){
+            if(m_initialized){
                 UpdateComponent();
             }
         }
