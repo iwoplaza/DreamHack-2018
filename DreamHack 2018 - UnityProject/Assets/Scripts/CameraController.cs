@@ -51,60 +51,85 @@ namespace Game
             }
         }
 
+        TilePosition GetTilePositionAtMouse()
+        {
+            //Create a ray from the Mouse click position
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //Initialise the enter variable
+            float enter = 0.0f;
+
+            if (m_groundPlane.Raycast(ray, out enter))
+            {
+                Vector3 hitPoint = ray.GetPoint(enter);
+                TilePosition tilePosition = TilePosition.FromWorldPosition(hitPoint);
+
+                return tilePosition;
+            }
+
+            return null;
+        }
+
         void Update()
         {
             float horizontal = CrossPlatformInputManager.GetAxis("Mouse X");
             float vertical = CrossPlatformInputManager.GetAxis("Mouse Y");
             float scrollWheel = CrossPlatformInputManager.GetAxis("Mouse ScrollWheel");
 
-            if(!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0))
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hitInfo;
+            TilePosition tilePositionAtMouse = GetTilePositionAtMouse();
 
-                if(Physics.Raycast(ray, out hitInfo))
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
                 {
-                    if(hitInfo.collider != null)
+                    if (tilePositionAtMouse != null)
                     {
-                        IFocusTarget focusTarget = hitInfo.collider.GetComponent<IFocusTarget>();
-                        WorldController.Instance.MainState.Focus.On(focusTarget);
+                        WorldController.Instance.MainState.BuildModeManager.SetCursorPosition(tilePositionAtMouse);
+
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
+                            if (targetTile != null && targetTile.HasObject)
+                                targetTile.UninstallObject();
+                            else
+                                WorldController.Instance.MainState.BuildModeManager.Place();
+                        }
                     }
                 }
-            }
-
-            if(Input.GetMouseButtonDown(1))
-            {
-                //Create a ray from the Mouse click position
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                //Initialise the enter variable
-                float enter = 0.0f;
-
-                if (m_groundPlane.Raycast(ray, out enter))
+                else
                 {
-                    Vector3 hitPoint = ray.GetPoint(enter);
-                    TilePosition tilePosition = TilePosition.FromWorldPosition(hitPoint);
-                    Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePosition);
-                    if(targetTile != null)
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        if (!targetTile.HasObject)
+                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                        RaycastHit hitInfo;
+
+                        if (Physics.Raycast(ray, out hitInfo))
                         {
-                            Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
-                            if(selectedWorker != null)
+                            if (hitInfo.collider != null)
                             {
-                                selectedWorker.MoveTo(tilePosition);
+                                IFocusTarget focusTarget = hitInfo.collider.GetComponent<IFocusTarget>();
+                                WorldController.Instance.MainState.Focus.On(focusTarget);
                             }
                         }
-
-                        /*if(!targetTile.HasObject)
-                        {
-                            targetTile.Install(new WallTileObject());
-                        }
-                        else
-                        {
-                            targetTile.UninstallObject();
-                        }*/
                     }
 
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        if (tilePositionAtMouse != null)
+                        {
+                            Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
+                            if (targetTile != null)
+                            {
+                                if (!targetTile.HasObject)
+                                {
+                                    Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
+                                    if (selectedWorker != null)
+                                    {
+                                        selectedWorker.MoveTo(tilePositionAtMouse);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -133,6 +158,11 @@ namespace Game
             if (CrossPlatformInputManager.GetButtonDown("Turn Camera Right"))
             {
                 RotateBy(-m_cameraTurnIncrement);
+            }
+
+            if(CrossPlatformInputManager.GetButtonDown("Build Mode Toggle"))
+            {
+                WorldController.Instance.ToggleBuildMode();
             }
 
             if (scrollWheel != 0 || m_lastDistance != m_distance)

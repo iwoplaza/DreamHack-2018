@@ -12,6 +12,7 @@ namespace Game
         public List<Worker> Workers { get; private set; }
         public Focus Focus { get; private set; }
         public TimeSystem TimeSystem { get; private set; }
+        public BuildModeManager BuildModeManager { get; private set; }
 
         public GameState()
         {
@@ -19,6 +20,7 @@ namespace Game
             Workers = new List<Worker>();
             Focus = new Focus();
             TimeSystem = new TimeSystem();
+            BuildModeManager = new BuildModeManager(this);
         }
 
         public void Start()

@@ -32,10 +32,6 @@ namespace Game
             MainState.TileMap.CreateGameObject();
         }
 
-        public void AddEnvironmentControlObject(EnvironmentControlComponent component){
-            EnvControlToInitialize.Enqueue(component);
-        }
-
         // Update is called once per frame
         void Update()
         {
@@ -51,15 +47,34 @@ namespace Game
             SaveController.Instance.Save(MainState);
         }
 
-        void SwitchMode(PlayMode newMode)
+        public void AddEnvironmentControlObject(EnvironmentControlComponent component)
         {
-            Mode = newMode;
+            EnvControlToInitialize.Enqueue(component);
         }
 
-        public enum PlayMode
+        public void SwitchMode(PlayMode newMode)
         {
-            DEFAULT_MODE,
-            BUILD_MODE
+            Mode = newMode;
+            if(Mode == PlayMode.BUILD_MODE)
+            {
+                MainState.BuildModeManager.OnEnabled();
+            }
+            else
+            {
+                MainState.BuildModeManager.OnDisabled();
+            }
+        }
+
+        public void ToggleBuildMode()
+        {
+            if(Mode == PlayMode.BUILD_MODE)
+            {
+                SwitchMode(PlayMode.DEFAULT_MODE);
+            }
+            else
+            {
+                SwitchMode(PlayMode.BUILD_MODE);
+            }
         }
     }
 }
