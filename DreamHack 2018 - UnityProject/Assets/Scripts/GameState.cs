@@ -11,17 +11,25 @@ namespace Game
         public TileMap TileMap { get; private set; }
         public List<Worker> Workers { get; private set; }
         public Focus Focus { get; private set; }
+        public TimeSystem TimeSystem { get; private set; }
+        public BuildModeManager BuildModeManager { get; private set; }
 
         public GameState()
         {
             TileMap = new TileMap(10, 10);
             Workers = new List<Worker>();
             Focus = new Focus();
+            TimeSystem = new TimeSystem();
+            BuildModeManager = new BuildModeManager(this);
         }
 
         public void Start()
         {
             Worker worker1 = SpawnWorker();
+        }
+
+        public void Update(){
+            TimeSystem.Update();
         }
 
         public Worker SpawnWorker()
@@ -55,6 +63,9 @@ namespace Game
 
             XElement tileMapElement = element.Element("TileMap");
             TileMap.Parse(tileMapElement);
+
+            XElement timeElement = element.Element("TimeSystem");
+            TimeSystem.Parse(timeElement);
         }
 
         public void Populate(XElement element)
@@ -62,6 +73,10 @@ namespace Game
             XElement tileMapElement = new XElement("TileMap");
             element.Add(tileMapElement);
             TileMap.Populate(tileMapElement);
+
+            XElement timeElement = new XElement("TimeSystem");
+            element.Add(timeElement);
+            TimeSystem.Populate(timeElement);
         }
     }
 }

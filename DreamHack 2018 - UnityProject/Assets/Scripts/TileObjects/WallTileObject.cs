@@ -35,5 +35,16 @@ namespace Game.TileObjects
                 InstalledGameObject.transform.SetPositionAndRotation(origin, Quaternion.identity);
             }
         }
+
+        public override GameObject CreateTemporaryDisplay()
+        {
+            GameObject prefab = Resources.FindTileObjectPrefab("Wall");
+            if (prefab != null)
+            {
+                return Object.Instantiate(prefab);
+            }
+
+            return null;
+        }
     }
 }

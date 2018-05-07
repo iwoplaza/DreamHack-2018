@@ -12,6 +12,7 @@ namespace Game.TileObjects
         public bool Installed { get { return InstalledAt != null; } }
 
         public GameObject InstalledGameObject { get; set; }
+        public Direction Orienation { get; private set; }
 
         public abstract string DisplayName { get; }
         /// <summary>
@@ -94,6 +95,23 @@ namespace Game.TileObjects
         public virtual void RemoveGameObject()
         {
             UnityEngine.Object.Destroy(InstalledGameObject);
+        }
+
+        public abstract GameObject CreateTemporaryDisplay();
+
+        public virtual void Rotate(Direction direction)
+        {
+            Orienation = direction;
+        }
+
+        public virtual void RotateLeft()
+        {
+            Orienation = DirectionUtils.RotateCCW(Orienation);
+        }
+
+        public virtual void RotateRight()
+        {
+            Orienation = DirectionUtils.RotateCW(Orienation);
         }
     }
 }
