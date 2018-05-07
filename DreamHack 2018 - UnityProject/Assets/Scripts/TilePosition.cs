@@ -26,6 +26,57 @@ namespace Game
             Y = y;
         }
 
+        public override bool Equals(object obj)
+        {
+            //
+            // See the full list of guidelines at
+            //   http://go.microsoft.com/fwlink/?LinkID=85237
+            // and also the guidance for operator== at
+            //   http://go.microsoft.com/fwlink/?LinkId=85238
+            //
+            
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            TilePosition other = obj as TilePosition;
+            
+            // TODO: write your implementation of Equals() here
+            return (other.X == X && other.Y == Y);
+        }
+        
+        // override object.GetHashCode
+        public override int GetHashCode()
+        {
+            // TODO: write your implementation of GetHashCode() here
+            return X*3 + Y*23;
+        }
+
+        public static bool operator ==(TilePosition a, TilePosition b){
+            if((object)(a) == null){
+                if((object)(b) == null)
+                    return true;
+                else
+                    return false;                
+            }
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(TilePosition a, TilePosition b){
+            if((object)a == null){
+                if( (object)b == null)
+                    return false;
+                else
+                    return true;
+            }
+            return !a.Equals(b);
+        }
+
+        public override string ToString(){
+            return "X Pos: " + X.ToString() + " Y Pos: " + Y.ToString();
+        }
+
         public static TilePosition FromWorldPosition(Vector3 worldPos)
         {
             TilePosition position = new TilePosition(Mathf.FloorToInt(worldPos.x), Mathf.FloorToInt(worldPos.z));
