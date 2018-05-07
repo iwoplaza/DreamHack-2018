@@ -29,6 +29,7 @@ ModelImporter:
     100046: Wall_Straight_1
     100048: Wall_Straight_2
     100050: Wall_Template
+    100052: Wall_Straight_1_001
     400000: Cube
     400002: Cube_000
     400004: Cube_001
@@ -55,6 +56,7 @@ ModelImporter:
     400046: Wall_Straight_1
     400048: Wall_Straight_2
     400050: Wall_Template
+    400052: Wall_Straight_1_001
     2100000: Unified
     2100002: Unified__Palette_png
     2100004: unnamed
@@ -83,6 +85,7 @@ ModelImporter:
     2300044: Wall_Straight_1
     2300046: Wall_Straight_2
     2300048: Wall_Template
+    2300050: Wall_Straight_1_001
     3300000: Cube
     3300002: Cube_000
     3300004: Cube_001
@@ -108,6 +111,7 @@ ModelImporter:
     3300044: Wall_Straight_1
     3300046: Wall_Straight_2
     3300048: Wall_Template
+    3300050: Wall_Straight_1_001
     4300000: Cube_007
     4300002: Cube
     4300004: Cube_006
@@ -133,6 +137,7 @@ ModelImporter:
     4300044: Wall_Straight_1
     4300046: Wall_Straight_0
     4300048: Wall_Template
+    4300050: Wall_Straight_1_001
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs

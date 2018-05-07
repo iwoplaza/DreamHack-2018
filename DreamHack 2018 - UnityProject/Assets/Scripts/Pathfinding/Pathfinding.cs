@@ -4,7 +4,7 @@ using UnityEngine;
 using Game.Pathfinding.Internal;
 using Game;
 
-namespace Game.Pathfinding
+namespace Game.Pathfinding.Internal
 {
     public static class Pathfinding
     {
