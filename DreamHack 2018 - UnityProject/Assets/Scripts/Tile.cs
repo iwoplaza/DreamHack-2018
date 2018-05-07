@@ -74,7 +74,7 @@ namespace Game
         public void Populate(XElement element)
         {
             element.SetAttributeValue("x", Position.X);
-            element.SetAttributeValue("y", Position.Y);
+            element.SetAttributeValue("y", Position.Z);
 
             if (InstalledObject != null)
             {

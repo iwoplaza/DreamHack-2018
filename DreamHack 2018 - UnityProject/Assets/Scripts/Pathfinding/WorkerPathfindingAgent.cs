@@ -5,26 +5,31 @@ using Game;
 using Game.Pathfinding;
 
 [RequireComponent(typeof(Worker))]
-public class WorkerPathfindingAgent : MonoBehaviour {
-
+public class WorkerPathfindingAgent : MonoBehaviour
+{
 	public TilePosition endPos;
 	public bool startMoving;
 
-	void Update(){
-		if(startMoving == true){
-			StartCoroutine(moveTo());
+	void Update()
+    {
+		if(startMoving == true)
+        {
+			StartCoroutine(MoveTo());
 			startMoving = false;
 		}
 	}
 
-	IEnumerator moveTo(){
+	IEnumerator MoveTo()
+    {
 		Worker livingWorker = GetComponent<Worker>();
 		Queue<TilePosition> posList = livingWorker.FindPath(WorldController.Instance.MainState.TileMap, TilePosition.FromWorldPosition(livingWorker.transform.position), endPos);
 		Debug.Log("Player is currently at: " + TilePosition.FromWorldPosition(livingWorker.transform.position).ToString());
-		while(posList.Count > 0){
+		while(posList.Count > 0)
+        {
 			livingWorker.MoveTo(posList.Dequeue());
 			Debug.Log(livingWorker.MoveToTarget.ToString());
-			while(livingWorker.MoveToTarget != null){
+			while(livingWorker.MoveToTarget != null)
+            {
 				yield return new WaitForEndOfFrame();
 			}
 		}

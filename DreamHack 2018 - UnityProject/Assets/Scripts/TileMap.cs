@@ -48,7 +48,7 @@ namespace Game
             {
                 Tile tile = Tile.CreateAndParse(tileElement, this);
                 if (tile != null)
-                    m_tiles[tile.Position.X, tile.Position.Y] = tile;
+                    m_tiles[tile.Position.X, tile.Position.Z] = tile;
             }
 
             if(widthAttrib != null)
@@ -94,10 +94,10 @@ namespace Game
         public Tile TileAt(TilePosition position)
         {
             if (position.X < 0 || position.X >= Width ||
-                position.Y < 0 || position.Y >= Height)
+                position.Z < 0 || position.Z >= Height)
                 return null;
 
-            return m_tiles[position.X, position.Y];
+            return m_tiles[position.X, position.Z];
         }
 
         public bool InstallAt(TileObjectBase objectToInstall, TilePosition targetPosition)

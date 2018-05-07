@@ -63,11 +63,11 @@ namespace Game.Components
         public TileDisplayComponent TileAt(TilePosition position)
         {
             if (position.X < 0 || position.X >= TileMap.Width ||
-                position.Y < 0 || position.Y >= TileMap.Height)
+                position.Z < 0 || position.Z >= TileMap.Height)
             {
                 return null;
             }
-            return m_tiles[position.X, position.Y];
+            return m_tiles[position.X, position.Z];
         }
 
         public void HoverOver(TilePosition position)

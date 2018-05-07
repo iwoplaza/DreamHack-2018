@@ -7,8 +7,25 @@ namespace Game
     public abstract class Living : MonoBehaviour
     {
         [SerializeField] private int m_health;
+        public TilePosition MoveToTarget { get; protected set; }
+        public TilePosition CurrentTile { get; private set; }
 
-        public virtual int Health {
+        public Vector3 Position
+        {
+            get
+            {
+                return transform.position;
+            }
+
+            set
+            {
+                transform.position = value;
+                CurrentTile = TilePosition.FromWorldPosition(value);
+            }
+        }
+
+        public virtual int Health
+        {
             get { return m_health; }
             set {
                 m_health = value;

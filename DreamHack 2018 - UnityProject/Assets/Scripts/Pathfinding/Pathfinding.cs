@@ -4,9 +4,12 @@ using UnityEngine;
 using Game.Pathfinding.Internal;
 using Game;
 
-namespace Game.Pathfinding{
-    public static class Pathfinding{
-        public static Queue<TilePosition> FindPath(this Living livingObj, TileMap map, TilePosition start, TilePosition end){
+namespace Game.Pathfinding
+{
+    public static class Pathfinding
+    {
+        public static Queue<TilePosition> FindPath(this Living livingObj, TileMap map, TilePosition start, TilePosition end)
+        {
             if(map.TileAt(start).HasObject || start == end){
                 Debug.Log("No path found! Either the starting position is obstructed or the start and end pos is the same!");
                 return new Queue<TilePosition>();
@@ -28,8 +31,8 @@ namespace Game.Pathfinding{
                 PathNode cheapestNode = pathHeaps.GetSmallest();
                 foreach(TilePosition pos in map.GetNeighbours(livingObj, cheapestNode.Location)){
                     float newWeight = Heuristic(pos,end) + cheapestNode.Weight;
-                    if(weightMap[pos.X,pos.Y] < 0 || newWeight < weightMap[pos.X,pos.Y]){
-                        weightMap[pos.X,pos.Y] = newWeight;
+                    if(weightMap[pos.X, pos.Z] < 0 || newWeight < weightMap[pos.X, pos.Z]){
+                        weightMap[pos.X, pos.Z] = newWeight;
                         PathNode newNode = new PathNode(cheapestNode, newWeight, pos);
                         if(pos == end){
                             endNode = newNode;
@@ -69,57 +72,69 @@ namespace Game.Pathfinding{
             return srcQueue;
         }
 
-        static float Heuristic(TilePosition start, TilePosition end){
+        static float Heuristic(TilePosition start, TilePosition end)
+        {
             int abs_x = Mathf.Abs(end.X - start.X);
-            int abs_y = Mathf.Abs(end.Y - start.Y);
+            int abs_y = Mathf.Abs(end.Z - start.Z);
             return Mathf.Min(abs_x,abs_y) * 1.41421f + Mathf.Abs(abs_x - abs_y);
         }
 
-        static List<TilePosition> GetNeighbours(this TileMap map, Living livingObj, TilePosition tilePos){
+        static List<TilePosition> GetNeighbours(this TileMap map, Living livingObj, TilePosition tilePos)
+        {
             List<TilePosition> neighbours = new List<TilePosition>();
 
-            if(tilePos.X > 0){
-                if(map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Y)).IsPassableFor(livingObj, Direction.POSITIVE_X)){
-                    neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Y));
+            if(tilePos.X > 0)
+            {
+                if(map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)).IsPassableFor(livingObj, Direction.POSITIVE_X))
+                {
+                    neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z));
                 }
-                if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Y)).HasObject){
-                    if(tilePos.Y > 0){
-                        if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Y - 1)).HasObject){
-                            neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Y - 1));
+                if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)).HasObject){
+                    if(tilePos.Z > 0)
+                    {
+                        if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z - 1)).HasObject)
+                        {
+                            neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z - 1));
                         }
                     }
-                    if(tilePos.Y < map.Height - 1){
-                        if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Y + 1)).HasObject){
-                            neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Y + 1));
+                    if(tilePos.Z < map.Height - 1)
+                    {
+                        if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z + 1)).HasObject)
+                        {
+                            neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z + 1));
                         }                
                     }
                 }
             }
-            if(tilePos.Y > 0){
-                if(map.TileAt(new TilePosition(tilePos.X, tilePos.Y - 1)).IsPassableFor(livingObj, Direction.POSITIVE_Z)){
-                    neighbours.Add(new TilePosition(tilePos.X, tilePos.Y - 1));
+            if(tilePos.Z > 0)
+            {
+                if(map.TileAt(new TilePosition(tilePos.X, tilePos.Z - 1)).IsPassableFor(livingObj, Direction.POSITIVE_Z)){
+                    neighbours.Add(new TilePosition(tilePos.X, tilePos.Z - 1));
                 }
             }
-            if(tilePos.X < map.Width - 1){
-                if(map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Y)).IsPassableFor(livingObj, Direction.NEGATIVE_X)){
-                    neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Y));
+            if(tilePos.X < map.Width - 1)
+            {
+                if(map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z)).IsPassableFor(livingObj, Direction.NEGATIVE_X)){
+                    neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z));
                 }
-                if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Y)).HasObject){
-                    if(tilePos.Y > 0){
-                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Y - 1)).HasObject){
-                            neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Y - 1));
+                if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z)).HasObject){
+                    if(tilePos.Z > 0)
+                    {
+                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z - 1)).HasObject){
+                            neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z - 1));
                         }
                     }
-                    if(tilePos.Y < map.Height - 1){
-                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Y + 1)).HasObject){
-                            neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Y + 1));
+                    if(tilePos.Z < map.Height - 1)
+                    {
+                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z + 1)).HasObject){
+                            neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z + 1));
                         }                
                     }
                 }
             }
-            if(tilePos.Y < map.Height - 1){
-                if(map.TileAt(new TilePosition(tilePos.X, tilePos.Y + 1)).IsPassableFor(livingObj, Direction.NEGATIVE_Z)){
-                    neighbours.Add(new TilePosition(tilePos.X, tilePos.Y + 1));
+            if(tilePos.Z < map.Height - 1){
+                if(map.TileAt(new TilePosition(tilePos.X, tilePos.Z + 1)).IsPassableFor(livingObj, Direction.NEGATIVE_Z)){
+                    neighbours.Add(new TilePosition(tilePos.X, tilePos.Z + 1));
                 }
             }
             return neighbours;

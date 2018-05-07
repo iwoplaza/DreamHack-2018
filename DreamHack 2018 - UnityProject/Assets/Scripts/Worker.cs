@@ -14,7 +14,6 @@ namespace Game
         Vector3 IFocusTarget.Position { get { return transform.position; } }
 
         public TaskQueue TaskQueue { get; private set; }
-        public TilePosition MoveToTarget { get; private set; }
 
         [SerializeField] private bool m_walking;
         [SerializeField] private float m_walkSpeed;
@@ -59,7 +58,7 @@ namespace Game
 
         private void FixedUpdate()
         {
-            if(MoveToTarget != null)
+            if (MoveToTarget != null)
             {
                 /// TODO Change this into Path Finding behaviour.
                 Vector3 target = MoveToTarget.Vector3 + new Vector3(0.5F, 0, 0.5F);
