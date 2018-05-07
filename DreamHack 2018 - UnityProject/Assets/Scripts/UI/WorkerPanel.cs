@@ -11,6 +11,12 @@ namespace Game.UI
 
         protected IFocusTarget m_focusTarget = null;
 
+        public InputField addTaskTitle;
+
+        public GameObject task;
+        public GameObject tasksPanel;
+        public Text taskTitle;
+
         void Awake()
         {
         }
@@ -24,6 +30,20 @@ namespace Game.UI
                 WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_GAIN, OnFocusGained);
                 WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_LOSS, OnFocusLost);
             }
+        }
+
+        public void UpdateTaskTitle()
+        {
+            taskTitle.text = addTaskTitle.text;
+        }
+
+        public void AddTask(string title)
+        {
+            // This is only a test function
+            GameObject go = Instantiate(task, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+            taskTitle.text = title;
+            addTaskTitle.text = "";
+            go.transform.parent = tasksPanel.transform;
         }
 
         // Update is called once per frame
