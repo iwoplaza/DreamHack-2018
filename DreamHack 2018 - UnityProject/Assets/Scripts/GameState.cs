@@ -28,7 +28,8 @@ namespace Game
             Worker worker1 = SpawnWorker();
         }
 
-        public void Update(){
+        public void Update()
+        {
             TimeSystem.Update();
         }
 

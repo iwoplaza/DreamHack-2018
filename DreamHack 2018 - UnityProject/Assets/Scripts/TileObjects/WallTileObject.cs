@@ -26,9 +26,9 @@ namespace Game.TileObjects
         {
             if (!Installed)
                 return;
-            Vector3 origin = InstalledAt.Position.Vector3;
+            Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(0.5F, 0, 0.5F);
 
-            GameObject prefab = Resources.FindTileObjectPrefab("Wall");
+            GameObject prefab = Resources.FindTileObjectPrefab("Wall_Straight_0");
             if (prefab != null)
             {
                 InstalledGameObject = Object.Instantiate(prefab);
@@ -38,7 +38,7 @@ namespace Game.TileObjects
 
         public override GameObject CreateTemporaryDisplay()
         {
-            GameObject prefab = Resources.FindTileObjectPrefab("Wall");
+            GameObject prefab = Resources.FindTileObjectPrefab("Wall_Straight_0");
             if (prefab != null)
             {
                 return Object.Instantiate(prefab);

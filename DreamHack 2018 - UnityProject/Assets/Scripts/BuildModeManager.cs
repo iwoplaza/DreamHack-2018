@@ -19,6 +19,19 @@ namespace Game
         public BuildModeManager(GameState gameState)
         {
             m_gameState = gameState;
+            WorldController.Instance.RegisterModeChangeHandler(OnPlayModeChange);
+        }
+
+        public void OnPlayModeChange(PlayMode playMode)
+        {
+            if (playMode == PlayMode.BUILD_MODE)
+            {
+                OnEnabled();
+            }
+            else
+            {
+                OnDisabled();
+            }
         }
 
         public void OnEnabled()
@@ -80,7 +93,7 @@ namespace Game
         {
             if(TemporaryDisplayObject != null)
             {
-                TemporaryDisplayObject.transform.position = Cursor.Vector3;
+                TemporaryDisplayObject.transform.position = Cursor.Vector3 + new Vector3(0.5F, 0, 0.5F);
             }
         }
 

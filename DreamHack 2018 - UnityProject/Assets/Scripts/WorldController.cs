@@ -29,7 +29,7 @@ namespace Game
         {
             MainState.Start();
             SaveController.Instance.Load(MainState);
-            MainState.TileMap.CreateGameObject();
+            MainState.TileMap.CreateMapComponent();
         }
 
         // Update is called once per frame
@@ -52,17 +52,20 @@ namespace Game
             EnvControlToInitialize.Enqueue(component);
         }
 
+        public delegate void ModeChangeHandler(PlayMode mode);
+        ModeChangeHandler m_modeChangeHandlers;
+
+        public void RegisterModeChangeHandler(ModeChangeHandler handler)
+        {
+            m_modeChangeHandlers += handler;
+        }
+
         public void SwitchMode(PlayMode newMode)
         {
             Mode = newMode;
-            if(Mode == PlayMode.BUILD_MODE)
-            {
-                MainState.BuildModeManager.OnEnabled();
-            }
-            else
-            {
-                MainState.BuildModeManager.OnDisabled();
-            }
+
+            if (m_modeChangeHandlers != null)
+                m_modeChangeHandlers(newMode);
         }
 
         public void ToggleBuildMode()
