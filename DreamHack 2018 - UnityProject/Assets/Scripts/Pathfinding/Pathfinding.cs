@@ -4,13 +4,16 @@ using UnityEngine;
 using Game.Pathfinding.Internal;
 using Game;
 
-namespace Game.Pathfinding.Internal
+namespace Game.Pathfinding
 {
     public interface PathfindingRule
     {
         bool CanPassThrough(Tile tile, Direction dir);
     }
+}
 
+namespace Game.Pathfinding.Internal
+{
     public static class Pathfinding
     {
         public static Queue<Tile> FindPath(PathfindingRule rule, TileMap map, TilePosition start, TilePosition end)
@@ -36,6 +39,7 @@ namespace Game.Pathfinding.Internal
             bool foundEndTile = false;
             PathNode endNode = null;
 
+            // Our A* implementation
             while(pathHeaps.HeapSize > 0 && !foundEndTile)
             {
                 PathNode cheapestNode = pathHeaps.GetSmallest();
