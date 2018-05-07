@@ -11,6 +11,13 @@ ModelImporter:
     100010: Plane_004
     100012: Plane_005
     100014: Plane_006
+    100016: Floor_0
+    100018: Floor_1
+    100020: Floor_2
+    100022: Floor_Outdoor_Elbow
+    100024: Floor_Outdoor_Intersection
+    100026: Floor_Outdoor_Straight
+    100028: Floor_Outdoor_T
     400000: //RootNode
     400002: Plane
     400004: Plane_001
@@ -19,6 +26,13 @@ ModelImporter:
     400010: Plane_004
     400012: Plane_005
     400014: Plane_006
+    400016: Floor_0
+    400018: Floor_1
+    400020: Floor_2
+    400022: Floor_Outdoor_Elbow
+    400024: Floor_Outdoor_Intersection
+    400026: Floor_Outdoor_Straight
+    400028: Floor_Outdoor_T
     2100000: Unified
     2100002: ChainFloor
     2300000: Plane
@@ -28,6 +42,13 @@ ModelImporter:
     2300008: Plane_004
     2300010: Plane_005
     2300012: Plane_006
+    2300014: Floor_0
+    2300016: Floor_1
+    2300018: Floor_2
+    2300020: Floor_Outdoor_Elbow
+    2300022: Floor_Outdoor_Intersection
+    2300024: Floor_Outdoor_Straight
+    2300026: Floor_Outdoor_T
     3300000: Plane
     3300002: Plane_001
     3300004: Plane_002
@@ -35,6 +56,13 @@ ModelImporter:
     3300008: Plane_004
     3300010: Plane_005
     3300012: Plane_006
+    3300014: Floor_0
+    3300016: Floor_1
+    3300018: Floor_2
+    3300020: Floor_Outdoor_Elbow
+    3300022: Floor_Outdoor_Intersection
+    3300024: Floor_Outdoor_Straight
+    3300026: Floor_Outdoor_T
     4300000: Plane_006
     4300002: Plane_005
     4300004: Plane_004
@@ -42,6 +70,13 @@ ModelImporter:
     4300008: Plane_002
     4300010: Plane_001
     4300012: Plane
+    4300014: Floor_0
+    4300016: Floor_2
+    4300018: Floor_Outdoor_Intersection
+    4300020: Floor_Outdoor_Elbow
+    4300022: Floor_Outdoor_T
+    4300024: Floor_Outdoor_Straight
+    4300026: Floor_1
     7400000: Default Take
     9500000: //RootNode
   externalObjects: {}
