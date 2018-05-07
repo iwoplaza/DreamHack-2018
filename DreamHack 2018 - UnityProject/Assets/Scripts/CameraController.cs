@@ -79,6 +79,11 @@ namespace Game
 
             if (!EventSystem.current.IsPointerOverGameObject())
             {
+                if (tilePositionAtMouse != null)
+                {
+                    WorldController.Instance.MainState.TileMap.Component.HoverOver(tilePositionAtMouse);
+                }
+
                 if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
                 {
                     if (tilePositionAtMouse != null)

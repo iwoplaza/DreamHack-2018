@@ -4,6 +4,7 @@ using UnityEngine;
 using Game.TileObjects;
 using System.Xml.Linq;
 using System;
+using Game.Components;
 
 namespace Game
 {
@@ -11,7 +12,10 @@ namespace Game
     {
         protected Tile[,] m_tiles;
 
-        protected GameObject m_mapObject;
+        /// <summary>
+        /// The representation of this TileMap in the Scene.
+        /// </summary>
+        public TileMapComponent Component { get; private set; }
 
         public int Width { get; private set; }
         public int Height { get; private set; }
@@ -72,31 +76,19 @@ namespace Game
             }
         }
 
-        public GameObject CreateGameObject()
+        public TileMapComponent CreateMapComponent()
         {
-            if(m_mapObject != null)
+            if(Component != null)
             {
-                UnityEngine.Object.Destroy(m_mapObject);
+                UnityEngine.Object.Destroy(Component.gameObject);
             }
 
-            m_mapObject = new GameObject("TileMap");
-            m_mapObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            GameObject mapObject = new GameObject("TileMap");
+            mapObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            Component = mapObject.AddComponent<TileMapComponent>();
+            Component.Setup(this);
 
-            for(int x = 0; x < Width; ++x)
-            {
-                for (int y = 0; y < Height; ++y)
-                {
-                    if (m_tiles[x, y] != null)
-                    {
-                        GameObject tileObject = UnityEngine.Object.Instantiate(WorldController.Instance.TilePrefab, m_mapObject.transform);
-                        tileObject.name = "Tile (" + x + "," + y + ")";
-                        tileObject.transform.SetParent(m_mapObject.transform);
-                        tileObject.transform.SetPositionAndRotation(new Vector3(x, 0, y), Quaternion.identity);
-                    }
-                }
-            }
-
-            return m_mapObject;
+            return Component;
         }
 
         public Tile TileAt(TilePosition position)
