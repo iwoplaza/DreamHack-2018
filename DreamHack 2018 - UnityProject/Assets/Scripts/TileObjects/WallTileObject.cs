@@ -32,7 +32,7 @@ namespace Game.TileObjects
             if (prefab != null)
             {
                 InstalledGameObject = Object.Instantiate(prefab);
-                InstalledGameObject.transform.SetPositionAndRotation(origin, Quaternion.identity);
+                InstalledGameObject.transform.SetPositionAndRotation(origin, Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orienation), 0.0F));
             }
         }
 

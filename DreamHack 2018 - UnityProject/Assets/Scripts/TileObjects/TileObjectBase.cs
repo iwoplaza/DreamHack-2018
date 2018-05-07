@@ -102,16 +102,20 @@ namespace Game.TileObjects
         public virtual void Rotate(Direction direction)
         {
             Orienation = direction;
+            if(InstalledGameObject != null)
+            {
+                InstalledGameObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orienation), 0.0F);
+            }
         }
 
         public virtual void RotateLeft()
         {
-            Orienation = DirectionUtils.RotateCCW(Orienation);
+            Rotate(DirectionUtils.RotateCCW(Orienation));
         }
 
         public virtual void RotateRight()
         {
-            Orienation = DirectionUtils.RotateCW(Orienation);
+            Rotate(DirectionUtils.RotateCW(Orienation));
         }
     }
 }

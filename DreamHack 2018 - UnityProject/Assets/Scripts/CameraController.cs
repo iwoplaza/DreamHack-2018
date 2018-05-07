@@ -76,31 +76,18 @@ namespace Game
             float scrollWheel = CrossPlatformInputManager.GetAxis("Mouse ScrollWheel");
 
             TilePosition tilePositionAtMouse = GetTilePositionAtMouse();
-
-            if (!EventSystem.current.IsPointerOverGameObject())
+            if (tilePositionAtMouse != null)
             {
-                if (tilePositionAtMouse != null)
-                {
-                    WorldController.Instance.MainState.TileMap.Component.HoverOver(tilePositionAtMouse);
-                }
+                WorldController.Instance.MainState.TileMap.Component.HoverOver(tilePositionAtMouse);
+            }
 
-                if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
-                {
-                    if (tilePositionAtMouse != null)
-                    {
-                        WorldController.Instance.MainState.BuildModeManager.SetCursorPosition(tilePositionAtMouse);
-
-                        if (Input.GetMouseButtonDown(0))
-                        {
-                            Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
-                            if (targetTile != null && targetTile.HasObject)
-                                targetTile.UninstallObject();
-                            else
-                                WorldController.Instance.MainState.BuildModeManager.Place();
-                        }
-                    }
-                }
-                else
+            if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
+            {
+                HandleBuildModeControls();
+            }
+            else
+            {
+                if (!EventSystem.current.IsPointerOverGameObject())
                 {
                     if (Input.GetMouseButtonDown(0))
                     {
@@ -191,6 +178,39 @@ namespace Game
                 Vector3 difference = m_focusTarget.Position - transform.position;
                 float t = Mathf.Min(Mathf.Pow(m_focusFollowSpeed, Time.deltaTime * 100), 1);
                 transform.position += difference * (t);
+            }
+        }
+
+        void HandleBuildModeControls()
+        {
+            BuildModeManager buildModeManager = WorldController.Instance.MainState.BuildModeManager;
+
+            if (CrossPlatformInputManager.GetButtonDown("Rotate Prop Left"))
+            {
+                buildModeManager.RotatePropLeft();
+            }
+
+            if (CrossPlatformInputManager.GetButtonDown("Rotate Prop Right"))
+            {
+                buildModeManager.RotatePropRight();
+            }
+
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                TilePosition tilePositionAtMouse = GetTilePositionAtMouse();
+                if (tilePositionAtMouse != null)
+                {
+                    buildModeManager.SetCursorPosition(tilePositionAtMouse);
+
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
+                        if (targetTile != null && targetTile.HasObject)
+                            targetTile.UninstallObject();
+                        else
+                            buildModeManager.Place();
+                    }
+                }
             }
         }
 
