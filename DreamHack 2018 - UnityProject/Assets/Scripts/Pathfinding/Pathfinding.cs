@@ -6,18 +6,26 @@ using Game;
 
 namespace Game.Pathfinding.Internal
 {
+    public interface PathfindingRule
+    {
+        bool CanPassThrough(Tile tile, Direction dir);
+    }
+
     public static class Pathfinding
     {
-        public static Queue<TilePosition> FindPath(this Living livingObj, TileMap map, TilePosition start, TilePosition end)
+        public static Queue<Tile> FindPath(PathfindingRule rule, TileMap map, TilePosition start, TilePosition end)
         {
-            if(map.TileAt(start).HasObject || start == end){
+            if(map.TileAt(start).HasObject || start == end)
+            {
                 Debug.Log("No path found! Either the starting position is obstructed or the start and end pos is the same!");
-                return new Queue<TilePosition>();
+                return new Queue<Tile>();
             }
 
             float[,] weightMap = new float[map.Width,map.Height];
-            for(int x = 0; x < map.Width; x++){
-                for(int y = 0; y < map.Height; y++){
+            for(int x = 0; x < map.Width; x++)
+            {
+                for(int y = 0; y < map.Height; y++)
+                {
                     weightMap[x,y] = -1;
                 }
             }
@@ -27,47 +35,64 @@ namespace Game.Pathfinding.Internal
             pathHeaps.AddToHeap(startNode.Weight, startNode);
             bool foundEndTile = false;
             PathNode endNode = null;
-            while(pathHeaps.HeapSize > 0 && !foundEndTile){
+
+            while(pathHeaps.HeapSize > 0 && !foundEndTile)
+            {
                 PathNode cheapestNode = pathHeaps.GetSmallest();
-                foreach(TilePosition pos in map.GetNeighbours(livingObj, cheapestNode.Location)){
+                foreach(TilePosition pos in map.GetNeighbours(rule, cheapestNode.Location))
+                {
                     float newWeight = Heuristic(pos,end) + cheapestNode.Weight;
-                    if(weightMap[pos.X, pos.Z] < 0 || newWeight < weightMap[pos.X, pos.Z]){
+                    if(weightMap[pos.X, pos.Z] < 0 || newWeight < weightMap[pos.X, pos.Z])
+                    {
                         weightMap[pos.X, pos.Z] = newWeight;
                         PathNode newNode = new PathNode(cheapestNode, newWeight, pos);
-                        if(pos == end){
+                        if(pos == end)
+                        {
                             endNode = newNode;
                             foundEndTile = true;
                             break;
-                        }else{
+                        }
+                        else
+                        {
                             pathHeaps.AddToHeap(newNode.Weight, newNode);
                         }
                     }
                 }
             }
-            if(!foundEndTile){
+            if(!foundEndTile)
+            {
                 Debug.Log("No path found for starting point: " + start.ToString() + " end point: " + end.ToString());
-                return new Queue<TilePosition>();
-            }else{
-                return TracePath(endNode);
+                return new Queue<Tile>();
+            }
+            else
+            {
+                return TracePath(endNode, map);
             }
         }
 
-        static Queue<TilePosition> TracePath(PathNode node){
-            Queue<TilePosition> path = RecursivePathTrace(new Queue<TilePosition>(),node);
-            Stack<TilePosition> pathStack = new Stack<TilePosition>();
-            while(path.Count > 0){
+        static Queue<Tile> TracePath(PathNode node, TileMap map)
+        {
+            // The path returned by RecursivePathTrace is in reversed order
+            // Stack is used to reverse it back
+            Queue<Tile> path = RecursivePathTrace(new Queue<Tile>(), map, node);
+            Stack<Tile> pathStack = new Stack<Tile>();
+            while(path.Count > 0)
+            {
                 pathStack.Push(path.Dequeue());
             }
-            while(pathStack.Count > 0){
+            while(pathStack.Count > 0)
+            {
                 path.Enqueue(pathStack.Pop());
             }
             return path;
         }
 
-        static Queue<TilePosition> RecursivePathTrace(Queue<TilePosition> srcQueue, PathNode currentNode){
-            if(currentNode.ParentNode != null){
-                srcQueue.Enqueue(currentNode.Location);
-                return RecursivePathTrace(srcQueue, currentNode.ParentNode);
+        static Queue<Tile> RecursivePathTrace(Queue<Tile> srcQueue, TileMap map, PathNode currentNode)
+        {
+            if(currentNode.ParentNode != null)
+            {
+                srcQueue.Enqueue(map.TileAt(currentNode.Location));
+                return RecursivePathTrace(srcQueue, map, currentNode.ParentNode);
             }
             return srcQueue;
         }
@@ -79,17 +104,18 @@ namespace Game.Pathfinding.Internal
             return Mathf.Min(abs_x,abs_y) * 1.41421f + Mathf.Abs(abs_x - abs_y);
         }
 
-        static List<TilePosition> GetNeighbours(this TileMap map, Living livingObj, TilePosition tilePos)
+        static List<TilePosition> GetNeighbours(this TileMap map, PathfindingRule rule, TilePosition tilePos)
         {
             List<TilePosition> neighbours = new List<TilePosition>();
 
             if(tilePos.X > 0)
             {
-                if(map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)).IsPassableFor(livingObj, Direction.POSITIVE_X))
+                if(rule.CanPassThrough(map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)), Direction.POSITIVE_X))
                 {
                     neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z));
                 }
-                if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)).HasObject){
+                if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)).HasObject)
+                {
                     if(tilePos.Z > 0)
                     {
                         if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z - 1)).HasObject)
@@ -108,32 +134,39 @@ namespace Game.Pathfinding.Internal
             }
             if(tilePos.Z > 0)
             {
-                if(map.TileAt(new TilePosition(tilePos.X, tilePos.Z - 1)).IsPassableFor(livingObj, Direction.POSITIVE_Z)){
+                if(rule.CanPassThrough(map.TileAt(new TilePosition(tilePos.X, tilePos.Z - 1)), Direction.POSITIVE_Z))
+                {
                     neighbours.Add(new TilePosition(tilePos.X, tilePos.Z - 1));
                 }
             }
             if(tilePos.X < map.Width - 1)
             {
-                if(map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z)).IsPassableFor(livingObj, Direction.NEGATIVE_X)){
+                if(rule.CanPassThrough(map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z)), Direction.NEGATIVE_X))
+                {
                     neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z));
                 }
-                if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z)).HasObject){
+                if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z)).HasObject)
+                {
                     if(tilePos.Z > 0)
                     {
-                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z - 1)).HasObject){
+                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z - 1)).HasObject)
+                        {
                             neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z - 1));
                         }
                     }
                     if(tilePos.Z < map.Height - 1)
                     {
-                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z + 1)).HasObject){
+                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z + 1)).HasObject)
+                        {
                             neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z + 1));
                         }                
                     }
                 }
             }
-            if(tilePos.Z < map.Height - 1){
-                if(map.TileAt(new TilePosition(tilePos.X, tilePos.Z + 1)).IsPassableFor(livingObj, Direction.NEGATIVE_Z)){
+            if(tilePos.Z < map.Height - 1)
+            {
+                if(rule.CanPassThrough(map.TileAt(new TilePosition(tilePos.X, tilePos.Z + 1)),Direction.NEGATIVE_Z))
+                {
                     neighbours.Add(new TilePosition(tilePos.X, tilePos.Z + 1));
                 }
             }
