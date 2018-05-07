@@ -20,6 +20,7 @@ namespace Game.Pathfinding
 		{
 			currentMap = map;
 			clientRule = rule;
+			m_currentPath = new Queue<Tile>();
 		}
 
 		public void GeneratePath(TilePosition from, TilePosition to)
