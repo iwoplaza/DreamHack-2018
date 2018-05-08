@@ -10,8 +10,11 @@ namespace Game
     {
         public delegate void OnHoldHandler(Type tileObject);
         public Type HeldObjectType { get; private set; }
+        public TileObjectBase TemporaryObject { get; private set; }
         public GameObject TemporaryDisplayObject { get; private set; }
         public TilePosition Cursor { get; private set; }
+        public Direction PropOrientation { get; private set; }
+        public int PropVariant { get; private set; }
 
         OnHoldHandler m_onHoldHandlers;
         GameState m_gameState;
@@ -36,6 +39,7 @@ namespace Game
 
         public void OnEnabled()
         {
+            PropOrientation = Direction.POSITIVE_Z;
             Hold(typeof(WallTileObject));
         }
 
@@ -54,10 +58,13 @@ namespace Game
                 UnityEngine.Object.Destroy(TemporaryDisplayObject);
             }
 
+            PropVariant = 0;
+            TemporaryObject = null;
             HeldObjectType = tileObjectType;
             TileObjectBase tileObject = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileObjectBase;
             if (tileObject != null)
             {
+                TemporaryObject = tileObject;
                 TemporaryDisplayObject = tileObject.CreateTemporaryDisplay();
                 foreach (Collider collider in TemporaryDisplayObject.GetComponentsInChildren<Collider>())
                 {
@@ -77,8 +84,11 @@ namespace Game
                 if (tile != null && !tile.HasObject)
                 {
                     TileObjectBase tileObject = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileObjectBase;
-                    if(tileObject != null)
+                    if (tileObject != null)
+                    {
+                        tileObject.Rotate(PropOrientation);
                         tile.Install(tileObject);
+                    }
                 }
             }
         }
@@ -89,17 +99,35 @@ namespace Game
             UpdateView();
         }
 
+        public void RotatePropLeft()
+        {
+            PropOrientation = DirectionUtils.RotateCCW(PropOrientation);
+            UpdateView();
+        }
+
+        public void RotatePropRight()
+        {
+            PropOrientation = DirectionUtils.RotateCW(PropOrientation);
+            UpdateView();
+        }
+
         void UpdateView()
         {
             if(TemporaryDisplayObject != null)
             {
                 TemporaryDisplayObject.transform.position = Cursor.Vector3 + new Vector3(0.5F, 0, 0.5F);
+                TemporaryDisplayObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(PropOrientation), 0.0F);
             }
         }
 
         public void RegisterOnHoldHandler(OnHoldHandler handler)
         {
             m_onHoldHandlers += handler;
+        }
+
+        public void SetVariant(int variant)
+        {
+            PropVariant = variant;
         }
     }
 }

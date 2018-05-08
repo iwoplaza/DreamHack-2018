@@ -44,5 +44,22 @@ namespace Game
 
             return Direction.NONE;
         }
+
+        public static float GetYRotation(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.POSITIVE_Z:
+                    return 0.0F;
+                case Direction.POSITIVE_X:
+                    return 90.0F;
+                case Direction.NEGATIVE_Z:
+                    return 180.0F;
+                case Direction.NEGATIVE_X:
+                    return 270.0F;
+            }
+
+            return 0.0F;
+        }
     }
 }

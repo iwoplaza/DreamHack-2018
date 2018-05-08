@@ -12,7 +12,7 @@ namespace Game.TileObjects
         public bool Installed { get { return InstalledAt != null; } }
 
         public GameObject InstalledGameObject { get; set; }
-        public Direction Orienation { get; private set; }
+        public Direction Orientation { get; private set; }
 
         public abstract string DisplayName { get; }
         /// <summary>
@@ -78,6 +78,10 @@ namespace Game.TileObjects
 
         public virtual void Parse(XElement element, Tile optionalTile = null)
         {
+            XAttribute orientationAttrib = element.Attribute("orientation");
+            if (orientationAttrib != null)
+                Orientation = (Direction)int.Parse(orientationAttrib.Value);
+
             if (optionalTile != null)
             {
                 InstalledAt = optionalTile;
@@ -89,6 +93,7 @@ namespace Game.TileObjects
         {
             String typeName = GetType().FullName;
             element.SetAttributeValue("type", typeName);
+            element.SetAttributeValue("orientation", (int) Orientation);
         }
 
         public abstract void ConstructGameObject();
@@ -96,22 +101,25 @@ namespace Game.TileObjects
         {
             UnityEngine.Object.Destroy(InstalledGameObject);
         }
-
         public abstract GameObject CreateTemporaryDisplay();
 
         public virtual void Rotate(Direction direction)
         {
-            Orienation = direction;
+            Orientation = direction;
+            if(InstalledGameObject != null)
+            {
+                InstalledGameObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F);
+            }
         }
 
         public virtual void RotateLeft()
         {
-            Orienation = DirectionUtils.RotateCCW(Orienation);
+            Rotate(DirectionUtils.RotateCCW(Orientation));
         }
 
         public virtual void RotateRight()
         {
-            Orienation = DirectionUtils.RotateCW(Orienation);
+            Rotate(DirectionUtils.RotateCW(Orientation));
         }
     }
 }
