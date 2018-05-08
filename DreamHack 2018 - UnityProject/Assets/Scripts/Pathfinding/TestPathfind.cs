@@ -29,8 +29,9 @@ public class TestPathfind : MonoBehaviour {
 
 	IEnumerator MoveTo()
     {		 
-        while(agent.HasTarget)
+        while(agent.CurrentStatus == PathfindingStatus.HAS_PATH)
         {
+			Debug.Log(agent.CurrentStatus);
             livingWorker.MoveTo(agent.GetNextTile().Position);
             Debug.Log(livingWorker.MoveToTarget.ToString());
             while(livingWorker.MoveToTarget != null)
