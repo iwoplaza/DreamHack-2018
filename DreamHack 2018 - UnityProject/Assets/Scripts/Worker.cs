@@ -1,5 +1,6 @@
-﻿using Game.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
+using Game.Tasks;
+using Game.Pathfinding;
 
 namespace Game
 {
@@ -14,20 +15,27 @@ namespace Game
         Vector3 IFocusTarget.Position { get { return transform.position; } }
 
         public TaskQueue TaskQueue { get; private set; }
+        public PathfindingAgent PathfindingAgent { get; private set; }
 
         [SerializeField] private bool m_walking;
         [SerializeField] private float m_walkSpeed;
         [SerializeField] private float m_runSpeed;
         [SerializeField] private float m_stickToGroundForce;
         [SerializeField] private float m_gravityMultiplier;
-        
-        private float m_yRotation;
-        private Vector3 m_moveDir = Vector3.zero;
+
+        private TileMap m_tileMap;
         private CharacterController m_characterController;
         private Animator m_animator;
+        private float m_yRotation;
+        private Vector3 m_moveDir = Vector3.zero;
         private CollisionFlags m_collisionFlags;
         private bool m_previouslyGrounded;
         private bool m_running = false;
+
+        public void Setup(TileMap tileMap)
+        {
+            m_tileMap = tileMap;
+        }
 
         protected override void Awake()
         {
@@ -38,6 +46,7 @@ namespace Game
         {
             base.Start();
 
+            PathfindingAgent = new PathfindingAgent(new BasicRule(), m_tileMap);
             m_characterController = GetComponent<CharacterController>();
             m_animator = GetComponentInChildren<Animator>();
         }
@@ -60,14 +69,16 @@ namespace Game
 
         private void FixedUpdate()
         {
-            if (MoveToTarget != null)
+            TilePosition nextPosition = PathfindingAgent.GetNextTile();
+
+            if (PathfindingAgent.CurrentStatus == PathfindingStatus.HAS_PATH && nextPosition != null)
             {
                 /// TODO Change this into Path Finding behaviour.
-                Vector3 target = MoveToTarget.Vector3 + new Vector3(0.5F, 0, 0.5F);
+                Vector3 target = nextPosition.Vector3 + new Vector3(0.5F, 0, 0.5F);
                 Vector3 direction = (target - transform.position);
                 float sqrDistance = direction.sqrMagnitude;
 
-                if (sqrDistance > 0.5F)
+                if (sqrDistance > 0.1F)
                 {
                     direction.y = 0;
                     direction.Normalize();
@@ -88,10 +99,13 @@ namespace Game
                 }
                 else
                 {
-                    MoveToTarget = null;
-                    m_walking = false;
+                    CurrentTile = PathfindingAgent.PopTile();
                     m_moveDir = Vector3.zero;
                 }
+            }
+            else
+            {
+                m_walking = false;
             }
 
             if (m_characterController.isGrounded)
@@ -130,7 +144,7 @@ namespace Game
 
         public void MoveTo(TilePosition target)
         {
-            MoveToTarget = target;
+            PathfindingAgent.GeneratePath(CurrentTile, target);
         }
 
         void IFocusTarget.OnFocusGained()

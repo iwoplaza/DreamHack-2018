@@ -11,21 +11,20 @@ namespace Game.Pathfinding
 	{
 		public PathfindingStatus CurrentStatus { get; private set; }
 
-		private PathfindingRule clientRule;
+		private PathfindingRule m_clientRule;
+		private List<TilePosition> m_currentPath;
+		private TilePosition m_currentEndTile;
+		private TileMap m_currentMap;
 
-		private List<Tile> m_currentPath;
-
-		private Tile m_currentEndTile;
-
-		private static TileMap currentMap;
-
-		private Thread m_PathfindingThread;
+		private Thread m_pathfindingThread;
 
 		public PathfindingAgent(PathfindingRule rule, TileMap map)
 		{
-			currentMap = map;
-			clientRule = rule;
-			m_currentPath = new List<Tile>();
+            CurrentStatus = PathfindingStatus.PATH_FINISHED;
+
+            m_currentMap = map;
+			m_clientRule = rule;
+			m_currentPath = new List<TilePosition>();
 			map.RegisterEventHandler(TileMapInterruption, TileMapEvent.TILEMAP_MODIFIED);
 		}
 
@@ -33,18 +32,19 @@ namespace Game.Pathfinding
 		{
 			CurrentStatus = PathfindingStatus.GENERATING_PATH;
 
-			if(m_PathfindingThread != null)
+			if(m_pathfindingThread != null)
 			{
-				m_PathfindingThread.Abort();
+				m_pathfindingThread.Abort();
 				m_currentPath.Clear();
 			}
 
-			m_PathfindingThread = new Thread(() => PathThread(from, to));
-			m_PathfindingThread.Start();
+			m_pathfindingThread = new Thread(() => PathThread(from, to));
+			m_pathfindingThread.Start();
 		}	
 
-		private void PathThread(TilePosition from, TilePosition to){			
-			m_currentPath = Internal.Pathfinding.FindPath(clientRule, currentMap, from, to);
+		private void PathThread(TilePosition from, TilePosition to)
+        {			
+			m_currentPath = Internal.Pathfinding.FindPath(m_clientRule, m_currentMap, from, to);
 			if(m_currentPath.Count > 0)
 			{
 				CurrentStatus = PathfindingStatus.HAS_PATH;
@@ -55,21 +55,29 @@ namespace Game.Pathfinding
 			}
 		}
 
-		public Tile GetNextTile()
+		public TilePosition GetNextTile()
 		{
-			Tile currentTile = m_currentPath[0];
-			m_currentPath.RemoveAt(0);
-			if(m_currentPath.Count == 0){
-				CurrentStatus = PathfindingStatus.PATH_FINISHED;
-			}	
-			return currentTile;
+			if(m_currentPath.Count > 0)
+			    return m_currentPath[0];
+            return null;
 		}
+
+        public TilePosition PopTile()
+        {
+            TilePosition currentTile = m_currentPath[0];
+            m_currentPath.RemoveAt(0);
+            if (m_currentPath.Count == 0)
+            {
+                CurrentStatus = PathfindingStatus.PATH_FINISHED;
+            }
+            return currentTile;
+        }
 
 		public bool CurrentPathContainsTilePos(TilePosition pos)
 		{
-			foreach(Tile tile in m_currentPath)
+			foreach(TilePosition position in m_currentPath)
 			{
-				if(tile.Position == pos)
+				if(position == pos)
 				{
 					return true;
 				}
@@ -84,8 +92,9 @@ namespace Game.Pathfinding
 			{
 				return;
 			}
-			if(CurrentPathContainsTilePos(interuptPosition) && CurrentStatus == PathfindingStatus.HAS_PATH){
-				GeneratePath(m_currentPath[0].Position, m_currentEndTile.Position);
+			if(CurrentPathContainsTilePos(interuptPosition) && CurrentStatus == PathfindingStatus.HAS_PATH)
+            {
+				GeneratePath(m_currentPath[0], m_currentEndTile);
 			}
 		}
 	}

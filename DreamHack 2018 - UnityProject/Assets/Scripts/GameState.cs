@@ -42,7 +42,7 @@ namespace Game
                 return null;
             }
 
-            GameObject workerObject = Object.Instantiate(workerPrefab, new Vector3(4, 1, 4), Quaternion.identity);
+            GameObject workerObject = Object.Instantiate(workerPrefab, Vector3.zero, Quaternion.identity);
             if(workerObject != null)
             {
                 Worker worker = workerObject.GetComponent<Worker>();
@@ -50,6 +50,8 @@ namespace Game
                 {
                     worker = workerObject.AddComponent<Worker>();
                 }
+                worker.Setup(TileMap);
+                worker.Position = new Vector3(4, 1, 4);
 
                 return worker;
             }

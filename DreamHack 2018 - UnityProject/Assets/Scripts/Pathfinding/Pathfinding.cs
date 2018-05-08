@@ -8,12 +8,12 @@ namespace Game.Pathfinding.Internal
 {
     public static class Pathfinding
     {
-        public static List<Tile> FindPath(PathfindingRule rule, TileMap map, TilePosition start, TilePosition end)
+        public static List<TilePosition> FindPath(PathfindingRule rule, TileMap map, TilePosition start, TilePosition end)
         {
             if(map.TileAt(start).HasObject || start == end)
             {
                 Debug.Log("No path found! Either the starting position is obstructed or the start and end pos is the same!");
-                return new List<Tile>();
+                return new List<TilePosition>();
             }
 
             float[,] weightMap = new float[map.Width,map.Height];
@@ -58,7 +58,7 @@ namespace Game.Pathfinding.Internal
             if(!foundEndTile)
             {
                 Debug.Log("No path found for starting point: " + start.ToString() + " end point: " + end.ToString());
-                return new List<Tile>();
+                return new List<TilePosition>();
             }
             else
             {
@@ -66,23 +66,24 @@ namespace Game.Pathfinding.Internal
             }
         }
 
-        static List<Tile> TracePath(PathNode node, TileMap map)
+        static List<TilePosition> TracePath(PathNode node, TileMap map)
         {
             // The path returned by RecursivePathTrace is in reversed order
             // It's corrected in the for loop
-            List<Tile> tempPath = RecursivePathTrace(new List<Tile>(), map, node);
-            List<Tile> path = new List<Tile>();
-            for(int i = tempPath.Count - 1; i >= 0; i--){
+            List<TilePosition> tempPath = RecursivePathTrace(new List<TilePosition>(), map, node);
+            List<TilePosition> path = new List<TilePosition>();
+            for(int i = tempPath.Count - 1; i >= 0; i--)
+            {
                 path.Add(tempPath[i]);
             }
             return path;
         }
 
-        static List<Tile> RecursivePathTrace(List<Tile> srcQueue, TileMap map, PathNode currentNode)
+        static List<TilePosition> RecursivePathTrace(List<TilePosition> srcQueue, TileMap map, PathNode currentNode)
         {
             if(currentNode.ParentNode != null)
             {
-                srcQueue.Add(map.TileAt(currentNode.Location));
+                srcQueue.Add(currentNode.Location);
                 return RecursivePathTrace(srcQueue, map, currentNode.ParentNode);
             }
             return srcQueue;
