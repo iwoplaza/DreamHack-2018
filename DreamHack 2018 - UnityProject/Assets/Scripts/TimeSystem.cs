@@ -10,7 +10,11 @@ namespace Game{
         public float Time{ get; private set; }
         public float SecondsPerDay { get; private set; }
         public int DayCount{ get; private set; }
-        public float DayProgress{ get{return Time/SecondsPerDay;}}
+        public float DayProgress{ get{ return Time/SecondsPerDay;}}
+
+        public int Hour { get { return Mathf.FloorToInt(DayProgress * 24); } }
+        public int Minute { get { return Mathf.FloorToInt(((DayProgress * 24) % 1) * 60); }}
+        public string TimeString{ get { return Hour.ToString().PadLeft(2,'0') + ":" + Minute.ToString().PadLeft(2,'0'); }}
         
         public TimeSystem(float time, float secperday){
             Time = time;
