@@ -24,6 +24,7 @@ namespace Game
         private float m_yRotation;
         private Vector3 m_moveDir = Vector3.zero;
         private CharacterController m_characterController;
+        private Animator m_animator;
         private CollisionFlags m_collisionFlags;
         private bool m_previouslyGrounded;
         private bool m_running = false;
@@ -38,6 +39,7 @@ namespace Game
             base.Start();
 
             m_characterController = GetComponent<CharacterController>();
+            m_animator = GetComponentInChildren<Animator>();
         }
 
         override protected void Update()
@@ -80,10 +82,14 @@ namespace Game
 
                     m_moveDir.x = direction.x * speed;
                     m_moveDir.z = direction.z * speed;
+                    m_walking = true;
+
+                    transform.rotation = Quaternion.Euler(0, Mathf.Atan2(m_moveDir.x, m_moveDir.z) / Mathf.PI * 180.0F, 0);
                 }
                 else
                 {
                     MoveToTarget = null;
+                    m_walking = false;
                     m_moveDir = Vector3.zero;
                 }
             }
@@ -97,6 +103,13 @@ namespace Game
                 m_moveDir += Physics.gravity * m_gravityMultiplier * Time.fixedDeltaTime;
             }
             m_collisionFlags = m_characterController.Move(m_moveDir * Time.fixedDeltaTime);
+
+            UpdateAnimator();
+        }
+
+        public void UpdateAnimator()
+        {
+            m_animator.SetBool("Walk", m_walking);
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
