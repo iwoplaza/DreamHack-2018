@@ -12,6 +12,10 @@ namespace Game
     {
         protected Tile[,] m_tiles;
 
+        public delegate void TileMapEventHandler(TilePosition modifiedPos);
+
+        private TileMapEventHandler m_TileMapModifiedHandler;
+
         /// <summary>
         /// The representation of this TileMap in the Scene.
         /// </summary>
@@ -107,7 +111,23 @@ namespace Game
                 return false;
 
             targetTile.Install(objectToInstall);
+            OnModifyEvent(targetPosition);
             return true;
+        }
+
+        public void RegisterEventHandler(TileMapEventHandler newListener, TileMapEvent eventType)
+        {
+            switch(eventType)
+            {
+                case TileMapEvent.TILEMAP_MODIFIED:
+                    m_TileMapModifiedHandler += newListener;
+                    break;                
+            }
+        }
+
+        private void OnModifyEvent(TilePosition modifiedPos)
+        {
+            m_TileMapModifiedHandler(modifiedPos);
         }
     }
 }

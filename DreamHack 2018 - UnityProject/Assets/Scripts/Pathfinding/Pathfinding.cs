@@ -8,12 +8,12 @@ namespace Game.Pathfinding.Internal
 {
     public static class Pathfinding
     {
-        public static Queue<Tile> FindPath(PathfindingRule rule, TileMap map, TilePosition start, TilePosition end)
+        public static List<Tile> FindPath(PathfindingRule rule, TileMap map, TilePosition start, TilePosition end)
         {
             if(map.TileAt(start).HasObject || start == end)
             {
                 Debug.Log("No path found! Either the starting position is obstructed or the start and end pos is the same!");
-                return new Queue<Tile>();
+                return new List<Tile>();
             }
 
             float[,] weightMap = new float[map.Width,map.Height];
@@ -58,7 +58,7 @@ namespace Game.Pathfinding.Internal
             if(!foundEndTile)
             {
                 Debug.Log("No path found for starting point: " + start.ToString() + " end point: " + end.ToString());
-                return new Queue<Tile>();
+                return new List<Tile>();
             }
             else
             {
@@ -66,28 +66,23 @@ namespace Game.Pathfinding.Internal
             }
         }
 
-        static Queue<Tile> TracePath(PathNode node, TileMap map)
+        static List<Tile> TracePath(PathNode node, TileMap map)
         {
             // The path returned by RecursivePathTrace is in reversed order
-            // Stack is used to reverse it back
-            Queue<Tile> path = RecursivePathTrace(new Queue<Tile>(), map, node);
-            Stack<Tile> pathStack = new Stack<Tile>();
-            while(path.Count > 0)
-            {
-                pathStack.Push(path.Dequeue());
-            }
-            while(pathStack.Count > 0)
-            {
-                path.Enqueue(pathStack.Pop());
+            // It's corrected in the for loop
+            List<Tile> tempPath = RecursivePathTrace(new List<Tile>(), map, node);
+            List<Tile> path = new List<Tile>();
+            for(int i = tempPath.Count - 1; i >= 0; i--){
+                path.Add(tempPath[i]);
             }
             return path;
         }
 
-        static Queue<Tile> RecursivePathTrace(Queue<Tile> srcQueue, TileMap map, PathNode currentNode)
+        static List<Tile> RecursivePathTrace(List<Tile> srcQueue, TileMap map, PathNode currentNode)
         {
             if(currentNode.ParentNode != null)
             {
-                srcQueue.Enqueue(map.TileAt(currentNode.Location));
+                srcQueue.Add(map.TileAt(currentNode.Location));
                 return RecursivePathTrace(srcQueue, map, currentNode.ParentNode);
             }
             return srcQueue;
@@ -97,7 +92,7 @@ namespace Game.Pathfinding.Internal
         {
             int abs_x = Mathf.Abs(end.X - start.X);
             int abs_y = Mathf.Abs(end.Z - start.Z);
-            return Mathf.Min(abs_x,abs_y) * 1.41421f + Mathf.Abs(abs_x - abs_y);
+            return Mathf.Max(abs_x,abs_y);
         }
 
         static List<TilePosition> GetNeighbours(this TileMap map, PathfindingRule rule, TilePosition tilePos)

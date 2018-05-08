@@ -49,7 +49,10 @@ namespace Game.UI
         // Update is called once per frame
         void Update()
         {
-
+            if(tasksPanel.transform.childCount > 5)
+            {
+                //Destroy();
+            }
         }
 
         void OnFocusGained(IFocusTarget focusTarget)
