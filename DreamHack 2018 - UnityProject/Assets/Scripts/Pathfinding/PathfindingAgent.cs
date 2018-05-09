@@ -4,6 +4,7 @@ using UnityEngine;
 using Game;
 using System.Threading;
 using Game.Pathfinding.Internal;
+using Game.Utility;
 
 namespace Game.Pathfinding
 {
@@ -27,6 +28,10 @@ namespace Game.Pathfinding
 		private TilePosition m_currentEndTile;
 		private TileMap m_currentMap;
 		private Thread m_pathfindingThread;
+        /// <summary>
+        /// Used for setting the CurrentStatus through the PathfindingThread.
+        /// </summary>
+        private ThreadQueue<PathfindingStatus> m_pathThreadStatusChanges;
 
         public delegate void StatusChangeHandler(PathfindingStatus newStatus);
         private StatusChangeHandler m_statusChangeHandlers;
@@ -34,12 +39,22 @@ namespace Game.Pathfinding
         public PathfindingAgent(PathfindingRule rule, TileMap map)
 		{
             CurrentStatus = PathfindingStatus.PATH_FINISHED;
+            m_pathThreadStatusChanges = new ThreadQueue<PathfindingStatus>();
 
             m_currentMap = map;
 			m_clientRule = rule;
 			m_currentPath = new List<TilePosition>();
 			map.RegisterEventHandler(TileMapInterruption, TileMapEvent.TILEMAP_MODIFIED);
 		}
+
+        public void Update()
+        {
+            PathfindingStatus newStatus;
+            while(m_pathThreadStatusChanges.TryDequeue(out newStatus))
+            {
+                CurrentStatus = newStatus;
+            }
+        }
 
 		public void GeneratePath(TilePosition from, TilePosition to)
 		{
@@ -67,12 +82,12 @@ namespace Game.Pathfinding
 			m_currentPath = Internal.Pathfinding.FindPath(m_clientRule, m_currentMap, from, to);
 			if(m_currentPath.Count > 0)
 			{
-				CurrentStatus = PathfindingStatus.HAS_PATH;
+                m_pathThreadStatusChanges.Enqueue(PathfindingStatus.HAS_PATH);
 			}
 			else
 			{
-				CurrentStatus = PathfindingStatus.PATH_FINISHED;
-			}
+                m_pathThreadStatusChanges.Enqueue(PathfindingStatus.PATH_FINISHED);
+            }
 		}
 
 		public TilePosition GetNextTile()
