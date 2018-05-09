@@ -26,7 +26,7 @@ namespace Game.UI
         // Update is called once per frame
         void Update()
         {
-            timeText.text = WorldController.Instance.MainState.TimeSystem.Hour + " : " + WorldController.Instance.MainState.TimeSystem.Minute;
+            timeText.text = WorldController.Instance.MainState.TimeSystem.TimeString;
             dayText.text = WorldController.Instance.MainState.TimeSystem.DayCount.ToString();
         }
     }

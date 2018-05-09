@@ -1,0 +1,257 @@
+fileFormatVersion: 2
+guid: 7f5adaf9dbf13774880671fb58e33e2d
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Belt
+    100004: Blaser
+    100006: Body
+    100008: Boot.L
+    100010: Boot.R
+    100012: Chest
+    100014: ChestEquipment
+    100016: Foot.L
+    100018: Foot.R
+    100020: Gloves
+    100022: Hand.L
+    100024: Hand.L_end
+    100026: Hand.R
+    100028: Hand.R_end
+    100030: Head
+    100032: Head_end
+    100034: Helmet
+    100036: Leg.L
+    100038: Leg.R
+    100040: LowerArm.L
+    100042: LowerArm.R
+    100044: Neck
+    100046: Pelvis
+    100048: Root
+    100050: Stomach
+    100052: Thigh.L
+    100054: Thigh.R
+    100056: Toes.L
+    100058: Toes.L_end
+    100060: Toes.R
+    100062: Toes.R_end
+    100064: UpperArm.L
+    100066: UpperArm.R
+    100068: //RootNode
+    400000: Armature
+    400002: Belt
+    400004: Blaser
+    400006: Body
+    400008: Boot.L
+    400010: Boot.R
+    400012: Chest
+    400014: ChestEquipment
+    400016: Foot.L
+    400018: Foot.R
+    400020: Gloves
+    400022: Hand.L
+    400024: Hand.L_end
+    400026: Hand.R
+    400028: Hand.R_end
+    400030: Head
+    400032: Head_end
+    400034: Helmet
+    400036: Leg.L
+    400038: Leg.R
+    400040: LowerArm.L
+    400042: LowerArm.R
+    400044: Neck
+    400046: Pelvis
+    400048: Root
+    400050: Stomach
+    400052: Thigh.L
+    400054: Thigh.R
+    400056: Toes.L
+    400058: Toes.L_end
+    400060: Toes.R
+    400062: Toes.R_end
+    400064: UpperArm.L
+    400066: UpperArm.R
+    400068: //RootNode
+    2100000: Armour
+    2100002: Accent
+    2100004: Glass
+    2100006: No Name
+    2100008: Undersuit
+    2100010: Skin
+    2100012: Sole
+    2100014: GunBlack
+    2100016: GunWhite
+    2300000: Blaser
+    2300002: Boot.L
+    2300004: Boot.R
+    3300000: Blaser
+    3300002: Boot.L
+    3300004: Boot.R
+    4300000: Gloves
+    4300002: Helmet
+    4300004: ChestEquipment
+    4300006: Belt
+    4300008: Body
+    4300010: Boot.L
+    4300012: Boot.R
+    4300014: Blaser
+    7400000: Armature|FootPoleTarget.LAction
+    7400002: Armature|FootPoleTarget.LAction.001
+    7400004: Armature|FootPoleTarget.RAction
+    7400006: Armature|FootTarget.L.Idle
+    7400008: Armature|FootTarget.L.Walk
+    7400010: Armature|FootTarget.R.Idle
+    7400012: Armature|FootTarget.R.Walk
+    7400014: Armature|Idle
+    7400016: Worker_Walk
+    7400018: Blaser|FootPoleTarget.LAction
+    7400020: Blaser|FootPoleTarget.LAction.001
+    7400022: Blaser|FootPoleTarget.RAction
+    7400024: Blaser|FootTarget.L.Idle
+    7400026: Blaser|FootTarget.L.Walk
+    7400028: Blaser|FootTarget.R.Idle
+    7400030: Blaser|FootTarget.R.Walk
+    9500000: //RootNode
+    13700000: Belt
+    13700002: Body
+    13700004: ChestEquipment
+    13700006: Gloves
+    13700008: Helmet
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Armature|Idle
+      takeName: Armature|Idle
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Worker_Walk
+      takeName: Armature|Walk
+      firstFrame: 10
+      lastFrame: 50
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

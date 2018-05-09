@@ -29,7 +29,7 @@ public class TestPathfind : MonoBehaviour {
 
 	IEnumerator MoveTo()
     {		 
-        while(agent.CurrentStatus == PathfindingStatus.HAS_PATH)
+        /*while(agent.CurrentStatus == PathfindingStatus.HAS_PATH)
         {
 			Debug.Log(agent.CurrentStatus);
             livingWorker.MoveTo(agent.GetNextTile().Position);
@@ -38,7 +38,7 @@ public class TestPathfind : MonoBehaviour {
             {
                 yield return new WaitForEndOfFrame();
             }
-        }
+        }*/
 		yield return new WaitForEndOfFrame();
         yield return StartCoroutine(MoveTo());
     }

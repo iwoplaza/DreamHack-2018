@@ -509,8 +509,8 @@ MonoBehaviour:
   m_rotationSpeedFactor: 4.12
   m_cameraTurnIncrement: 22.5
   m_focusFollowSpeed: 0.361
-  m_distance: 12
-  m_minDistance: 5
+  m_distance: 3
+  m_minDistance: 3
   m_maxDistance: 70
   m_scrollSpeed: 1.83
   m_scrollAccellerationFactor: 0.3
