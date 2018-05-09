@@ -47,6 +47,7 @@ namespace Game
             base.Start();
 
             PathfindingAgent = new PathfindingAgent(new BasicRule(), m_tileMap);
+            PathfindingAgent.RegisterStatusChangeHandler(OnPathfindingStatusChanged);
             m_characterController = GetComponent<CharacterController>();
             m_animator = GetComponentInChildren<Animator>();
         }
@@ -122,6 +123,26 @@ namespace Game
             UpdateAnimator();
         }
 
+        void HandleTasks()
+        {
+            TaskBase task = TaskQueue.CurrentTask;
+            if (task != null)
+            {
+                if(TaskQueue.Status == TaskQueue.QueueStatus.IN_PROGRESS)
+                {
+                    if(task is GoToTask)
+                    {
+                        GoToTask goToTask = task as GoToTask;
+                        MoveTo(goToTask.TargetPosition);
+                    }
+                    else
+                    {
+                        TaskQueue.CompleteTask();
+                    }
+                }
+            }
+        }
+
         public void UpdateAnimator()
         {
             m_animator.SetBool("Walk", m_walking);
@@ -146,6 +167,22 @@ namespace Game
         public void MoveTo(TilePosition target)
         {
             PathfindingAgent.GeneratePath(CurrentTile, target);
+        }
+
+        /// <summary>
+        /// An event handler for the StatusChanged event of the PathfindingAgent.
+        /// </summary>
+        /// <param name="newStatus">The new status</param>
+        public void OnPathfindingStatusChanged(PathfindingStatus newStatus)
+        {
+            if (newStatus == PathfindingStatus.PATH_FINISHED && TaskQueue.Status == TaskQueue.QueueStatus.IN_PROGRESS)
+            {
+                GoToTask goToTask = TaskQueue.CurrentTask as GoToTask;
+                if (goToTask != null)
+                {
+                    TaskQueue.CompleteTask();
+                }
+            }
         }
 
         void IFocusTarget.OnFocusGained()
