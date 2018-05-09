@@ -100,7 +100,11 @@ namespace Game.Pathfinding.Internal
         {
             int x = Mathf.Abs(end.X - start.X);
             int y = Mathf.Abs(end.Z - start.Z);
-            return (x + y) > 1 ? 1.41421356237f : 1;
+            if(x + y <= 2){
+                return (x + y) > 1 ? 1.41421356237f : 1;
+            }else{
+                return Heuristic(start,end);
+            }
         }
 
         static List<TilePosition> GetNeighbours(this TileMap map, PathfindingRule rule, TilePosition tilePos)
