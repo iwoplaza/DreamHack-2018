@@ -69,6 +69,8 @@ namespace Game
             }
 
             m_previouslyGrounded = m_characterController.isGrounded;
+
+            PathfindingAgent.Update();
         }
 
         private void FixedUpdate()
