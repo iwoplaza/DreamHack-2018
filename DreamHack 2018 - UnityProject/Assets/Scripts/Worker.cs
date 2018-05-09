@@ -40,6 +40,9 @@ namespace Game
         protected override void Awake()
         {
             base.Awake();
+
+            TaskQueue = new TaskQueue();
+            TaskQueue.RegisterHandler(TaskQueue.TaskEvent.CANCEL_TASK, OnTaskCancel);
         }
 
         override protected void Start()
@@ -120,6 +123,7 @@ namespace Game
             }
             m_collisionFlags = m_characterController.Move(m_moveDir * Time.fixedDeltaTime);
 
+            HandleTasks();
             UpdateAnimator();
         }
 
@@ -128,11 +132,13 @@ namespace Game
             TaskBase task = TaskQueue.CurrentTask;
             if (task != null)
             {
-                if(TaskQueue.Status == TaskQueue.QueueStatus.IN_PROGRESS)
+                if(TaskQueue.Status == TaskQueue.QueueStatus.WAITING)
                 {
                     if(task is GoToTask)
                     {
                         GoToTask goToTask = task as GoToTask;
+                        TaskQueue.StartTask();
+                        Debug.Log("Starting walk...");
                         MoveTo(goToTask.TargetPosition);
                     }
                     else
@@ -180,7 +186,19 @@ namespace Game
                 GoToTask goToTask = TaskQueue.CurrentTask as GoToTask;
                 if (goToTask != null)
                 {
+                    Debug.Log("COMPLETE");
                     TaskQueue.CompleteTask();
+                }
+            }
+        }
+
+        public void OnTaskCancel(TaskBase task)
+        {
+            if(task == TaskQueue.CurrentTask)
+            {
+                if(task is GoToTask)
+                {
+                    PathfindingAgent.CancelPath();
                 }
             }
         }

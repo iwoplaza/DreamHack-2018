@@ -105,9 +105,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224119508424404152}
-  - component: {fileID: 114319744942839710}
+  - component: {fileID: 114731944149911298}
   m_Layer: 5
-  m_Name: Task
+  m_Name: TaskQueueEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,7 +204,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114235413406181914}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114731944149911298}
+        m_MethodName: MoveUp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114219563110419728
@@ -360,7 +371,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114319744942839710}
+      - m_Target: {fileID: 114731944149911298}
         m_MethodName: RemoveTask
         m_Mode: 1
         m_Arguments:
@@ -373,7 +384,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114319744942839710
+--- !u!114 &114731944149911298
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -381,10 +392,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1773809153491664}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 640187da583957240ab5fcbc3232545f, type: 3}
+  m_Script: {fileID: 11500000, guid: c4188806a5a137e41829f332c8ddb3f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  topPriority: {x: 115.2, y: -28.65, z: 0}
+  m_titleText: {fileID: 114219563110419728}
 --- !u!114 &114756196192076378
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -504,7 +515,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114920920095302798}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114731944149911298}
+        m_MethodName: MoveDown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114995155660106750
@@ -731,8 +753,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 103.4, y: 0.8}
-  m_SizeDelta: {x: 85.28, y: 35.58}
+  m_AnchoredPosition: {x: 137.8, y: 0.8}
+  m_SizeDelta: {x: 154.2, y: 35.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224973132171675076
 RectTransform:

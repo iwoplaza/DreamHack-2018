@@ -6,7 +6,7 @@ namespace Game.Tasks
 {
     public class TaskQueue
     {
-        private List<TaskBase> Tasks { get; set; }
+        public List<TaskBase> Tasks { get; private set; }
         public QueueStatus Status { get; private set; }
 
         public delegate void TaskEventHandler(TaskBase task);
@@ -22,7 +22,7 @@ namespace Game.Tasks
             get { return Tasks.Count > 0; }
         }
 
-        TaskQueue()
+        public TaskQueue()
         {
             Status = QueueStatus.WAITING;
             Tasks = new List<TaskBase>();
@@ -38,6 +38,7 @@ namespace Game.Tasks
             if (!Tasks.Exists(t => t.Equals(newTask)))
             {
                 Tasks.Add(newTask);
+                NotifyTaskEvent(TaskEvent.NEW_TASK, newTask);
             }
         }
 
@@ -50,6 +51,8 @@ namespace Game.Tasks
             if (task != null)
             {
                 task.OnStart();
+                Status = QueueStatus.IN_PROGRESS;
+                NotifyTaskEvent(TaskEvent.START_TASK, task);
                 return true;
             }
 
@@ -70,6 +73,8 @@ namespace Game.Tasks
             {
                 task.OnComplete();
                 Tasks.Remove(task);
+                Status = QueueStatus.WAITING;
+                NotifyTaskEvent(TaskEvent.COMPLETE_TASK, task);
                 return true;
             }
 
@@ -81,13 +86,35 @@ namespace Game.Tasks
             if (Tasks.Exists(t => t.Equals(taskToCancel)))
             {
                 taskToCancel.OnCancel();
+                Status = QueueStatus.WAITING;
+                NotifyTaskEvent(TaskEvent.CANCEL_TASK, taskToCancel);
                 Tasks.Remove(taskToCancel);
             }
         }
 
         public void RegisterHandler(TaskEvent taskEvent, TaskEventHandler handler)
         {
-            m_taskEventHandlers[taskEvent] += handler;
+            if (!IsEventHandlerRegistered(taskEvent, handler))
+            {
+                if (!m_taskEventHandlers.ContainsKey(taskEvent))
+                    m_taskEventHandlers.Add(taskEvent, handler);
+                else
+                    m_taskEventHandlers[taskEvent] += handler;
+            }
+        }
+
+        public void UnregisterHandler(TaskEvent taskEvent, TaskEventHandler handler)
+        {
+            m_taskEventHandlers[taskEvent] -= handler;
+        }
+
+        public bool IsEventHandlerRegistered(TaskEvent taskEvent, TaskEventHandler handler)
+        {
+            if (m_taskEventHandlers.ContainsKey(taskEvent) && m_taskEventHandlers[taskEvent] != null)
+                foreach (TaskEventHandler h in m_taskEventHandlers[taskEvent].GetInvocationList())
+                    if (h == handler)
+                        return true;
+            return false;
         }
 
         public void NotifyTaskEvent(TaskEvent taskEvent, TaskBase task)
@@ -107,6 +134,7 @@ namespace Game.Tasks
         public enum TaskEvent
         {
             NEW_TASK,
+            START_TASK,
             COMPLETE_TASK,
             CANCEL_TASK
         }

@@ -5,20 +5,17 @@ using UnityEngine.UI;
 
 namespace Game.UI
 {
-    public class WorkerPanel : MonoBehaviour
+    public class FocusPanel : MonoBehaviour
     {
         [SerializeField] protected Text m_nameText;
 
+        protected TaskQueuePanel m_tileQueuePanel;
+
         protected IFocusTarget m_focusTarget = null;
-
-        public InputField addTaskTitle;
-
-        public GameObject task;
-        public GameObject tasksPanel;
-        public Text taskTitle;
 
         void Awake()
         {
+            m_tileQueuePanel = GetComponentInChildren<TaskQueuePanel>();
         }
 
         // Use this for initialization
@@ -32,29 +29,6 @@ namespace Game.UI
             }
         }
 
-        public void UpdateTaskTitle()
-        {
-            taskTitle.text = addTaskTitle.text;
-        }
-
-        public void AddTask(string title)
-        {
-            // This is only a test function
-            GameObject go = Instantiate(task, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-            taskTitle.text = title;
-            addTaskTitle.text = "";
-            go.transform.parent = tasksPanel.transform;
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            if(tasksPanel.transform.childCount > 5)
-            {
-                //Destroy();
-            }
-        }
-
         void OnFocusGained(IFocusTarget focusTarget)
         {
             gameObject.SetActive(true);
@@ -64,6 +38,14 @@ namespace Game.UI
             if (m_focusTarget != null)
             {
                 m_nameText.text = m_focusTarget.DisplayName;
+
+                if (m_focusTarget is Worker)
+                {
+                    Worker worker = m_focusTarget as Worker;
+                    m_tileQueuePanel.Populate(worker.TaskQueue);
+                }
+                else
+                    m_tileQueuePanel.gameObject.SetActive(false);
             }
             else
             {

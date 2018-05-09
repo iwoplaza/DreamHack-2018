@@ -56,7 +56,13 @@ namespace Game.Pathfinding
 			m_pathfindingThread.Start();
 		}
 
-		private void PathThread(TilePosition from, TilePosition to)
+        public void CancelPath()
+        {
+            m_currentPath.Clear();
+            CurrentStatus = PathfindingStatus.PATH_FINISHED;
+        }
+
+        private void PathThread(TilePosition from, TilePosition to)
         {			
 			m_currentPath = Internal.Pathfinding.FindPath(m_clientRule, m_currentMap, from, to);
 			if(m_currentPath.Count > 0)

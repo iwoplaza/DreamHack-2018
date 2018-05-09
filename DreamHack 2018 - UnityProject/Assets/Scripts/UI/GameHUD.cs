@@ -7,14 +7,14 @@ namespace Game.UI
 {
     public class GameHUD : MonoBehaviour
     {
-        public WorkerPanel WorkerPanel { get; private set; }
+        public FocusPanel WorkerPanel { get; private set; }
 
         public Text timeText;
         public Text dayText;
 
         void Awake()
         {
-            WorkerPanel = GetComponentInChildren<WorkerPanel>();
+            WorkerPanel = GetComponentInChildren<FocusPanel>();
         }
 
         // Use this for initialization
