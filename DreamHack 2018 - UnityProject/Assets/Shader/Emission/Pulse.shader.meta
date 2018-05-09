@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: ad516abeb2bda3847b4b49cb7723112f
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _PulseMap: {fileID: 2800000, guid: 95626cb6cdc93364bb20162b223d48a0, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
