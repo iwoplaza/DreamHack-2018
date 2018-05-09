@@ -7,10 +7,16 @@ ModelImporter:
     100002: Cube_001
     100004: Cylinder
     100006: //RootNode
+    100008: Drill
+    100010: Drill_Cover
+    100012: Drill_Machine
     400000: Cube
     400002: Cube_001
     400004: Cylinder
     400006: //RootNode
+    400008: Drill
+    400010: Drill_Cover
+    400012: Drill_Machine
     2100000: Glass
     2100002: unnamed
     2100004: Unified
@@ -18,12 +24,21 @@ ModelImporter:
     2300000: Cube
     2300002: Cube_001
     2300004: Cylinder
+    2300006: Drill
+    2300008: Drill_Cover
+    2300010: Drill_Machine
     3300000: Cube
     3300002: Cube_001
     3300004: Cylinder
+    3300006: Drill
+    3300008: Drill_Cover
+    3300010: Drill_Machine
     4300000: Cube_001
     4300002: Cube
     4300004: Cylinder
+    4300006: Drill_Cover
+    4300008: Drill_Machine
+    4300010: Drill
     7400000: Default Take
     9500000: //RootNode
   externalObjects: {}
