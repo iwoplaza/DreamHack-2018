@@ -314,7 +314,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224997490809281554}
   - component: {fileID: 222499528930734304}
-  - component: {fileID: 114732239146735568}
   - component: {fileID: 114865863812858828}
   m_Layer: 5
   m_Name: Holder
@@ -3060,17 +3059,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8a63b580fecdaa48b2fc4b9037511c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114732239146735568
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1202527249129646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8a63b580fecdaa48b2fc4b9037511c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114735669117572762
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3421,7 +3409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
