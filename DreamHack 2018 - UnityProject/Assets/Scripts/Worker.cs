@@ -100,13 +100,14 @@ namespace Game
                 else
                 {
                     CurrentTile = PathfindingAgent.PopTile();
-                    m_moveDir = Vector3.zero;
                 }
             }
             else
             {
                 m_walking = false;
-            }
+                m_moveDir.x = 0;
+                m_moveDir.z = 0;
+            }            
 
             if (m_characterController.isGrounded)
             {

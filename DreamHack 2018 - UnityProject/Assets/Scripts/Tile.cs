@@ -34,6 +34,7 @@ namespace Game
                 objectToInstall.OnInstalledAt(this);
                 InstalledObject = objectToInstall;
             }
+            Owner.OnModifyEvent(Position);
         }
 
         public void UninstallObject()
@@ -43,6 +44,7 @@ namespace Game
                 InstalledObject.OnUninstalled();
                 InstalledObject = null;
             }
+            Owner.OnModifyEvent(Position);
         }
 
         public static Tile CreateAndParse(XElement element, TileMap tileMap)

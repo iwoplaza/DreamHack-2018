@@ -111,7 +111,6 @@ namespace Game
                 return false;
 
             targetTile.Install(objectToInstall);
-            OnModifyEvent(targetPosition);
             return true;
         }
 
@@ -125,7 +124,7 @@ namespace Game
             }
         }
 
-        private void OnModifyEvent(TilePosition modifiedPos)
+        public void OnModifyEvent(TilePosition modifiedPos)
         {
             m_TileMapModifiedHandler(modifiedPos);
         }
