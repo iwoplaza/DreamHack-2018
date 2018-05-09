@@ -9,16 +9,29 @@ namespace Game.Pathfinding
 {
 	public class PathfindingAgent
 	{
-		public PathfindingStatus CurrentStatus { get; private set; }
+        private PathfindingStatus m_currentStatus;
+
+        public PathfindingStatus CurrentStatus
+        {
+            get { return m_currentStatus; }
+            private set
+            {
+                m_currentStatus = value;
+                if (m_statusChangeHandlers != null)
+                    m_statusChangeHandlers(m_currentStatus);
+            }
+        }
 
 		private PathfindingRule m_clientRule;
 		private List<TilePosition> m_currentPath;
 		private TilePosition m_currentEndTile;
 		private TileMap m_currentMap;
-
 		private Thread m_pathfindingThread;
 
-		public PathfindingAgent(PathfindingRule rule, TileMap map)
+        public delegate void StatusChangeHandler(PathfindingStatus newStatus);
+        private StatusChangeHandler m_statusChangeHandlers;
+
+        public PathfindingAgent(PathfindingRule rule, TileMap map)
 		{
             CurrentStatus = PathfindingStatus.PATH_FINISHED;
 
@@ -103,5 +116,10 @@ namespace Game.Pathfinding
 				GeneratePath(GetNextTile(), m_currentEndTile);
 			}
 		}
+
+        public void RegisterStatusChangeHandler(StatusChangeHandler handler)
+        {
+            m_statusChangeHandlers += handler;
+        }
 	}
 }
