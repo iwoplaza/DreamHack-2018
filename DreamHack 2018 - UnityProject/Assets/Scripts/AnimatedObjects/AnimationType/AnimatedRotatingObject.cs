@@ -11,38 +11,46 @@ public class AnimatedRotatingObject : AnimatedComponent {
 
 	float m_currentRotationSpeed;
 	float m_targetRotationSpeed;
+	float m_baseRotationSpeed;
 	float m_interpolateTime;
 	float m_currentInterpolateTime;
+
+	void Reset()
+	{
+		m_rotationAxis = Vector3.one;
+		m_maxRotationSpeed = 120;
+		m_acceleration = 30;
+	}
+
+	void Start()
+	{
+		m_currentInterpolateTime = m_interpolateTime + 1;
+	}
 
 	void Update()
 	{
 		transform.localRotation *= Quaternion.Euler(m_rotationAxis * m_currentRotationSpeed * Time.deltaTime);
 
-		if(m_interpolateTime > 0)
+		if(m_currentInterpolateTime <= m_interpolateTime)
 		{
-			m_currentRotationSpeed = CosineInterpolation(m_currentRotationSpeed, m_targetRotationSpeed, 1 - m_interpolateTime/m_currentInterpolateTime);
-			m_interpolateTime -= Time.deltaTime;
+			m_currentRotationSpeed = AnimatedObjectHelper.CosineInterpolation(m_baseRotationSpeed, m_targetRotationSpeed, m_currentInterpolateTime/m_interpolateTime);
+			m_currentInterpolateTime += Time.deltaTime;
 		}
 	}
 
 	public override void OnActivate()
 	{
 		m_targetRotationSpeed = m_maxRotationSpeed;
+		m_baseRotationSpeed = m_currentRotationSpeed;
 		m_interpolateTime = m_targetRotationSpeed/m_acceleration;
-		m_currentInterpolateTime = m_interpolateTime;
+		m_currentInterpolateTime = 0;
 	}
 
 	public override void OnDeactivate()
 	{
 		m_targetRotationSpeed = 0;
+		m_baseRotationSpeed = m_currentRotationSpeed;
 		m_interpolateTime = m_currentRotationSpeed/m_acceleration;
-		m_currentInterpolateTime = m_interpolateTime;
-	}
-
-	public static float CosineInterpolation(float f1, float f2, float t)
-	{
-		t = Mathf.Clamp01(t);
-		float t1 = (1f - Mathf.Cos(t * Mathf.PI))/2f;
-		return (f1 * (1f - t1) + (f2 * t1));
+		m_currentInterpolateTime = 0;
 	}
 }
