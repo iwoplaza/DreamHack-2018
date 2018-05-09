@@ -8,9 +8,12 @@ namespace Game.Pathfinding.Internal
         public PathNode ParentNode { get; private set; }
         public float Weight { get; private set; }
         public TilePosition Location { get; private set; }
+        public float Cost { get; private set; }
+        
 
         public PathNode(PathNode parent, float weight, TilePosition loc)
         {
+            Weight = weight;
             ParentNode = parent;
             Location = loc;
         }

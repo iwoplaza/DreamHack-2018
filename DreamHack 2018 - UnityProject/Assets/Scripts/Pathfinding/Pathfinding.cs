@@ -37,7 +37,7 @@ namespace Game.Pathfinding.Internal
                 PathNode cheapestNode = pathHeaps.GetSmallest();
                 foreach(TilePosition pos in map.GetNeighbours(rule, cheapestNode.Location))
                 {
-                    float newWeight = Heuristic(pos,end) + cheapestNode.Weight;
+                    float newWeight = cheapestNode.Weight + GetCost(cheapestNode.Location,pos);
                     if(weightMap[pos.X, pos.Z] < 0 || newWeight < weightMap[pos.X, pos.Z])
                     {
                         weightMap[pos.X, pos.Z] = newWeight;
@@ -50,7 +50,7 @@ namespace Game.Pathfinding.Internal
                         }
                         else
                         {
-                            pathHeaps.AddToHeap(newNode.Weight, newNode);
+                            pathHeaps.AddToHeap(newWeight + Heuristic(pos,end), newNode);
                         }
                     }
                 }
@@ -93,7 +93,14 @@ namespace Game.Pathfinding.Internal
         {
             int abs_x = Mathf.Abs(end.X - start.X);
             int abs_y = Mathf.Abs(end.Z - start.Z);
-            return Mathf.Max(abs_x,abs_y);
+            return Mathf.Min(abs_x,abs_y) * 1.41421f + Mathf.Abs(abs_x - abs_y);
+        }
+
+        static float GetCost(TilePosition start, TilePosition end)
+        {
+            int x = Mathf.Abs(end.X - start.X);
+            int y = Mathf.Abs(end.Z - start.Z);
+            return (x + y) > 1 ? 1.41421356237f : 1;
         }
 
         static List<TilePosition> GetNeighbours(this TileMap map, PathfindingRule rule, TilePosition tilePos)
@@ -104,23 +111,28 @@ namespace Game.Pathfinding.Internal
             {
                 if(rule.CanPassThrough(map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)), Direction.POSITIVE_X))
                 {
-                    neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z));
+                    neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z));                    
                 }
-                if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)).HasObject)
-                {
+                if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)).HasObject){
                     if(tilePos.Z > 0)
-                    {
-                        if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z - 1)).HasObject)
                         {
-                            neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z - 1));
+                            if(!map.TileAt(new TilePosition(tilePos.X, tilePos.Z - 1)).HasObject)
+                            {
+                                if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z - 1)).HasObject)
+                                {
+                                    neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z - 1));
+                                }
+                            }
                         }
-                    }
                     if(tilePos.Z < map.Height - 1)
                     {
-                        if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z + 1)).HasObject)
+                        if(!map.TileAt(new TilePosition(tilePos.X, tilePos.Z + 1)).HasObject)
                         {
-                            neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z + 1));
-                        }                
+                            if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z + 1)).HasObject)
+                            {
+                                neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z + 1));
+                            }
+                        }
                     }
                 }
             }
@@ -141,16 +153,23 @@ namespace Game.Pathfinding.Internal
                 {
                     if(tilePos.Z > 0)
                     {
-                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z - 1)).HasObject)
+                        if(!map.TileAt(new TilePosition(tilePos.X, tilePos.Z - 1)).HasObject)
                         {
-                            neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z - 1));
+                            if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z - 1)).HasObject)
+                            {
+                                neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z - 1));
+                            }
                         }
                     }
                     if(tilePos.Z < map.Height - 1)
                     {
-                        if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z + 1)).HasObject)
+                        if(!map.TileAt(new TilePosition(tilePos.X, tilePos.Z + 1)).HasObject)
                         {
-                            neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z + 1));
+                            if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z + 1)).HasObject)
+                            {
+                                neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z + 1));
+
+                            }
                         }                
                     }
                 }
