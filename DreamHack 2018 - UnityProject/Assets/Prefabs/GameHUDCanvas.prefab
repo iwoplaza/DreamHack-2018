@@ -697,6 +697,7 @@ GameObject:
   - component: {fileID: 114108573614119522}
   - component: {fileID: 114484622569301444}
   - component: {fileID: 114149955133544224}
+  - component: {fileID: 114960130765006336}
   m_Layer: 5
   m_Name: Tasks Panel
   m_TagString: Untagged
@@ -2140,11 +2141,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_nameText: {fileID: 114158672714271394}
-  addTaskTitle: {fileID: 114157115691761812}
-  task: {fileID: 1773809153491664, guid: 585314bf349fd7c46afea76670d30596, type: 2}
-  tasksPanel: {fileID: 1488114423150984}
-  taskTitle: {fileID: 114219563110419728, guid: 585314bf349fd7c46afea76670d30596,
-    type: 2}
 --- !u!114 &114158672714271394
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5733,6 +5729,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114960130765006336
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1488114423150984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a68db3cf904b3498a1420bdeb1c88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_tileEntryPrefab: {fileID: 1773809153491664, guid: 585314bf349fd7c46afea76670d30596,
+    type: 2}
+  m_taskEntryHeight: 40
 --- !u!114 &114974366544742296
 MonoBehaviour:
   m_ObjectHideFlags: 1
