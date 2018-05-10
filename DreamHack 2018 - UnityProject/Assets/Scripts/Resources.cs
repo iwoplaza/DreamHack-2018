@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game
 {
@@ -8,6 +9,7 @@ namespace Game
     {
         public static Dictionary<string, GameObject> TileObjectPrefabs { get; private set; }
         public static Dictionary<string, GameObject> EnvironmentObjectPrefabs { get; private set; }
+        public static Dictionary<string, Sprite> Icons { get; private set; }
 
         public static GameObject WorkerPrefab { get; private set; }
         public static GameObject TileDisplayPrefab { get; private set; }
@@ -24,6 +26,11 @@ namespace Game
             EnvironmentObjectPrefabs = new Dictionary<string, GameObject>();
             foreach (GameObject prefab in environmentObjectPrefabs)
                 EnvironmentObjectPrefabs.Add(prefab.name, prefab);
+
+            Sprite[] icons = UnityEngine.Resources.LoadAll<Sprite>("Icons");
+            Icons = new Dictionary<string, Sprite>();
+            foreach (Sprite image in icons)
+                Icons.Add(image.name, image);
 
             WorkerPrefab = UnityEngine.Resources.Load<GameObject>("Worker");
             TileDisplayPrefab = UnityEngine.Resources.Load<GameObject>("TileDisplay");
@@ -48,6 +55,16 @@ namespace Game
                 return null;
             }
             return EnvironmentObjectPrefabs[name];
+        }
+
+        public static Sprite FindIcon(string name)
+        {
+            if (!Icons.ContainsKey(name))
+            {
+                Debug.LogError("Couldn't find the icon (" + name + ").");
+                return null;
+            }
+            return Icons[name];
         }
     }
 }

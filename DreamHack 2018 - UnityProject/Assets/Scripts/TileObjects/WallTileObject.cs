@@ -12,9 +12,8 @@ namespace Game.TileObjects
             return false;
         }
 
-        public WallTileObject()
+        public WallTileObject(int variant = 0) : base(variant)
         {
-
         }
 
         protected override void OnInstalled()

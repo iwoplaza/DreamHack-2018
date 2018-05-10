@@ -12,7 +12,10 @@ namespace Game
         public TileMap Owner { get; private set; }
         public TilePosition Position { get; private set; }
         public TileObjectBase InstalledObject { get; private set; }
+        public bool HasCliff { get; private set; }
         public bool HasObject { get { return InstalledObject != null; } }
+        public bool Empty { get { return !HasObject && !HasCliff; } }
+        public bool CanInstallProp { get { return Empty; } }
 
         public Tile(TileMap owner, TilePosition position)
         {
@@ -29,7 +32,7 @@ namespace Game
         /// <param name="objectToInstall">The object to install</param>
         public void Install(TileObjectBase objectToInstall)
         {
-            if(!objectToInstall.Installed)
+            if(CanInstallProp && !objectToInstall.Installed)
             {
                 objectToInstall.OnInstalledAt(this);
                 InstalledObject = objectToInstall;
@@ -45,6 +48,11 @@ namespace Game
                 InstalledObject = null;
             }
             Owner.OnModifyEvent(Position);
+        }
+        
+        public void SetHasCliff(bool flag)
+        {
+            HasCliff = flag;
         }
 
         public static Tile CreateAndParse(XElement element, TileMap tileMap)

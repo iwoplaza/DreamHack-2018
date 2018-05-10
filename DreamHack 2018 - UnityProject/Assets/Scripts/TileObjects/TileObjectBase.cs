@@ -13,6 +13,7 @@ namespace Game.TileObjects
 
         public GameObject InstalledGameObject { get; set; }
         public Direction Orientation { get; private set; }
+        public int Variant { get; private set; }
 
         public abstract string DisplayName { get; }
         /// <summary>
@@ -36,8 +37,9 @@ namespace Game.TileObjects
         /// </summary>
         public virtual bool IsStatic { get { return false; } }
 
-        public TileObjectBase()
+        public TileObjectBase(int variant = 0)
         {
+            Variant = variant;
             InstalledAt = null;
         }
 

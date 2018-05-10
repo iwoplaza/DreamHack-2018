@@ -8,6 +8,7 @@ using Game.Tasks;
 using Game.Acting;
 using Game.Acting.Actions;
 using Game.Components;
+using Game.Building;
 
 namespace Game
 {
@@ -127,7 +128,7 @@ namespace Game
                                 Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
                                 if (targetTile != null)
                                 {
-                                    if (!targetTile.HasObject)
+                                    if (targetTile.Empty)
                                     {
                                         Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
                                         if (selectedWorker != null)

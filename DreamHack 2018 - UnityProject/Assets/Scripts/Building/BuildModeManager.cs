@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Game.Building
 {
     public class BuildModeManager
     {
@@ -51,14 +51,14 @@ namespace Game
             HeldObjectType = null;
         }
 
-        public void Hold(Type tileObjectType)
+        public void Hold(Type tileObjectType, int variant = 0)
         {
             if(TemporaryDisplayObject != null)
             {
                 UnityEngine.Object.Destroy(TemporaryDisplayObject);
             }
 
-            PropVariant = 0;
+            SetVariant(variant);
             TemporaryObject = null;
             HeldObjectType = tileObjectType;
             TileObjectBase tileObject = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileObjectBase;
@@ -81,7 +81,7 @@ namespace Game
             if (HeldObjectType != null)
             {
                 Tile tile = m_gameState.TileMap.TileAt(Cursor);
-                if (tile != null && !tile.HasObject)
+                if (tile != null && tile.CanInstallProp)
                 {
                     TileObjectBase tileObject = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileObjectBase;
                     if (tileObject != null)

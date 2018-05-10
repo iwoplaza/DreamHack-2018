@@ -1,4 +1,5 @@
-﻿using Game.TileObjects;
+﻿using Game.Building;
+using Game.TileObjects;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
@@ -12,6 +13,7 @@ namespace Game
         public List<Worker> Workers { get; private set; }
         public Focus Focus { get; private set; }
         public TimeSystem TimeSystem { get; private set; }
+        public BuildCatalogue BuildCatalogue { get; private set; }
         public BuildModeManager BuildModeManager { get; private set; }
 
         public GameState()
@@ -20,6 +22,7 @@ namespace Game
             Workers = new List<Worker>();
             Focus = new Focus();
             TimeSystem = new TimeSystem();
+            BuildCatalogue = new BuildCatalogue();
             BuildModeManager = new BuildModeManager(this);
         }
 
