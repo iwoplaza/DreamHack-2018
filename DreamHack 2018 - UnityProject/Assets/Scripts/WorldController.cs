@@ -8,10 +8,6 @@ namespace Game
     {
         public static WorldController Instance { get; private set; }
 
-        [SerializeField]
-        protected GameObject m_tilePrefab;
-
-        public GameObject TilePrefab { get { return m_tilePrefab; } }
         public GameState MainState { get; private set; }
         public PlayMode Mode { get; private set; }
 

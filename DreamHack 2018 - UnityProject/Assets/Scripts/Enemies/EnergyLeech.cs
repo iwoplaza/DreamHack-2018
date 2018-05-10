@@ -19,6 +19,7 @@ namespace Game.Enemies
 
         override protected void Awake()
         {
+            base.Awake();
             Visual = GetComponent<EnergyLeechVisual>();
         }
 

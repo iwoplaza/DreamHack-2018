@@ -33,7 +33,7 @@ namespace Game.Animation
         {
             TimeSystem timeSystem = WorldController.Instance.MainState.TimeSystem;
             m_animator.speed = timeSystem.TimeMultiplier;
-            m_animator.SetBool("Walk", EnergyLeech.IsWalking);
+            //m_animator.SetBool("Walk", EnergyLeech.IsWalking);
         }
     }
 }

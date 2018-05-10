@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using Game.Tasks;
 using Game.Acting;
 using Game.Acting.Actions;
+using Game.Components;
 
 namespace Game
 {
@@ -15,6 +16,7 @@ namespace Game
         protected Camera m_camera;
 
         [SerializeField] protected float m_moveSpeedFactor = 1.0F;
+        [SerializeField] protected float m_moveSpeedZoomInfluence = 2.0F;
         [SerializeField] protected float m_rotationSpeedFactor = 1.0F;
         [SerializeField] protected float m_cameraTurnIncrement = 45.0F;
         [SerializeField] protected float m_focusFollowSpeed = 0.7F;
@@ -51,6 +53,12 @@ namespace Game
             {
                 WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_GAIN, OnFocusGained);
                 WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_LOSS, OnFocusLost);
+
+                if(WorldController.Instance.MainState.TileMap != null)
+                {
+                    TileMap tileMap = WorldController.Instance.MainState.TileMap;
+                    //transform.position = new Vector3(tileMap.Width / 2, 0, tileMap.Height / 2);
+                }
             }
         }
 
@@ -78,11 +86,14 @@ namespace Game
             float vertical = CrossPlatformInputManager.GetAxis("Mouse Y");
             float scrollWheel = CrossPlatformInputManager.GetAxis("Mouse ScrollWheel");
 
+            TileMapComponent tileMapComponent = WorldController.Instance.MainState.TileMap.Component;
+            tileMapComponent.UpdateViewpoint(transform.position);
+
             TilePosition tilePositionAtMouse = GetTilePositionAtMouse();
-            if (tilePositionAtMouse != null)
-            {
-                WorldController.Instance.MainState.TileMap.Component.HoverOver(tilePositionAtMouse);
-            }
+            if (tilePositionAtMouse != null && !EventSystem.current.IsPointerOverGameObject())
+                tileMapComponent.HoverOver(tilePositionAtMouse);
+            else
+                tileMapComponent.HoverOver(null);
 
             if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
             {
@@ -141,8 +152,8 @@ namespace Game
                 right.Normalize();
 
                 Vector3 position = transform.position;
-                position += -right * horizontal * m_moveSpeedFactor;
-                position += -forward * vertical * m_moveSpeedFactor;
+                position += -right * horizontal * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
+                position += -forward * vertical * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
                 transform.position = position;
 
                 m_focusTarget = null;

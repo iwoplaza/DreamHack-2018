@@ -77,6 +77,11 @@ namespace Game
             return !a.Equals(b);
         }
 
+        public static TilePosition operator +(TilePosition a, TilePosition b)
+        {
+            return new TilePosition(a.X + b.X, a.Z + b.Z);
+        }
+
         public override string ToString()
         {
             return "(" + X.ToString() + ", " + Z.ToString() + ")";

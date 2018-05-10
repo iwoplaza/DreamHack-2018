@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,11 +7,34 @@ namespace Game.Components
 {
     public class TileMapComponent : MonoBehaviour
     {
-        TileDisplayComponent[,] m_tiles;
+        GameObject m_tileDisplaysHolder;
+        TileDisplayComponent[,] m_tileDisplays;
+        GameObject m_tileHoverDisplay;
+
         TilePosition m_currentHoveredOverPosition;
-        protected bool m_showNeutralOutline = false;
+        protected bool m_showOutline = false;
 
         public TileMap TileMap { get; private set; }
+        /// <summary>
+        /// The maximum number of tiles in the X axis that are going to
+        /// be displayed at a time.
+        /// </summary>
+        public int DisplayWidth { get; private set; }
+        /// <summary>
+        /// The maximum number of tiles in the Z axis that are going to
+        /// be displayed at a time.
+        /// </summary>
+        public int DisplayHeight { get; private set; }
+
+        /// <summary>
+        /// Determines how offset the display is from the actual
+        /// TileMap.
+        /// Used to draw the partial outline of the TileMap.
+        /// </summary>
+        public TilePosition DisplayOffset { get; private set; }
+
+        public static int MAX_DISPLAY_WIDTH = 80;
+        public static int MAX_DISPLAY_HEIGHT = 80;
 
         public void Start()
         {
@@ -21,11 +45,11 @@ namespace Game.Components
         {
             if(playMode == PlayMode.BUILD_MODE)
             {
-                ShowNeutralOutline(true);
+                ShowOutline(true);
             }
             else
             {
-                ShowNeutralOutline(false);
+                ShowOutline(false);
             }
         }
 
@@ -34,24 +58,30 @@ namespace Game.Components
             if (TileMap == null)
             {
                 TileMap = tileMap;
+                DisplayOffset = new TilePosition(0, 0);
+                DisplayWidth = Math.Min(TileMap.Width, MAX_DISPLAY_WIDTH);
+                DisplayHeight = Math.Min(TileMap.Height, MAX_DISPLAY_HEIGHT);
+                m_tileDisplays = new TileDisplayComponent[DisplayWidth, DisplayHeight];
+                m_currentHoveredOverPosition = null;
 
-                m_tiles = new TileDisplayComponent[TileMap.Width, TileMap.Height];
+                m_tileDisplaysHolder = new GameObject("TileDisplays");
+                m_tileDisplaysHolder.transform.parent = transform;
 
-                for (int x = 0; x < TileMap.Width; ++x)
+                for (int x = 0; x < DisplayWidth; ++x)
                 {
-                    for(int z = 0; z < TileMap.Height; ++z)
+                    for(int z = 0; z < DisplayHeight; ++z)
                     {
                         TilePosition position = new TilePosition(x, z);
-                        if (TileMap.TileAt(position) != null)
-                        {
-                            GameObject tileObject = UnityEngine.Object.Instantiate(WorldController.Instance.TilePrefab, transform);
-                            tileObject.name = "Tile (" + x + "," + z + ")";
-                            tileObject.transform.SetPositionAndRotation(new Vector3(x, 0, z), Quaternion.identity);
-                            TileDisplayComponent tileComponent = tileObject.GetComponent<TileDisplayComponent>();
-                            m_tiles[x, z] = tileComponent;
-                        }
+                        GameObject tileObject = Instantiate(Resources.TileDisplayPrefab, m_tileDisplaysHolder.transform);
+                        tileObject.name = "Tile (" + x + "," + z + ")";
+                        tileObject.transform.SetPositionAndRotation(position.Vector3, Quaternion.identity);
+                        TileDisplayComponent tileComponent = tileObject.GetComponent<TileDisplayComponent>();
+                        m_tileDisplays[x, z] = tileComponent;
                     }
                 }
+
+                m_tileHoverDisplay = Instantiate(Resources.TileDisplayHoverPrefab, transform);
+                m_tileHoverDisplay.SetActive(false);
             }
         }
 
@@ -60,47 +90,58 @@ namespace Game.Components
 		
 	    }
 
-        public TileDisplayComponent TileAt(TilePosition position)
+        void UpdateView()
         {
-            if (position.X < 0 || position.X >= TileMap.Width ||
-                position.Z < 0 || position.Z >= TileMap.Height)
+            m_tileDisplaysHolder.transform.position = DisplayOffset.Vector3;
+        }
+
+        TileDisplayComponent TileAt(TilePosition position)
+        {
+            if (position.X < DisplayOffset.X || position.X >= DisplayOffset.X + DisplayWidth ||
+                position.Z < DisplayOffset.Z || position.Z >= DisplayOffset.Z + DisplayHeight)
             {
                 return null;
             }
-            return m_tiles[position.X, position.Z];
+            return m_tileDisplays[position.X - DisplayOffset.X, position.Z - DisplayOffset.Z];
         }
 
         public void HoverOver(TilePosition position)
         {
             if (m_currentHoveredOverPosition != position)
             {
-                if (m_currentHoveredOverPosition != null)
+                if (position == null || TileAt(position) == null)
                 {
-                    TileDisplayComponent oldTile = TileAt(m_currentHoveredOverPosition);
-                    if (oldTile != null)
-                        oldTile.OnMouseExit();
+                    m_tileHoverDisplay.SetActive(false);
+                    m_currentHoveredOverPosition = null;
                 }
-
-                m_currentHoveredOverPosition = position;
-                TileDisplayComponent newTile = TileAt(m_currentHoveredOverPosition);
-                if (newTile != null)
-                    newTile.OnMouseEnter();
+                else
+                {
+                    m_currentHoveredOverPosition = position;
+                    m_tileHoverDisplay.SetActive(true);
+                    m_tileHoverDisplay.transform.position = m_currentHoveredOverPosition.Vector3 + new Vector3(0.5F, 0, 0.5F);
+                }
             }
         }
 
-        public void ShowNeutralOutline(bool show)
+        public void UpdateViewpoint(Vector3 viewPoint)
         {
-            if (show != m_showNeutralOutline)
-            {
-                m_showNeutralOutline = show;
+            DisplayOffset = TilePosition.FromWorldPosition(viewPoint);
+            var x = DisplayOffset.X - DisplayWidth / 2;
+            var z = DisplayOffset.Z - DisplayHeight / 2;
 
-                for (int x = 0; x < TileMap.Width; ++x)
-                {
-                    for (int z = 0; z < TileMap.Height; ++z)
-                    {
-                        m_tiles[x, z].ShowNeutralOutline(m_showNeutralOutline);
-                    }
-                }
+            x = Math.Min(x, TileMap.Width - DisplayWidth);
+            z = Math.Min(z, TileMap.Height - DisplayHeight);
+            DisplayOffset = new TilePosition(x, z);
+
+            UpdateView();
+        }
+
+        public void ShowOutline(bool show)
+        {
+            if (show != m_showOutline)
+            {
+                m_showOutline = show;
+                m_tileDisplaysHolder.SetActive(m_showOutline);
             }
         }
     }

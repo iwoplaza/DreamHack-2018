@@ -7,10 +7,11 @@ namespace Game
     public class Resources
     {
         public static Dictionary<string, GameObject> TileObjectPrefabs { get; private set; }
-
         public static Dictionary<string, GameObject> EnvironmentObjectPrefabs { get; private set; }
 
         public static GameObject WorkerPrefab { get; private set; }
+        public static GameObject TileDisplayPrefab { get; private set; }
+        public static GameObject TileDisplayHoverPrefab { get; private set; }
 
         public static void LoadAll()
         {
@@ -25,6 +26,8 @@ namespace Game
                 EnvironmentObjectPrefabs.Add(prefab.name, prefab);
 
             WorkerPrefab = UnityEngine.Resources.Load<GameObject>("Worker");
+            TileDisplayPrefab = UnityEngine.Resources.Load<GameObject>("TileDisplay");
+            TileDisplayHoverPrefab = UnityEngine.Resources.Load<GameObject>("TileDisplayHover");
         }
 
         public static GameObject FindTileObjectPrefab(string name)
