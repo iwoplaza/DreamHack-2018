@@ -126,7 +126,22 @@ ModelImporter:
     9500000: //RootNode
     13700000: Body
     13700002: Tongue
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Accent
+    second: {fileID: 2100000, guid: f5d049ae8ebc70e4cb227f3b77233654, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glow
+    second: {fileID: 2100000, guid: e0069e7ec5be37c439060a64ee20ef9f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Skin
+    second: {fileID: 2100000, guid: 15bd28f2c1ae4a44c8a9ecb9487abdb6, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

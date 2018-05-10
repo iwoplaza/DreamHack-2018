@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine.EventSystems;
 using Game.Tasks;
+using Game.Acting;
+using Game.Acting.Actions;
 
 namespace Game
 {
@@ -107,17 +109,20 @@ namespace Game
 
                     if (Input.GetMouseButtonDown(1))
                     {
-                        if (tilePositionAtMouse != null)
+                        if(!HandleSubjectClick())
                         {
-                            Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
-                            if (targetTile != null)
+                            if (tilePositionAtMouse != null)
                             {
-                                if (!targetTile.HasObject)
+                                Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
+                                if (targetTile != null)
                                 {
-                                    Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
-                                    if (selectedWorker != null)
+                                    if (!targetTile.HasObject)
                                     {
-                                        selectedWorker.TaskQueue.AddTask(new GoToTask(tilePositionAtMouse));
+                                        Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
+                                        if (selectedWorker != null)
+                                        {
+                                            selectedWorker.TaskQueue.AddTask(new GoToTask(tilePositionAtMouse));
+                                        }
                                     }
                                 }
                             }
@@ -180,6 +185,33 @@ namespace Game
                 float t = Mathf.Min(Mathf.Pow(m_focusFollowSpeed, Time.deltaTime * 100), 1);
                 transform.position += difference * (t);
             }
+        }
+
+        bool HandleSubjectClick()
+        {
+            IActor actor = WorldController.Instance.MainState.Focus.Current as IActor;
+            if (actor == null)
+                return false;
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo) &&
+                hitInfo.collider != null)
+            {
+                ISubject subject = hitInfo.collider.GetComponent<ISubject>();
+                if (subject != null)
+                {
+                    List<ActionBase> actions = subject.GetActionsFor(actor);
+                    if (actions.Count > 0)
+                    {
+                        actor.PerformAction(actions[0], subject);
+                    }
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         void HandleBuildModeControls()

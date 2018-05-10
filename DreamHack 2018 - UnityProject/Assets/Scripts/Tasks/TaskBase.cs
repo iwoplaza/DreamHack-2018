@@ -23,6 +23,9 @@ namespace Game.Tasks
         /// </summary>
         public abstract string Description { get; }
 
+        public virtual float Progress { get { return 0F; } }
+        public virtual bool ShouldDisplayProgress { get { return false; } }
+
         public virtual void OnStart() { }
         public virtual void OnUpdate() { }
         public virtual void OnComplete() { }

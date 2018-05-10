@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using Game.Tasks;
 using Game.Pathfinding;
+using Game.Animation;
+using Game.Acting;
+using Game.Acting.Actions;
 
 namespace Game
 {
     [RequireComponent(typeof(CharacterController))]
-    public class Worker : Living, IFocusTarget
+    public class Worker : Living, IFocusTarget, IActor
     {
         [Header("Worker")]
         [SerializeField] protected string m_name;
@@ -16,8 +19,9 @@ namespace Game
 
         public TaskQueue TaskQueue { get; private set; }
         public PathfindingAgent PathfindingAgent { get; private set; }
+        public bool IsWalking { get; private set; }
+        public bool IsWeaponOut { get; private set; }
 
-        [SerializeField] private bool m_walking;
         [SerializeField] private float m_walkSpeed;
         [SerializeField] private float m_runSpeed;
         [SerializeField] private float m_stickToGroundForce;
@@ -25,7 +29,7 @@ namespace Game
 
         private TileMap m_tileMap;
         private CharacterController m_characterController;
-        private Animator m_animator;
+        private WorkerVisual m_workerVisual;
         private float m_yRotation;
         private Vector3 m_moveDir = Vector3.zero;
         private CollisionFlags m_collisionFlags;
@@ -41,6 +45,7 @@ namespace Game
         {
             base.Awake();
 
+            IsWeaponOut = false;
             TaskQueue = new TaskQueue();
             TaskQueue.RegisterHandler(TaskQueue.TaskEvent.CANCEL_TASK, OnTaskCancel);
         }
@@ -52,7 +57,7 @@ namespace Game
             PathfindingAgent = new PathfindingAgent(new BasicRule(), m_tileMap);
             PathfindingAgent.RegisterStatusChangeHandler(OnPathfindingStatusChanged);
             m_characterController = GetComponent<CharacterController>();
-            m_animator = GetComponentInChildren<Animator>();
+            m_workerVisual = GetComponent<WorkerVisual>();
         }
 
         override protected void Update()
@@ -67,10 +72,10 @@ namespace Game
             {
                 m_moveDir.y = 0f;
             }
-
             m_previouslyGrounded = m_characterController.isGrounded;
 
             PathfindingAgent.Update();
+            HandleTasks();
         }
 
         private void FixedUpdate()
@@ -99,7 +104,7 @@ namespace Game
 
                     m_moveDir.x = direction.x * speed;
                     m_moveDir.z = direction.z * speed;
-                    m_walking = true;
+                    IsWalking = true;
 
                     transform.rotation = Quaternion.Euler(0, Mathf.Atan2(m_moveDir.x, m_moveDir.z) / Mathf.PI * 180.0F, 0);
                 }
@@ -110,7 +115,7 @@ namespace Game
             }
             else
             {
-                m_walking = false;
+                IsWalking = false;
                 m_moveDir.x = 0;
                 m_moveDir.z = 0;
             }            
@@ -124,9 +129,7 @@ namespace Game
                 m_moveDir += Physics.gravity * m_gravityMultiplier * Time.fixedDeltaTime;
             }
             m_collisionFlags = m_characterController.Move(m_moveDir * Time.fixedDeltaTime);
-
-            HandleTasks();
-            UpdateAnimator();
+            m_workerVisual.UpdateAnimator();
         }
 
         void HandleTasks()
@@ -143,17 +146,33 @@ namespace Game
                         Debug.Log("Starting walk...");
                         MoveTo(goToTask.TargetPosition);
                     }
+                    else if(task is AttackTask)
+                    {
+                        AttackTask goToTask = task as AttackTask;
+                        TaskQueue.StartTask();
+                        Debug.Log("Starting attack...");
+                        TakeWeaponOut();
+                    }
                     else
                     {
                         TaskQueue.CompleteTask();
                     }
                 }
-            }
-        }
+                else
+                {
+                    task.OnUpdate();
 
-        public void UpdateAnimator()
-        {
-            m_animator.SetBool("Walk", m_walking);
+                    if (task is AttackTask)
+                    {
+                        AttackTask attackTask = task as AttackTask;
+                        if(attackTask.IsComplete)
+                        {
+                            TaskQueue.CompleteTask();
+                            PutWeaponAway();
+                        }
+                    }
+                }
+            }
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -175,6 +194,17 @@ namespace Game
         public void MoveTo(TilePosition target)
         {
             PathfindingAgent.GeneratePath(CurrentTile, target);
+        }
+
+        public void TakeWeaponOut()
+        {
+            IsWeaponOut = true;
+        }
+
+        public void PutWeaponAway()
+        {
+            Debug.Log("PUTTING WEAPON AWAY");
+            IsWeaponOut = false;
         }
 
         /// <summary>
@@ -211,6 +241,15 @@ namespace Game
 
         void IFocusTarget.OnFocusLost()
         {
+        }
+
+        void IActor.PerformAction(ActionBase action, ISubject subject)
+        {
+            if(action is PerformTaskAction)
+            {
+                PerformTaskAction performTask = action as PerformTaskAction;
+                TaskQueue.AddTask(performTask.TaskToPerform);
+            }
         }
     }
 }
