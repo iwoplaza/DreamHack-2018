@@ -64,12 +64,22 @@ namespace Game
 
         IEnumerator HandleShooting()
         {
-            yield return new WaitForSeconds(m_initialShootCooldown);
+            TimeSystem timeSystem = WorldController.Instance.MainState.TimeSystem;
+
+            float initialCooldownLeft = m_initialShootCooldown;
+            while (initialCooldownLeft > 0)
+            {
+                initialCooldownLeft -= Time.deltaTime * timeSystem.TimeMultiplier;
+                yield return new WaitForEndOfFrame();
+            }
             while (true && IsActive)
             {
                 ShootCooldown = m_subsequentShootCooldown;
-                yield return new WaitForSeconds(ShootCooldown);
-                ShootCooldown = 0;
+                while (ShootCooldown > 0)
+                {
+                    ShootCooldown -= Time.deltaTime * timeSystem.TimeMultiplier;
+                    yield return new WaitForEndOfFrame();
+                }
                 Shoot();
             }
         }

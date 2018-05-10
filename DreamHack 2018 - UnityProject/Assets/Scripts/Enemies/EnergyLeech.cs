@@ -9,7 +9,7 @@ using Game.Animation;
 
 namespace Game.Enemies
 {
-    public class EnergyLeech : Enemy, ISubject
+    public class EnergyLeech : Enemy, ISubject, IFocusTarget
     {
         public override string DisplayName { get { return "Energy Leech"; } }
         public override int MaxHealth { get { return 10; } }
@@ -35,6 +35,14 @@ namespace Game.Enemies
         {
             if (Visual != null)
                 Visual.UpdateAnimator();
+        }
+
+        public void OnFocusGained()
+        {
+        }
+
+        public void OnFocusLost()
+        {
         }
     }
 }

@@ -42,6 +42,7 @@ namespace Game.UI
                 if (m_focusTarget is Worker)
                 {
                     Worker worker = m_focusTarget as Worker;
+                    m_tileQueuePanel.gameObject.SetActive(true);
                     m_tileQueuePanel.Populate(worker.TaskQueue);
                 }
                 else
