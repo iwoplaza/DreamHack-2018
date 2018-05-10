@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: EnergyLeech_Head
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 0
+  - m_Path: Armature/Root
+    m_Weight: 0
+  - m_Path: Armature/Root/BackThigh.L
+    m_Weight: 0
+  - m_Path: Armature/Root/BackThigh.L/Shin.L
+    m_Weight: 0
+  - m_Path: Armature/Root/BackThigh.L/Shin.L/Foot.L
+    m_Weight: 0
+  - m_Path: Armature/Root/BackThigh.L/Shin.L/Foot.L/Foot.L_end
+    m_Weight: 0
+  - m_Path: Armature/Root/BackThigh.R
+    m_Weight: 0
+  - m_Path: Armature/Root/BackThigh.R/Shin.R
+    m_Weight: 0
+  - m_Path: Armature/Root/BackThigh.R/Shin.R/Foot.R
+    m_Weight: 0
+  - m_Path: Armature/Root/BackThigh.R/Shin.R/Foot.R/Foot.R_end
+    m_Weight: 0
+  - m_Path: Armature/Root/Bone
+    m_Weight: 0
+  - m_Path: Armature/Root/Bone/Bone.001
+    m_Weight: 0
+  - m_Path: Armature/Root/Bone/Bone.001/Bone.002
+    m_Weight: 0
+  - m_Path: Armature/Root/Bone/Bone.001/Bone.002/Bone.003
+    m_Weight: 0
+  - m_Path: Armature/Root/Bone/Bone.001/Bone.002/Bone.003/Bone.004
+    m_Weight: 0
+  - m_Path: Armature/Root/Bone/Bone.001/Bone.002/Bone.003/Bone.004/Bone.004_end
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Bone.005
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Bone.005/Bone.009
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Bone.005/Bone.009/Bone.008
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Bone.005/Bone.009/Bone.008/Bone.007
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Bone.005/Bone.009/Bone.008/Bone.007/Bone.006
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Bone.005/Bone.009/Bone.008/Bone.007/Bone.006/Bone.006_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.L
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.L/Eye1.L
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.L/Eye1.L/Eye2.L
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.L/Eye1.L/Eye2.L/Eye3.L
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.L/Eye1.L/Eye2.L/Eye3.L/Eye3.L_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.R
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.R/Eye1.R
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.R/Eye1.R/Eye2.R
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.R/Eye1.R/Eye2.R/Eye3.R
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/Chest/Neck0/Neck1/Head/Eye0.R/Eye1.R/Eye2.R/Eye3.R/Eye3.R_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Stomach/FrontThigh.L
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach/FrontThigh.L/FrontShin.L
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach/FrontThigh.L/FrontShin.L/FrontFoot.L
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach/FrontThigh.L/FrontShin.L/FrontFoot.L/FrontFoot.L_end
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach/FrontThigh.R
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach/FrontThigh.R/FrontShin.R
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach/FrontThigh.R/FrontShin.R/FrontFoot.R
+    m_Weight: 0
+  - m_Path: Armature/Root/Pelvis/Stomach/FrontThigh.R/FrontShin.R/FrontFoot.R/FrontFoot.R_end
+    m_Weight: 0
+  - m_Path: Body
+    m_Weight: 0
+  - m_Path: FootPoleTarget.BackL
+    m_Weight: 0
+  - m_Path: FootPoleTarget.BackR
+    m_Weight: 0
+  - m_Path: FootTarget.FrontL
+    m_Weight: 0
+  - m_Path: FootTarget.FrontR
+    m_Weight: 0
+  - m_Path: Tongue
+    m_Weight: 0
