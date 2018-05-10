@@ -16,7 +16,7 @@ namespace Game
 
         public GameState()
         {
-            TileMap = new TileMap(10, 10);
+            TileMap = new TileMap(512, 512);
             Workers = new List<Worker>();
             Focus = new Focus();
             TimeSystem = new TimeSystem();

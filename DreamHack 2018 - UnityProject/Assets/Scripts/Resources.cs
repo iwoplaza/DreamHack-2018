@@ -8,6 +8,8 @@ namespace Game
     {
         public static Dictionary<string, GameObject> TileObjectPrefabs { get; private set; }
 
+        public static Dictionary<string, GameObject> EnvironmentObjectPrefabs { get; private set; }
+
         public static GameObject WorkerPrefab { get; private set; }
 
         public static void LoadAll()
@@ -16,6 +18,11 @@ namespace Game
             TileObjectPrefabs = new Dictionary<string, GameObject>();
             foreach (GameObject prefab in tileObjectPrefabs)
                 TileObjectPrefabs.Add(prefab.name, prefab);
+
+            GameObject[] environmentObjectPrefabs = UnityEngine.Resources.LoadAll<GameObject>("EnvironmentObjects");
+            EnvironmentObjectPrefabs = new Dictionary<string, GameObject>();
+            foreach (GameObject prefab in environmentObjectPrefabs)
+                EnvironmentObjectPrefabs.Add(prefab.name, prefab);
 
             WorkerPrefab = UnityEngine.Resources.Load<GameObject>("Worker");
         }
@@ -28,6 +35,16 @@ namespace Game
                 return null;
             }
             return TileObjectPrefabs[name];
+        }
+
+        public static GameObject FindEnvironmentObjectPrefab(string name)
+        {
+            if (!EnvironmentObjectPrefabs.ContainsKey(name))
+            {
+                Debug.LogError("Couldn't find a prefab (" + name + ").");
+                return null;
+            }
+            return EnvironmentObjectPrefabs[name];
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
+using Utility.Noise;
 [CustomEditor(typeof(FractalGenerator))]
 public class FractalGeneratorUtilityEditor : Editor {
 
@@ -19,13 +19,15 @@ public class FractalGeneratorUtilityEditor : Editor {
 
 		if(t.DrawType == FractalGenerator.FractalDrawType.FILTERED || t.DrawType == FractalGenerator.FractalDrawType.FILTERED_BLACK_WHITE)
 		{
+			m_filterHeight = t.FilterHeight;
 			m_filterHeight = EditorGUILayout.Slider("Filter out below",m_filterHeight,0,1);
 			t.FilterHeight = m_filterHeight;
 		}
 
 		if(t.DrawType == FractalGenerator.FractalDrawType.SEGMENTED)
 		{
-			m_segmentCount = EditorGUILayout.IntSlider("Filter out below",m_segmentCount,0,32);
+			m_segmentCount = t.SegmentCount;
+			m_segmentCount = EditorGUILayout.IntSlider("Segment count",m_segmentCount,0,32);
 			t.SegmentCount = m_segmentCount;
 		}
 
