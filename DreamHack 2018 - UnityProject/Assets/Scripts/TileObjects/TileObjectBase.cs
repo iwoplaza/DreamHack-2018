@@ -30,6 +30,12 @@ namespace Game.TileObjects
         /// </summary>
         public virtual float PassWeight { get { return 1; } }
 
+        /// <summary>
+        /// Determines if this TileObject can be removed or destroyed in any way,
+        /// by the player or the environment.
+        /// </summary>
+        public virtual bool IsStatic { get { return false; } }
+
         public TileObjectBase()
         {
             InstalledAt = null;
