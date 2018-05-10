@@ -10,7 +10,7 @@ namespace Game.Building
     {
         public delegate void OnHoldHandler(Type tileObject);
         public Type HeldObjectType { get; private set; }
-        public TileObjectBase TemporaryObject { get; private set; }
+        public TileProp TemporaryProp { get; private set; }
         public GameObject TemporaryDisplayObject { get; private set; }
         public TilePosition Cursor { get; private set; }
         public Direction PropOrientation { get; private set; }
@@ -58,14 +58,14 @@ namespace Game.Building
             }
 
             SetVariant(variant);
-            TemporaryObject = null;
+            TemporaryProp = null;
             HeldObjectType = tileObjectType;
-            TileObjectBase tileObject = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileObjectBase;
-            if (tileObject != null)
+            TileProp tileProp = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileProp;
+            if (tileProp != null)
             {
-                tileObject.Variant = PropVariant;
-                TemporaryObject = tileObject;
-                TemporaryDisplayObject = tileObject.CreateTemporaryDisplay();
+                tileProp.Variant = PropVariant;
+                TemporaryProp = tileProp;
+                TemporaryDisplayObject = tileProp.CreateTemporaryDisplay();
                 foreach (Collider collider in TemporaryDisplayObject.GetComponentsInChildren<Collider>())
                 {
                     collider.isTrigger = true;
@@ -81,14 +81,14 @@ namespace Game.Building
             if (HeldObjectType != null)
             {
                 Tile tile = m_gameState.TileMap.TileAt(Cursor);
-                if (tile != null && tile.CanInstallProp)
+                if (tile != null && tile.CanInstallObject)
                 {
-                    TileObjectBase tileObject = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileObjectBase;
-                    if (tileObject != null)
+                    TileProp tileProp = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileProp;
+                    if (tileProp != null)
                     {
-                        tileObject.Variant = PropVariant;
-                        tileObject.Rotate(PropOrientation);
-                        tile.Install(tileObject);
+                        tileProp.Variant = PropVariant;
+                        tileProp.Rotate(PropOrientation);
+                        tile.Install(tileProp);
                     }
                 }
             }
@@ -116,7 +116,7 @@ namespace Game.Building
         {
             if(TemporaryDisplayObject != null)
             {
-                TemporaryDisplayObject.transform.position = Cursor.Vector3 + new Vector3(0.5F, 0, 0.5F);
+                TemporaryDisplayObject.transform.position = Cursor.Vector3 + new Vector3(0.5F, 0.001F, 0.5F);
                 TemporaryDisplayObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(PropOrientation), 0.0F);
             }
         }

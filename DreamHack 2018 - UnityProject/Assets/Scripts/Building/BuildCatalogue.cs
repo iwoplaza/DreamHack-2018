@@ -24,6 +24,9 @@ namespace Game.Building
                 .Add(new BuildEntry("Wall", typeof(TileObjects.WallTileObject), 0))
                 .Add(new BuildEntry("Windowed Wall", typeof(TileObjects.WallTileObject), 1))
                 .Add(new BuildEntry("Wall Corner", typeof(TileObjects.WallCornerTileObject), 0))
+                .Add(new BuildEntry("Floor 1", typeof(TileFloors.DefaultTileFloor), 0))
+                .Add(new BuildEntry("Floor 2", typeof(TileFloors.DefaultTileFloor), 1))
+                .Add(new BuildEntry("Floor 3", typeof(TileFloors.DefaultTileFloor), 2))
             ;
 
             InteriorCategory = new BuildCategory("Interior", "Interior")

@@ -128,13 +128,10 @@ namespace Game
                                 Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
                                 if (targetTile != null)
                                 {
-                                    if (targetTile.Empty)
+                                    Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
+                                    if (selectedWorker != null)
                                     {
-                                        Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
-                                        if (selectedWorker != null)
-                                        {
-                                            selectedWorker.TaskQueue.AddTask(new GoToTask(tilePositionAtMouse));
-                                        }
+                                        selectedWorker.TaskQueue.AddTask(new GoToTask(tilePositionAtMouse));
                                     }
                                 }
                             }
@@ -249,11 +246,17 @@ namespace Game
 
                     if (Input.GetMouseButtonDown(0))
                     {
+                        buildModeManager.Place();
+                    }
+
+                    if(Input.GetMouseButtonDown(1))
+                    {
                         Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
-                        if (targetTile != null && targetTile.HasObject)
+                        if (targetTile != null)
+                        {
                             targetTile.UninstallObject();
-                        else
-                            buildModeManager.Place();
+                            targetTile.UninstallFloor();
+                        }
                     }
                 }
             }

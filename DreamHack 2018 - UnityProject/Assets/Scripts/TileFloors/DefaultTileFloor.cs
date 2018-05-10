@@ -2,24 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.TileObjects
+namespace Game.TileFloors
 {
-    public class WallTileObject : TileObjectBase
+    public class DefaultTileFloor : TileFloorBase
     {
-        public override string DisplayName { get { return "Wall"; } }
-
-        public WallTileObject()
-        {
-        }
+        public override string DisplayName { get { return "Default Floor"; } }
 
         public override bool IsPassableFor(Living passer, Direction entryDirection)
         {
-            return false;
+            return true;
         }
 
         public GameObject GetPrefab()
         {
-            return Resources.FindTileObjectPrefab(Variant == 0 ? "Wall_Straight" : "Wall_Windowed");
+            return Resources.FindTileFloorPrefab("Floor_" + (Variant + 1));
         }
 
         public override void ConstructGameObject()

@@ -8,6 +8,7 @@ namespace Game
     public class Resources
     {
         public static Dictionary<string, GameObject> TileObjectPrefabs { get; private set; }
+        public static Dictionary<string, GameObject> TileFloorPrefabs { get; private set; }
         public static Dictionary<string, GameObject> EnvironmentObjectPrefabs { get; private set; }
         public static Dictionary<string, Sprite> Icons { get; private set; }
 
@@ -21,6 +22,11 @@ namespace Game
             TileObjectPrefabs = new Dictionary<string, GameObject>();
             foreach (GameObject prefab in tileObjectPrefabs)
                 TileObjectPrefabs.Add(prefab.name, prefab);
+
+            GameObject[] tileFloorPrefabs = UnityEngine.Resources.LoadAll<GameObject>("TileFloors");
+            TileFloorPrefabs = new Dictionary<string, GameObject>();
+            foreach (GameObject prefab in tileFloorPrefabs)
+                TileFloorPrefabs.Add(prefab.name, prefab);
 
             GameObject[] environmentObjectPrefabs = UnityEngine.Resources.LoadAll<GameObject>("EnvironmentObjects");
             EnvironmentObjectPrefabs = new Dictionary<string, GameObject>();
@@ -41,10 +47,20 @@ namespace Game
         {
             if (!TileObjectPrefabs.ContainsKey(name))
             {
-                Debug.LogError("Couldn't find a prefab (" + name + ").");
+                Debug.LogError("Couldn't find a TileObject prefab (" + name + ").");
                 return null;
             }
             return TileObjectPrefabs[name];
+        }
+
+        public static GameObject FindTileFloorPrefab(string name)
+        {
+            if (!TileFloorPrefabs.ContainsKey(name))
+            {
+                Debug.LogError("Couldn't find a TileFloor prefab (" + name + ").");
+                return null;
+            }
+            return TileFloorPrefabs[name];
         }
 
         public static GameObject FindEnvironmentObjectPrefab(string name)
