@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine.EventSystems;
+using Game.Tasks;
 
 namespace Game
 {
@@ -116,7 +117,7 @@ namespace Game
                                     Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
                                     if (selectedWorker != null)
                                     {
-                                        selectedWorker.MoveTo(tilePositionAtMouse);
+                                        selectedWorker.TaskQueue.AddTask(new GoToTask(tilePositionAtMouse));
                                     }
                                 }
                             }

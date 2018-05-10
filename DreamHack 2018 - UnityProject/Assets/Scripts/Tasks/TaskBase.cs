@@ -22,5 +22,10 @@ namespace Game.Tasks
         /// This is used as a description of the task in UI.
         /// </summary>
         public abstract string Description { get; }
+
+        public virtual void OnStart() { }
+        public virtual void OnUpdate() { }
+        public virtual void OnComplete() { }
+        public virtual void OnCancel() { }
     }
 }

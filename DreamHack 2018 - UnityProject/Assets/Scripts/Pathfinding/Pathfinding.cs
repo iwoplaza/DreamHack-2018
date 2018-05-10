@@ -21,7 +21,7 @@ namespace Game.Pathfinding.Internal
             {
                 for(int y = 0; y < map.Height; y++)
                 {
-                    weightMap[x,y] = -1;
+                    weightMap[x, y] = -1;
                 }
             }
 

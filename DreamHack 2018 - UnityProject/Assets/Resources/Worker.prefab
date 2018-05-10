@@ -1248,7 +1248,7 @@ MonoBehaviour:
   m_health: 0
   m_name: Hugo Marz
   m_walking: 0
-  m_walkSpeed: 3
+  m_walkSpeed: 2
   m_runSpeed: 6
   m_stickToGroundForce: 0
   m_gravityMultiplier: 1
