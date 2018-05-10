@@ -258,7 +258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1180915471208196
 GameObject:
   m_ObjectHideFlags: 1
@@ -406,6 +406,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224950663836121362}
+  - component: {fileID: 114648731248231534}
   m_Layer: 5
   m_Name: BuildPanel
   m_TagString: Untagged
@@ -622,7 +623,7 @@ GameObject:
   - component: {fileID: 114100512738936524}
   - component: {fileID: 114184294338078650}
   m_Layer: 5
-  m_Name: Build Panel
+  m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4482,6 +4483,17 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114648731248231534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1242857257286774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae9e92ff1e4489b4782992335592fb44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114649326681561722
 MonoBehaviour:
   m_ObjectHideFlags: 1

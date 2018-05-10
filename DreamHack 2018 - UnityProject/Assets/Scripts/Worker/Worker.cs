@@ -82,6 +82,9 @@ namespace Game
 
             PathfindingAgent.Update();
             HandleTasks();
+
+            if (Visual != null)
+                Visual.UpdateAnimator();
         }
 
         private void FixedUpdate()
@@ -137,9 +140,6 @@ namespace Game
                 m_moveDir += Physics.gravity * m_gravityMultiplier * timeMultiplier;
             }
             m_collisionFlags = m_characterController.Move(m_moveDir * timeMultiplier);
-
-            if(Visual != null)
-                Visual.UpdateAnimator();
         }
 
         void HandleTasks()

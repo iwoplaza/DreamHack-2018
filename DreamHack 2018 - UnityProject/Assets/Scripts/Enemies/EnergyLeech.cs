@@ -5,6 +5,7 @@ using UnityEngine;
 using Game.Acting.Actions;
 using Game.Tasks;
 using System;
+using Game.Animation;
 
 namespace Game.Enemies
 {
@@ -13,7 +14,13 @@ namespace Game.Enemies
         public override string DisplayName { get { return "Energy Leech"; } }
         public override int MaxHealth { get { return 10; } }
 
+        public EnergyLeechVisual Visual { get; private set; }
         public bool IsWalking { get; private set; }
+
+        override protected void Awake()
+        {
+            Visual = GetComponent<EnergyLeechVisual>();
+        }
 
         List<ActionBase> ISubject.GetActionsFor(IActor actor)
         {
@@ -21,6 +28,12 @@ namespace Game.Enemies
             actions.Add(new PerformTaskAction(new AttackTask(this)));
 
             return actions;
+        }
+
+        override protected void Update()
+        {
+            if (Visual != null)
+                Visual.UpdateAnimator();
         }
     }
 }

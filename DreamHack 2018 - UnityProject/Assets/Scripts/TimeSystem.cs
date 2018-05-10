@@ -48,14 +48,15 @@ namespace Game
 
         public void Update()
         {
-            Time += UnityEngine.Time.deltaTime;
+            Time += UnityEngine.Time.deltaTime * TimeMultiplier;
             if(Time >= SecondsPerDay){
                 DayCount++;
                 Time %= SecondsPerDay;
             }
         }
 
-        public void Parse(XElement element){
+        public void Parse(XElement element)
+        {
             if(element == null)
                 return;
             XAttribute timeAttribute = element.Attribute("CurrentTime");
@@ -67,7 +68,8 @@ namespace Game
                 Time = float.Parse(timeAttribute.Value) * SecondsPerDay;
         }
 
-        public void Populate(XElement element) {
+        public void Populate(XElement element)
+        {
             element.SetAttributeValue("CurrentTime", DayProgress);
             element.SetAttributeValue("DayCount", DayCount);
         }
