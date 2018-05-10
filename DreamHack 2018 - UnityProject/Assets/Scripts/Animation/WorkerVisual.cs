@@ -71,6 +71,8 @@ namespace Game.Animation
 
         public void UpdateAnimator()
         {
+            TimeSystem timeSystem = WorldController.Instance.MainState.TimeSystem;
+            m_animator.speed = timeSystem.TimeMultiplier;
             m_animator.SetBool("Walk", Worker.IsWalking);
             m_animator.SetBool("WeaponOut", Worker.IsWeaponOut);
         }

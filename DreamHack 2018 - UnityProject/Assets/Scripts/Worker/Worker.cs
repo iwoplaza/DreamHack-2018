@@ -86,6 +86,8 @@ namespace Game
 
         private void FixedUpdate()
         {
+            TimeSystem timeSystem = WorldController.Instance.MainState.TimeSystem;
+            float timeMultiplier = Time.fixedDeltaTime * timeSystem.TimeMultiplier;
             TilePosition nextPosition = PathfindingAgent.GetNextTile();
 
             if (PathfindingAgent.CurrentStatus == PathfindingStatus.HAS_PATH && nextPosition != null)
@@ -132,9 +134,9 @@ namespace Game
             }
             else
             {
-                m_moveDir += Physics.gravity * m_gravityMultiplier * Time.fixedDeltaTime;
+                m_moveDir += Physics.gravity * m_gravityMultiplier * timeMultiplier;
             }
-            m_collisionFlags = m_characterController.Move(m_moveDir * Time.fixedDeltaTime);
+            m_collisionFlags = m_characterController.Move(m_moveDir * timeMultiplier);
 
             if(Visual != null)
                 Visual.UpdateAnimator();
