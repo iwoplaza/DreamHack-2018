@@ -498,6 +498,7 @@ GameObject:
   - component: {fileID: 143869003838980854}
   - component: {fileID: 136542491973904800}
   - component: {fileID: 114501334758600288}
+  - component: {fileID: 114911001356036104}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Untagged
@@ -1324,6 +1325,17 @@ MonoBehaviour:
   m_runSpeed: 6
   m_stickToGroundForce: 0
   m_gravityMultiplier: 1
+--- !u!114 &114911001356036104
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1808823953848640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f13c980cfd2aff5479b4870a55a4b9e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &136542491973904800
 CapsuleCollider:
   m_ObjectHideFlags: 1

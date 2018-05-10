@@ -13,12 +13,15 @@ namespace Game
         [Header("Worker")]
         [SerializeField] protected string m_name;
 
+        override public string DisplayName { get { return m_name; } }
         override public int MaxHealth { get { return 100; } }
         string IFocusTarget.DisplayName { get { return m_name; } }
         Vector3 IFocusTarget.Position { get { return transform.position; } }
 
         public TaskQueue TaskQueue { get; private set; }
         public PathfindingAgent PathfindingAgent { get; private set; }
+        public WorkerAttackBehaviour AttackBehaviour { get; private set; }
+        public WorkerVisual Visual { get; private set; }
         public bool IsWalking { get; private set; }
         public bool IsWeaponOut { get; private set; }
 
@@ -29,7 +32,6 @@ namespace Game
 
         private TileMap m_tileMap;
         private CharacterController m_characterController;
-        private WorkerVisual m_workerVisual;
         private float m_yRotation;
         private Vector3 m_moveDir = Vector3.zero;
         private CollisionFlags m_collisionFlags;
@@ -54,10 +56,14 @@ namespace Game
         {
             base.Start();
 
-            PathfindingAgent = new PathfindingAgent(new BasicRule(), m_tileMap);
-            PathfindingAgent.RegisterStatusChangeHandler(OnPathfindingStatusChanged);
+            if (m_tileMap != null)
+            {
+                PathfindingAgent = new PathfindingAgent(new BasicRule(), m_tileMap);
+                PathfindingAgent.RegisterStatusChangeHandler(OnPathfindingStatusChanged);
+            }
             m_characterController = GetComponent<CharacterController>();
-            m_workerVisual = GetComponent<WorkerVisual>();
+            Visual = GetComponent<WorkerVisual>();
+            AttackBehaviour = GetComponent<WorkerAttackBehaviour>();
         }
 
         override protected void Update()
@@ -129,7 +135,9 @@ namespace Game
                 m_moveDir += Physics.gravity * m_gravityMultiplier * Time.fixedDeltaTime;
             }
             m_collisionFlags = m_characterController.Move(m_moveDir * Time.fixedDeltaTime);
-            m_workerVisual.UpdateAnimator();
+
+            if(Visual != null)
+                Visual.UpdateAnimator();
         }
 
         void HandleTasks()
@@ -143,15 +151,14 @@ namespace Game
                     {
                         GoToTask goToTask = task as GoToTask;
                         TaskQueue.StartTask();
-                        Debug.Log("Starting walk...");
                         MoveTo(goToTask.TargetPosition);
                     }
                     else if(task is AttackTask)
                     {
-                        AttackTask goToTask = task as AttackTask;
+                        AttackTask attackTask = task as AttackTask;
                         TaskQueue.StartTask();
-                        Debug.Log("Starting attack...");
-                        TakeWeaponOut();
+                        if(AttackBehaviour != null)
+                            AttackBehaviour.Activate(attackTask);
                     }
                     else
                     {
@@ -168,7 +175,8 @@ namespace Game
                         if(attackTask.IsComplete)
                         {
                             TaskQueue.CompleteTask();
-                            PutWeaponAway();
+                            if (AttackBehaviour != null)
+                                AttackBehaviour.Deactivate();
                         }
                     }
                 }
@@ -203,8 +211,21 @@ namespace Game
 
         public void PutWeaponAway()
         {
-            Debug.Log("PUTTING WEAPON AWAY");
             IsWeaponOut = false;
+        }
+
+        public void TurnTowards(Vector3 position)
+        {
+            Vector3 difference = position - transform.position;
+            transform.rotation = Quaternion.Euler(0, Mathf.Atan2(difference.x, difference.z) / Mathf.PI * 180.0F, 0);
+        }
+
+        public void Shoot()
+        {
+            if(AttackBehaviour.CanShootYet)
+            {
+
+            }
         }
 
         /// <summary>
@@ -218,7 +239,6 @@ namespace Game
                 GoToTask goToTask = TaskQueue.CurrentTask as GoToTask;
                 if (goToTask != null)
                 {
-                    Debug.Log("COMPLETE");
                     TaskQueue.CompleteTask();
                 }
             }
@@ -231,6 +251,11 @@ namespace Game
                 if(task is GoToTask)
                 {
                     PathfindingAgent.CancelPath();
+                }
+                else if (task is AttackTask)
+                {
+                    if (AttackBehaviour != null)
+                        AttackBehaviour.Deactivate();
                 }
             }
         }

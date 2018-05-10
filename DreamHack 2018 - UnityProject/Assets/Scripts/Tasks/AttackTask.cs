@@ -7,23 +7,27 @@ namespace Game.Tasks
 {
     public class AttackTask : TaskBase
     {
-        float m_timeToComplete;
+        public Living Target { get; private set; }
 
-        public bool IsComplete { get { return m_timeToComplete <= 0; } }
-
-        public AttackTask()
+        public bool IsComplete
         {
-            m_timeToComplete = 2.0F; // 2 seconds
+            get
+            {
+                return Target == null || !Target.Alive;
+            }
+        }
+
+        public AttackTask(Living target)
+        {
+            Target = target;
         }
 
         public override string Description { get { return ""; } }
-        public override string DisplayName { get { return "Attack"; } }
+        public override string DisplayName { get { return "Attack " + Target.DisplayName; } }
 
         public override void OnUpdate()
         {
             base.OnUpdate();
-
-            m_timeToComplete -= Time.deltaTime;
         }
     }
 }

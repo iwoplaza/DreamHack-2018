@@ -36,6 +36,7 @@ namespace Game
             }
         }
         public bool Alive { get; protected set; }
+        public abstract string DisplayName { get; }
         public abstract int MaxHealth { get; }
 
         protected virtual void Awake()
