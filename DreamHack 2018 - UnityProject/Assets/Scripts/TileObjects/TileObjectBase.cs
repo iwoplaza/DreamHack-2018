@@ -13,7 +13,7 @@ namespace Game.TileObjects
 
         public GameObject InstalledGameObject { get; set; }
         public Direction Orientation { get; private set; }
-        public int Variant { get; private set; }
+        public int Variant { get; set; }
 
         public abstract string DisplayName { get; }
         /// <summary>
@@ -37,9 +37,8 @@ namespace Game.TileObjects
         /// </summary>
         public virtual bool IsStatic { get { return false; } }
 
-        public TileObjectBase(int variant = 0)
+        public TileObjectBase()
         {
-            Variant = variant;
             InstalledAt = null;
         }
 
@@ -87,8 +86,12 @@ namespace Game.TileObjects
         public virtual void Parse(XElement element, Tile optionalTile = null)
         {
             XAttribute orientationAttrib = element.Attribute("orientation");
+            XAttribute variantAttrib = element.Attribute("variant");
+
             if (orientationAttrib != null)
                 Orientation = (Direction)int.Parse(orientationAttrib.Value);
+            if (variantAttrib != null)
+                Variant = int.Parse(variantAttrib.Value);
 
             if (optionalTile != null)
             {
@@ -102,6 +105,7 @@ namespace Game.TileObjects
             String typeName = GetType().FullName;
             element.SetAttributeValue("type", typeName);
             element.SetAttributeValue("orientation", (int) Orientation);
+            element.SetAttributeValue("variant", Variant);
         }
 
         public abstract void ConstructGameObject();

@@ -73,7 +73,7 @@ namespace Game.UI
             BuildModeManager buildModeManager = WorldController.Instance.MainState.BuildModeManager;
             if (buildModeManager != null)
             {
-                buildModeManager.Hold(entry.PropType);
+                buildModeManager.Hold(entry.PropType, entry.PropVariation);
             }
         }
 

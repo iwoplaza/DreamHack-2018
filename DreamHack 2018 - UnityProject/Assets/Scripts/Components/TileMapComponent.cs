@@ -66,6 +66,7 @@ namespace Game.Components
 
                 m_tileDisplaysHolder = new GameObject("TileDisplays");
                 m_tileDisplaysHolder.transform.parent = transform;
+                m_tileDisplaysHolder.SetActive(false);
 
                 for (int x = 0; x < DisplayWidth; ++x)
                 {

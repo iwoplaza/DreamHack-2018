@@ -23,6 +23,7 @@ namespace Game.Building
             FoundationCategory = new BuildCategory("Foundation", "Foundation")
                 .Add(new BuildEntry("Wall", typeof(TileObjects.WallTileObject), 0))
                 .Add(new BuildEntry("Windowed Wall", typeof(TileObjects.WallTileObject), 1))
+                .Add(new BuildEntry("Wall Corner", typeof(TileObjects.WallCornerTileObject), 0))
             ;
 
             InteriorCategory = new BuildCategory("Interior", "Interior")

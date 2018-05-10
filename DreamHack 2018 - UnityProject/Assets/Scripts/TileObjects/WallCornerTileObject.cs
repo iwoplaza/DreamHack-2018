@@ -2,15 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallCornerTileObject : MonoBehaviour {
+namespace Game.TileObjects
+{
+    public class WallCornerTileObject : TileObjectBase
+    {
+        public override string DisplayName { get { return "Wall Corner"; } }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        public override bool IsPassableFor(Living passer, Direction entryDirection)
+        {
+            return true;
+        }
+
+        public GameObject GetPrefab()
+        {
+            return Resources.FindTileObjectPrefab("Wall_Convex");
+        }
+
+        public override void ConstructGameObject()
+        {
+            if (!Installed)
+                return;
+            Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(0.5F, 0, 0.5F);
+
+            GameObject prefab = GetPrefab();
+            if (prefab != null)
+            {
+                InstalledGameObject = Object.Instantiate(prefab);
+                InstalledGameObject.transform.SetPositionAndRotation(origin, Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F));
+            }
+        }
+
+        public override GameObject CreateTemporaryDisplay()
+        {
+            GameObject prefab = GetPrefab();
+            if (prefab != null)
+            {
+                return Object.Instantiate(prefab);
+            }
+
+            return null;
+        }
+    }
 }

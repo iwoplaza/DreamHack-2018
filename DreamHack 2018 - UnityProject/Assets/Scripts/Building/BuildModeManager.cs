@@ -40,7 +40,6 @@ namespace Game.Building
         public void OnEnabled()
         {
             PropOrientation = Direction.POSITIVE_Z;
-            Hold(typeof(WallTileObject));
         }
 
         public void OnDisabled()
@@ -64,6 +63,7 @@ namespace Game.Building
             TileObjectBase tileObject = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileObjectBase;
             if (tileObject != null)
             {
+                tileObject.Variant = PropVariant;
                 TemporaryObject = tileObject;
                 TemporaryDisplayObject = tileObject.CreateTemporaryDisplay();
                 foreach (Collider collider in TemporaryDisplayObject.GetComponentsInChildren<Collider>())
@@ -86,6 +86,7 @@ namespace Game.Building
                     TileObjectBase tileObject = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileObjectBase;
                     if (tileObject != null)
                     {
+                        tileObject.Variant = PropVariant;
                         tileObject.Rotate(PropOrientation);
                         tile.Install(tileObject);
                     }
