@@ -93,11 +93,11 @@ namespace Game
                 /// TODO Change this into Path Finding behaviour.
                 Vector3 target = nextPosition.Vector3 + new Vector3(0.5F, 0, 0.5F);
                 Vector3 direction = (target - transform.position);
+                direction.y = 0;
                 float sqrDistance = direction.sqrMagnitude;
 
                 if (sqrDistance > 0.1F)
                 {
-                    direction.y = 0;
                     direction.Normalize();
 
                     float speed = m_running ? m_runSpeed : m_walkSpeed;
@@ -224,7 +224,8 @@ namespace Game
         {
             if(AttackBehaviour.CanShootYet)
             {
-
+                if (Visual != null)
+                    Visual.OnShoot();
             }
         }
 

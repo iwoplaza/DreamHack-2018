@@ -1308,6 +1308,8 @@ MonoBehaviour:
   m_handHolder: {fileID: 1572576980562240}
   m_hipHolder: {fileID: 1414287041762670}
   m_blaster: {fileID: 1340149381452594}
+  m_shootEffectPrefab: {fileID: 1723418952666478, guid: 4915ae581420a4f43b208eb19c4099f7,
+    type: 2}
 --- !u!114 &114892408004864490
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1336,6 +1338,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f13c980cfd2aff5479b4870a55a4b9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_initialShootCooldown: 1
+  m_subsequentShootCooldown: 0.7
 --- !u!136 &136542491973904800
 CapsuleCollider:
   m_ObjectHideFlags: 1

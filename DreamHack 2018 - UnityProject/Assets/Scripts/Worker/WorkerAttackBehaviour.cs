@@ -33,6 +33,8 @@ namespace Game
             IsActive = true;
             ShootCooldown = m_initialShootCooldown;
             Worker.TakeWeaponOut();
+
+            StartCoroutine(HandleShooting());
         }
 
         public void Deactivate()
@@ -41,6 +43,7 @@ namespace Game
                 return;
 
             IsActive = false;
+            StopAllCoroutines();
             Worker.PutWeaponAway();
 
             AttackTask = null;
@@ -57,6 +60,18 @@ namespace Game
                 return;
 
             Worker.TurnTowards(AttackTask.Target.transform.position);
+        }
+
+        IEnumerator HandleShooting()
+        {
+            yield return new WaitForSeconds(m_initialShootCooldown);
+            while (true && IsActive)
+            {
+                ShootCooldown = m_subsequentShootCooldown;
+                yield return new WaitForSeconds(ShootCooldown);
+                ShootCooldown = 0;
+                Shoot();
+            }
         }
     }
 }
