@@ -1,4 +1,5 @@
 ﻿using Game.Building;
+using Game.Environment;
 using Game.TileObjects;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,9 +16,12 @@ namespace Game
         public TimeSystem TimeSystem { get; private set; }
         public BuildCatalogue BuildCatalogue { get; private set; }
         public BuildModeManager BuildModeManager { get; private set; }
+        public GameEnvironment GameEnvironment { get; private set; }
 
-        public GameState()
+        public GameState(GameEnvironment gameEnvironment)
         {
+            GameEnvironment = gameEnvironment;
+
             TileMap = new TileMap(512, 512);
             Workers = new List<Worker>();
             Focus = new Focus();
@@ -28,12 +32,24 @@ namespace Game
 
         public void Start()
         {
-            Worker worker1 = SpawnWorker();
+            Generate();
         }
 
         public void Update()
         {
             TimeSystem.Update();
+        }
+
+        public void Generate()
+        {
+            WorldMeshResource.UpdateMeshDictionary();
+            GameEnvironment.CliffThreshold = 0.5f;
+            GameEnvironment.WorldSeed = "seed";
+            GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
+            GameEnvironment.ChunkSize = new Vector2Int(10, 10);
+            GameEnvironment.GenerateMap();
+
+            Worker worker1 = SpawnWorker();
         }
 
         public Worker SpawnWorker()

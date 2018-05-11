@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Game.Environment;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +18,16 @@ namespace Game
         {
             Instance = this;
             Resources.LoadAll();
-            MainState = new GameState();
+
+            GameEnvironment gameEnvironment = GetComponentInChildren<GameEnvironment>();
+            if (gameEnvironment != null)
+            {
+                MainState = new GameState(gameEnvironment);
+            }
+            else
+            {
+                Debug.LogError("The GameEnvironment child GameObject is missing from the WorldController");
+            }
         }
 
         // Use this for initialization

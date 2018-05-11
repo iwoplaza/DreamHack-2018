@@ -55,18 +55,18 @@ namespace Game.Environment
 		public TilePosition ChunkBasePosition { get; set; }
 
 		public TilePosition ChunkPosition { get; set; }
-		public TilePosition ChunkSize { get; set; }
+		public Vector2Int ChunkSize { get; set; }
 		public bool[,] CliffMap { get; set; }
 		public List<MeshCombine> MeshesToAdd { get; private set; }
 		public Material MeshMaterial { get; private set; }
 
-		public void Initialize(GameEnvironment _owner, TilePosition _chunkBasePosition, TilePosition _chunkPosition, TilePosition _chunkSize, Material _material)
+		public void Initialize(GameEnvironment _owner, TilePosition _chunkBasePosition, TilePosition _chunkPosition, Vector2Int _chunkSize, Material _material)
 		{
 			Owner = _owner;
 			ChunkBasePosition = _chunkBasePosition;
 			ChunkPosition = _chunkPosition;
 			ChunkSize = _chunkSize;
-			CliffMap = new bool[_chunkSize.X,_chunkSize.Z];
+			CliffMap = new bool[_chunkSize.x, _chunkSize.y];
 			MeshMaterial = _material;
 			gameObject.AddComponent<MeshFilter>();
 			gameObject.AddComponent<MeshRenderer>();
@@ -75,9 +75,9 @@ namespace Game.Environment
 		public void GenerateMeshMap()
 		{
 			MeshesToAdd = new List<MeshCombine>();
-			for(int x = 0; x < ChunkSize.X; x++)
+			for(int x = 0; x < ChunkSize.x; x++)
 			{
-				for(int z = 0; z < ChunkSize.Z; z++)
+				for(int z = 0; z < ChunkSize.y; z++)
 				{
 					TilePosition addPosition = new TilePosition(x + ChunkBasePosition.X,z + ChunkBasePosition.Z);
 					if(!CliffMap[x,z])
@@ -1069,9 +1069,9 @@ namespace Game.Environment
 					targetChunk.X -= 1;
 				}
 			}
-			if(_pos.x > ChunkSize.X - 1)
+			if(_pos.x > ChunkSize.x - 1)
 			{
-				if(ChunkPosition.X == Owner.ChunkCount.X - 1)
+				if(ChunkPosition.X == Owner.ChunkCount.x - 1)
 				{
 					return true;
 				}
@@ -1091,9 +1091,9 @@ namespace Game.Environment
 					targetChunk.Z -= 1;
 				}
 			}
-			if(_pos.y > ChunkSize.Z - 1)
+			if(_pos.y > ChunkSize.y - 1)
 			{
-				if(ChunkPosition.Z == Owner.ChunkCount.Z - 1)
+				if(ChunkPosition.Z == Owner.ChunkCount.y - 1)
 				{
 					return true;
 				}
@@ -1105,7 +1105,7 @@ namespace Game.Environment
 
 			if(targetChunk.X - ChunkPosition.X < 0)
 			{
-				targetTile.X = (ushort)(Owner.Chunks[targetChunk.X,targetChunk.Z].ChunkSize.X - 1);
+				targetTile.X = (ushort)(Owner.Chunks[targetChunk.X,targetChunk.Z].ChunkSize.x - 1);
 			}
 			else if(targetChunk.X - ChunkPosition.X > 0)
 			{
@@ -1114,7 +1114,7 @@ namespace Game.Environment
 
 			if(targetChunk.Z - ChunkPosition.Z < 0)
 			{
-				targetTile.Z = (ushort)(Owner.Chunks[targetChunk.X,targetChunk.Z].ChunkSize.Z - 1);
+				targetTile.Z = (ushort)(Owner.Chunks[targetChunk.X,targetChunk.Z].ChunkSize.y - 1);
 			}
 			else if(targetChunk.Z - ChunkPosition.Z > 0)
 			{
