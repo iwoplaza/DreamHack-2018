@@ -9,9 +9,10 @@ namespace Utility.Noise
 	public class FractalChain : MonoBehaviour {		
 		
 		[SerializeField]Vector2Int m_currentRes;
+		public Vector2Int CurrentRes { get { return m_currentRes; } set { m_currentRes = value; } }
 		[SerializeField]List<FractalGeneratorChain> m_chain;
 
-		float[,] m_currentNoise; 
+		float[,] m_currentNoise;
 		public float[,] CurrentNoise { get{ return m_currentNoise; } }
 
 		Texture2D m_currentTexture;
@@ -30,7 +31,8 @@ namespace Utility.Noise
 			}
 			foreach(FractalGeneratorChain chain in m_chain)
 			{
-				chain.CurrentGenerator.GenerateFractal(seed, resolution);
+				chain.CurrentGenerator.CurrentRes = resolution;
+				chain.CurrentGenerator.CurrentSeed = seed;				
 			}
 			m_currentRes = resolution;
 			GenerateMap();
@@ -54,12 +56,9 @@ namespace Utility.Noise
 				{
 					float currentValue = 0;
 					for(int i = 0; i < m_chain.Count; i++)
-					{
-						if(m_chain[i].CurrentGenerator.CurrentNoise == null ||
-							m_chain[i].CurrentGenerator.CurrentRes != m_currentRes)
-						{
-							m_chain[i].CurrentGenerator.GenerateFractal(m_currentRes);
-						}
+					{						
+						m_chain[i].CurrentGenerator.GenerateFractal(m_currentRes);
+						
 						if(i != 0)
 						{
 							if(m_chain[i].OperationType == FractalGeneratorChain.OperatorType.ADD)
