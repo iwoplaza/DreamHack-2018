@@ -14,12 +14,18 @@ namespace Game
 		
 		public override void InitializeComponent()
         {
+			WorldMeshResource.UpdateMeshDictionary();
 			m_environmentGen.CliffThreshold = 0.5f;
 			m_environmentGen.WorldSeed = m_mapSeed;
 			m_environmentGen.WorldSize = m_mapSize;
+			m_environmentGen.ChunkSize = new TilePosition(10,10);
 			m_environmentGen.GenerateMap();
 		}
 		
+		public void GenerateMap()
+		{
+			
+		}
 		public override void UpdateComponent()
         {
 

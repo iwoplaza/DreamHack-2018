@@ -59,7 +59,7 @@ namespace Game.Environment
             m_edgeCliffStraightLoneMeshes = new List<Mesh>();
             m_edgeCliffStraightLoneEndMeshes = new List<Mesh>();
             m_edgeCliffDiagonalMeshes = new List<Mesh>();
-            m_edgeCliffDiagonalMeshes = new List<Mesh>();
+            m_edgeCliffDiagonalCase1Meshes = new List<Mesh>();
             m_edgeCliffSharpCornerMeshes = new List<Mesh>();
             m_edgeCliffCornerCase1Meshes = new List<Mesh>();
             m_edgeCliffCornerCase21Meshes = new List<Mesh>();
@@ -73,7 +73,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_groundMeshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_groundMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -83,7 +83,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_groundCliffMeshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_groundCliffMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -93,7 +93,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_cliffLoneMeshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_cliffLoneMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -103,7 +103,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightMeshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffStraightMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -113,7 +113,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightCase1Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffStraightCase1Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -123,7 +123,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightCase2Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffStraightCase2Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -133,7 +133,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightCase3Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffStraightCase3Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -143,7 +143,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightLoneMeshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffStraightLoneMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -153,7 +153,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightLoneEndMeshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffStraightLoneEndMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -163,7 +163,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffDiagonalMeshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffDiagonalMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -173,7 +173,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffDiagonalCase1Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffDiagonalCase1Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -183,7 +183,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffSharpCornerMeshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffSharpCornerMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -193,7 +193,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase1Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffCornerCase1Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -203,7 +203,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase21Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffCornerCase21Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -213,7 +213,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase22Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffCornerCase22Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -223,7 +223,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase3Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffCornerCase3Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
@@ -233,7 +233,7 @@ namespace Game.Environment
                 if(temp != null)
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase4Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                        m_edgeCliffCornerCase4Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
                     i = 100;                        
                 }
             }
