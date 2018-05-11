@@ -27,6 +27,8 @@ ModelImporter:
     100042: CliffEdgeCornerCase22
     100044: CliffEdgeStraightCase1
     100046: CliffEdgeStraightCase2
+    100048: CliffEdgeStraightCase3
+    100050: CliffEdgeDiagonalCase1
     400000: //RootNode
     400002: Plane
     400004: Plane_001
@@ -51,6 +53,8 @@ ModelImporter:
     400042: CliffEdgeCornerCase22
     400044: CliffEdgeStraightCase1
     400046: CliffEdgeStraightCase2
+    400048: CliffEdgeStraightCase3
+    400050: CliffEdgeDiagonalCase1
     2100000: unnamed
     2100002: UnifiedPlanet
     2300000: //RootNode
@@ -77,6 +81,8 @@ ModelImporter:
     2300042: CliffEdgeCornerCase22
     2300044: CliffEdgeStraightCase1
     2300046: CliffEdgeStraightCase2
+    2300048: CliffEdgeStraightCase3
+    2300050: CliffEdgeDiagonalCase1
     3300000: //RootNode
     3300002: Plane
     3300004: Plane_001
@@ -101,6 +107,8 @@ ModelImporter:
     3300042: CliffEdgeCornerCase22
     3300044: CliffEdgeStraightCase1
     3300046: CliffEdgeStraightCase2
+    3300048: CliffEdgeStraightCase3
+    3300050: CliffEdgeDiagonalCase1
     4300000: Plane
     4300002: Plane_002
     4300004: Plane_001
@@ -124,6 +132,8 @@ ModelImporter:
     4300040: CliffEdgeCornerCase21
     4300042: CliffEdgeStraightCase2
     4300044: CliffEdgeStraightCase1
+    4300046: CliffEdgeStraightCase3
+    4300048: CliffEdgeDiagonalCase1
     7400000: Default Take
     9500000: //RootNode
   externalObjects: {}
