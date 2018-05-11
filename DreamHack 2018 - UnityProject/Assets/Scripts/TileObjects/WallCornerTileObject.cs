@@ -9,9 +9,14 @@ namespace Game.TileObjects
         public override string DisplayName { get { return "Wall Corner"; } }
         public override bool IsImpenetrable { get { return true; } }
 
-        public override bool IsPassableFor(Direction entryDirection)
+        public override bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection)
         {
-            return true;
+            return false;
+        }
+
+        public override bool CanComeOutOfTowards(Pathfinding.MovementDirection direction)
+        {
+            return false;
         }
 
         public GameObject GetPrefab()

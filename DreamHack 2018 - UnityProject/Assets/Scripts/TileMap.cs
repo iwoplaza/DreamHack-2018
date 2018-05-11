@@ -70,7 +70,7 @@ namespace Game
             {
                 for (int y = 0; y < Height; ++y)
                 {
-                    if (m_tiles[x, y] != null)
+                    if (m_tiles[x, y] != null && m_tiles[x, y].IsWorthSaving)
                     {
                         XElement tileElement = new XElement("Tile");
                         element.Add(tileElement);

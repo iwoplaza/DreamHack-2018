@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.Pathfinding;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,15 +9,47 @@ namespace Game.TileObjects
     public class WallTileObject : TileObjectBase
     {
         public override string DisplayName { get { return "Wall"; } }
-        public override bool IsImpenetrable { get { return true; } }
+        public override bool IsImpenetrable { get { return false; } }
 
         public WallTileObject()
         {
         }
 
-        public override bool IsPassableFor(Direction entryDirection)
+        public override bool CanGoIntoFrom(MovementDirection entryDirection)
         {
+            MovementDirection localEntryDirection = MovementDirectionUtils.OrientTowardsInverse(
+                entryDirection, MovementDirectionUtils.NewFrom(Orientation)
+            );
+
+            Debug.Log(localEntryDirection);
+
+            if (localEntryDirection == MovementDirection.POSITIVE_X || //Side
+                localEntryDirection == MovementDirection.NEGATIVE_X || //Side
+                localEntryDirection == MovementDirection.POSITIVE_Z || //Front
+                localEntryDirection == MovementDirection.POSITIVE_Z_POSITIVE_X || //FrontSideDiagonal
+                localEntryDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X)    //FrontSideDiagonal
+            {
+                return true;
+            }
+
             return false;
+        }
+
+        public override bool CanComeOutOfTowards(MovementDirection direction)
+        {
+            MovementDirection localDirection = MovementDirectionUtils.OrientTowardsInverse(
+                direction, MovementDirectionUtils.NewFrom(Orientation)
+            );
+
+            if (localDirection == MovementDirection.POSITIVE_Z ||
+                localDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X ||
+                localDirection == MovementDirection.POSITIVE_Z_POSITIVE_X)
+            {
+                return false;
+            }
+
+            Debug.Log("Returned true for " + localDirection);
+            return true;
         }
 
         public GameObject GetPrefab()

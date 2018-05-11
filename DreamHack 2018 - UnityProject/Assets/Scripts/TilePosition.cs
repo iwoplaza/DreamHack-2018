@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Game.Pathfinding;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +20,12 @@ namespace Game
             {
                 return new Vector3(X, 0, Z);
             }
+        }
+
+        public TilePosition(TilePosition position)
+        {
+            X = position.X;
+            Z = position.Z;
         }
 
         public TilePosition(ushort x, ushort z)
@@ -51,6 +58,41 @@ namespace Game
             hashCode <<= 16;
             hashCode |= Z;
             return hashCode;
+        }
+
+        public void Offset(MovementDirection direction)
+        {
+            if (direction == MovementDirection.POSITIVE_Z ||
+                direction == MovementDirection.POSITIVE_Z_NEGATIVE_X ||
+                direction == MovementDirection.POSITIVE_Z_POSITIVE_X)
+            {
+                Z++;
+            }
+            if (direction == MovementDirection.NEGATIVE_Z ||
+                direction == MovementDirection.NEGATIVE_Z_NEGATIVE_X ||
+                direction == MovementDirection.NEGATIVE_Z_POSITIVE_X)
+            {
+                Z--;
+            }
+            if (direction == MovementDirection.POSITIVE_X ||
+                direction == MovementDirection.NEGATIVE_Z_POSITIVE_X ||
+                direction == MovementDirection.POSITIVE_Z_POSITIVE_X)
+            {
+                X++;
+            }
+            if (direction == MovementDirection.NEGATIVE_X ||
+                direction == MovementDirection.NEGATIVE_Z_NEGATIVE_X ||
+                direction == MovementDirection.POSITIVE_Z_NEGATIVE_X)
+            {
+                X--;
+            }
+        }
+
+        public TilePosition GetOffset(MovementDirection direction)
+        {
+            TilePosition position = new TilePosition(this);
+            position.Offset(direction);
+            return position;
         }
 
         public static bool operator ==(TilePosition a, TilePosition b)

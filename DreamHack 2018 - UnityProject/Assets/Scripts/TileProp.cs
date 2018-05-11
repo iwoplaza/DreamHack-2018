@@ -21,9 +21,10 @@ namespace Game
         /// Used for Path Finding.
         /// </summary>
         /// <param name="entryDirection">The direction it's coming from.
-        ///                              (relative to the object, not the passer)</param>
+        ///                              (relative to the passer, not the object)</param>
         /// <returns>Whether or not the passer can pass.</returns>
-        public abstract bool IsPassableFor(Direction entryDirection);
+        public abstract bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection);
+        public abstract bool CanComeOutOfTowards(Pathfinding.MovementDirection entryDirection);
 
         public abstract bool IsImpenetrable { get; }
 
@@ -41,6 +42,7 @@ namespace Game
         public TileProp()
         {
             InstalledAt = null;
+            Orientation = Direction.POSITIVE_Z;
         }
 
         public void OnInstalledAt(Tile targetTile)
@@ -72,7 +74,11 @@ namespace Game
             XAttribute variantAttrib = element.Attribute("variant");
 
             if (orientationAttrib != null)
+            {
                 Orientation = (Direction)int.Parse(orientationAttrib.Value);
+                if (Orientation == Direction.NONE)
+                    Orientation = Direction.POSITIVE_Z;
+            }
             if (variantAttrib != null)
                 Variant = int.Parse(variantAttrib.Value);
 
@@ -100,10 +106,13 @@ namespace Game
 
         public virtual void Rotate(Direction direction)
         {
-            Orientation = direction;
-            if (InstalledGameObject != null)
+            if (direction != Direction.NONE)
             {
-                InstalledGameObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F);
+                Orientation = direction;
+                if (InstalledGameObject != null)
+                {
+                    InstalledGameObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F);
+                }
             }
         }
 

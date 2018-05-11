@@ -20,6 +20,11 @@ namespace Game
         public bool Empty { get { return !HasObject && !HasFloor && !HasCliff; } }
         public bool CanInstallObject { get { return !HasObject && !HasCliff; } }
         public bool CanInstallFloor { get { return !HasFloor && !HasCliff; } }
+        /// <summary>
+        /// Tells the Populate function if it should create an element for this Tile
+        /// when serializing.
+        /// </summary>
+        public bool IsWorthSaving { get { return !Empty; } }
 
         public bool IsImpenetrable
         {
@@ -133,6 +138,10 @@ namespace Game
             return tile;
         }
 
+        /// <summary>
+        /// This only runs when <see cref="IsWorthSaving"/> is true.
+        /// </summary>
+        /// <param name="element">The element to populate</param>
         public void Populate(XElement element)
         {
             element.SetAttributeValue("x", Position.X);
@@ -154,20 +163,39 @@ namespace Game
         }
 
         /// <summary>
-        /// Returns if the passer can go through this tile.
+        /// Returns if the passer can go into this tile.
         /// More in <see cref="TileProp"/>
         /// </summary>
-        /// <param name="entryDirection"></param>
+        /// <param name="direction"></param>
         /// <returns></returns>
-        public bool CanPassThrough(Direction entryDirection)
+        public bool CanGoIntoFrom(Pathfinding.MovementDirection direction)
         {
             bool passable = true;
 
             if (InstalledObject != null)
-                passable = passable && InstalledObject.IsPassableFor(entryDirection);
+                passable = passable && InstalledObject.CanGoIntoFrom(direction);
 
             if (InstalledFloor != null)
-                passable = passable && InstalledFloor.IsPassableFor(entryDirection);
+                passable = passable && InstalledFloor.CanGoIntoFrom(direction);
+
+            return passable;
+        }
+
+        /// <summary>
+        /// Returns if the passer can go out of this tile.
+        /// More in <see cref="TileProp"/>
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        public bool CanComeOutOfTowards(Pathfinding.MovementDirection direction)
+        {
+            bool passable = true;
+
+            if (InstalledObject != null)
+                passable = passable && InstalledObject.CanComeOutOfTowards(direction);
+
+            if (InstalledFloor != null)
+                passable = passable && InstalledFloor.CanComeOutOfTowards(direction);
 
             return passable;
         }

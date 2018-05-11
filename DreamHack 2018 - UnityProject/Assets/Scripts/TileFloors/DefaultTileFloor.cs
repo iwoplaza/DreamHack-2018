@@ -9,7 +9,12 @@ namespace Game.TileFloors
         public override string DisplayName { get { return "Default Floor"; } }
         public override bool IsImpenetrable { get { return false; } }
 
-        public override bool IsPassableFor(Direction entryDirection)
+        public override bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection)
+        {
+            return true;
+        }
+
+        public override bool CanComeOutOfTowards(Pathfinding.MovementDirection direction)
         {
             return true;
         }

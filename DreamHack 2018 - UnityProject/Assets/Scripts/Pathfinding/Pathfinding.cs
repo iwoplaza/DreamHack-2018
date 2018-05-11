@@ -8,20 +8,20 @@ namespace Game.Pathfinding.Internal
 {
     public static class Pathfinding
     {
-        public static List<TilePosition> FindPath(PathfindingRule rule, TileMap map, TilePosition start, TilePosition end)
+        public static List<TilePosition> FindPath(IPathfindingRule rule, TileMap map, TilePosition start, TilePosition end)
         {
             if(!rule.IsProperEndGoal(map.TileAt(end)))
             {
                 return new List<TilePosition>();
             }
 
-            if(map.TileAt(start).HasObject || start == end)
+            if(start == end)
             {
                 Debug.Log("No path found! Either the starting position is obstructed or the start and end pos is the same!");
                 return new List<TilePosition>();
             }
 
-            float[,] weightMap = new float[map.Width,map.Height];
+            float[,] weightMap = new float[map.Width, map.Height];
             for(int x = 0; x < map.Width; x++)
             {
                 for(int y = 0; y < map.Height; y++)
@@ -40,7 +40,7 @@ namespace Game.Pathfinding.Internal
             while(pathHeaps.HeapSize > 0 && !foundEndTile)
             {
                 PathNode cheapestNode = pathHeaps.GetSmallest();
-                foreach(TilePosition pos in map.GetNeighbours(rule, cheapestNode.Location))
+                foreach(TilePosition pos in GetNeighbours(map, rule, cheapestNode.Location))
                 {
                     float newWeight = cheapestNode.Weight + GetCost(cheapestNode.Location,pos);
                     if(weightMap[pos.X, pos.Z] < 0 || newWeight < weightMap[pos.X, pos.Z])
@@ -112,84 +112,69 @@ namespace Game.Pathfinding.Internal
             }
         }
 
-        static List<TilePosition> GetNeighbours(this TileMap map, PathfindingRule rule, TilePosition tilePos)
+        static bool CanGoTowards(IPathfindingRule rule, TileMap map, TilePosition tilePos, MovementDirection direction)
+        {
+            return rule.CanComeOutOfTowards(map.TileAt(tilePos), direction) &&
+                   rule.CanGoIntoFrom(map.TileAt(tilePos.GetOffset(direction)), direction);
+        }
+
+        static List<TilePosition> GetNeighbours(TileMap map, IPathfindingRule rule, TilePosition tilePos)
         {
             List<TilePosition> neighbours = new List<TilePosition>();
 
-            if(tilePos.X > 0)
-            {
-                if(rule.CanPassThrough(map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)), Direction.POSITIVE_X))
-                {
-                    neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z));                    
-                }
-                if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)).HasObject){
-                    if(tilePos.Z > 0)
-                        {
-                            if(!map.TileAt(new TilePosition(tilePos.X, tilePos.Z - 1)).HasObject)
-                            {
-                                if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z - 1)).HasObject)
-                                {
-                                    neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z - 1));
-                                }
-                            }
-                        }
-                    if(tilePos.Z < map.Height - 1)
-                    {
-                        if(!map.TileAt(new TilePosition(tilePos.X, tilePos.Z + 1)).HasObject)
-                        {
-                            if(!map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z + 1)).HasObject)
-                            {
-                                neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z + 1));
-                            }
-                        }
-                    }
-                }
-            }
-            if(tilePos.Z > 0)
-            {
-                if(rule.CanPassThrough(map.TileAt(new TilePosition(tilePos.X, tilePos.Z - 1)), Direction.POSITIVE_Z))
-                {
-                    neighbours.Add(new TilePosition(tilePos.X, tilePos.Z - 1));
-                }
-            }
-            if(tilePos.X < map.Width - 1)
-            {
-                if(rule.CanPassThrough(map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z)), Direction.NEGATIVE_X))
-                {
-                    neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z));
-                }
-                if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z)).HasObject)
-                {
-                    if(tilePos.Z > 0)
-                    {
-                        if(!map.TileAt(new TilePosition(tilePos.X, tilePos.Z - 1)).HasObject)
-                        {
-                            if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z - 1)).HasObject)
-                            {
-                                neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z - 1));
-                            }
-                        }
-                    }
-                    if(tilePos.Z < map.Height - 1)
-                    {
-                        if(!map.TileAt(new TilePosition(tilePos.X, tilePos.Z + 1)).HasObject)
-                        {
-                            if(!map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z + 1)).HasObject)
-                            {
-                                neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z + 1));
+            bool negativeZ = false;
+            bool positiveZ = false;
+            bool negativeX = false;
+            bool positiveX = false;
 
-                            }
-                        }                
-                    }
-                }
-            }
-            if(tilePos.Z < map.Height - 1)
+            // Top
+            if (CanGoTowards(rule, map, tilePos, MovementDirection.NEGATIVE_Z))
             {
-                if(rule.CanPassThrough(map.TileAt(new TilePosition(tilePos.X, tilePos.Z + 1)),Direction.NEGATIVE_Z))
-                {
-                    neighbours.Add(new TilePosition(tilePos.X, tilePos.Z + 1));
-                }
+                neighbours.Add(new TilePosition(tilePos.X, tilePos.Z - 1));
+                negativeZ = true;
             }
+
+            // Bottom
+            if (CanGoTowards(rule, map, tilePos, MovementDirection.POSITIVE_Z))
+            {
+                neighbours.Add(new TilePosition(tilePos.X, tilePos.Z + 1));
+                positiveZ = true;
+            }
+
+            // Left
+            if(CanGoTowards(rule, map, tilePos, MovementDirection.NEGATIVE_X))
+            {
+                neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z));
+                negativeX = true;
+            }
+
+            // Right
+            if (CanGoTowards(rule, map, tilePos, MovementDirection.POSITIVE_X))
+            {
+                neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z));
+                positiveX = true;
+            }
+
+            // Top-Left
+            if (negativeZ && negativeX)
+                if (CanGoTowards(rule, map, tilePos, MovementDirection.NEGATIVE_Z_NEGATIVE_X))
+                    neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z - 1));
+
+            // Bottom-Left
+            if (positiveZ && negativeX)
+                if (CanGoTowards(rule, map, tilePos, MovementDirection.POSITIVE_Z_NEGATIVE_X))
+                    neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z + 1));
+
+            // Top-Right
+            if (negativeZ && positiveX)
+                if (CanGoTowards(rule, map, tilePos, MovementDirection.NEGATIVE_Z_POSITIVE_X))
+                    neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z - 1));
+
+            // Bottom-Right
+            if (positiveZ && positiveX)
+                if (CanGoTowards(rule, map, tilePos, MovementDirection.POSITIVE_Z_POSITIVE_X))
+                    neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z + 1));
+
             return neighbours;
         }
     }

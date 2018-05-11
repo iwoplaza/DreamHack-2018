@@ -3,15 +3,23 @@ using Game.Pathfinding;
 using Game;
 using System;
 
-public class BasicRule : PathfindingRule
+namespace Game.Pathfinding.Rules
 {
-    public bool CanPassThrough(Tile tile, Direction dir)
+    public class BasicRule : IPathfindingRule
     {
-        return tile.CanPassThrough(dir);
-    }
+        public bool CanGoIntoFrom(Tile tile, MovementDirection dir)
+        {
+            return tile != null && tile.CanGoIntoFrom(dir);
+        }
 
-    public bool IsProperEndGoal(Tile tile)
-    {
-        return tile != null && !tile.IsImpenetrable;
+        public bool CanComeOutOfTowards(Tile tile, MovementDirection dir)
+        {
+            return tile != null && tile.CanComeOutOfTowards(dir);
+        }
+
+        public bool IsProperEndGoal(Tile tile)
+        {
+            return tile != null && !tile.IsImpenetrable;
+        }
     }
 }

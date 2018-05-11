@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.Pathfinding;
 using Game;
+using Game.Pathfinding.Rules;
 
 [RequireComponent(typeof(Worker))]
 public class TestPathfind : MonoBehaviour {

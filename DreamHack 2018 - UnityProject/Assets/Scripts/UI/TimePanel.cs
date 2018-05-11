@@ -26,6 +26,14 @@ namespace Game.UI
         void Start()
         {
             ResetColours();
+
+            TimeSystem timeSystem = WorldController.Instance.MainState.TimeSystem;
+            if (timeSystem != null)
+            {
+                Button button = GetButtonForMode(timeSystem.CurrentMode);
+                if (button != null)
+                    button.colors = m_selectedColors;
+            }
         }
 
         void Update()
@@ -39,6 +47,22 @@ namespace Game.UI
             TimeSystem timeSystem = WorldController.Instance.MainState.TimeSystem;
             if (timeSystem != null)
                 timeSystem.CurrentMode = mode;
+        }
+
+        Button GetButtonForMode(TimeSystem.TimeMode mode)
+        {
+            switch (mode)
+            {
+                case TimeSystem.TimeMode.PAUSE:
+                    return m_pauseButton;
+                case TimeSystem.TimeMode.NORMAL:
+                    return m_normalButton;
+                case TimeSystem.TimeMode.MULTIPLIER_2X:
+                    return m_2xButton;
+                case TimeSystem.TimeMode.MULTIPLIER_4X:
+                    return m_4xButton;
+            }
+            return null;
         }
 
         void ResetColours(Button button)

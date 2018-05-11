@@ -2,9 +2,10 @@ using Game;
 
 namespace Game.Pathfinding
 {
-    public interface PathfindingRule
+    public interface IPathfindingRule
     {
-        bool CanPassThrough(Tile tile, Direction dir);
+        bool CanGoIntoFrom(Tile tile, Pathfinding.MovementDirection dir);
+        bool CanComeOutOfTowards(Tile tile, Pathfinding.MovementDirection dir);
         bool IsProperEndGoal(Tile tile);
     }
 }

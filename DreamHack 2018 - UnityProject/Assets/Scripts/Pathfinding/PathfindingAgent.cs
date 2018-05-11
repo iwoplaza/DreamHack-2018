@@ -35,7 +35,7 @@ namespace Game.Pathfinding
             }
         }
 
-		private PathfindingRule m_clientRule;
+		private IPathfindingRule m_clientRule;
 		private List<TilePosition> m_currentPath;
 		private TilePosition m_currentEndTile;
 		private TileMap m_currentMap;
@@ -48,7 +48,7 @@ namespace Game.Pathfinding
         public delegate void StatusChangeHandler(PathfindingStatus newStatus);
         private StatusChangeHandler m_statusChangeHandlers;
 
-        public PathfindingAgent(PathfindingRule rule, TileMap map)
+        public PathfindingAgent(IPathfindingRule rule, TileMap map)
 		{
             CurrentStatus = PathfindingStatus.PATH_FINISHED;
             m_pathThreadStatusChanges = new ThreadQueue<PathfindingStatus>();

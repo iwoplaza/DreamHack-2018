@@ -61,5 +61,35 @@ namespace Game
 
             return 0.0F;
         }
+
+        public static Direction OrientTowards(Direction input, Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.POSITIVE_X:
+                    return RotateCW(input);
+                case Direction.NEGATIVE_Z:
+                    return RotateCW(RotateCW(input));
+                case Direction.NEGATIVE_X:
+                    return RotateCCW(input);
+            }
+
+            return input;
+        }
+
+        public static Direction OrientTowardsInverse(Direction input, Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.POSITIVE_X:
+                    return RotateCCW(input);
+                case Direction.NEGATIVE_Z:
+                    return RotateCW(RotateCW(input));
+                case Direction.NEGATIVE_X:
+                    return RotateCW(input);
+            }
+
+            return input;
+        }
     }
 }

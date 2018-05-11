@@ -68,7 +68,7 @@ namespace Game
 
             if (m_tileMap != null)
             {
-                PathfindingAgent = new PathfindingAgent(new BasicRule(), m_tileMap);
+                PathfindingAgent = new PathfindingAgent(new Pathfinding.Rules.BasicRule(), m_tileMap);
                 PathfindingAgent.RegisterStatusChangeHandler(OnPathfindingStatusChanged);
             }
             m_characterController = GetComponent<CharacterController>();
