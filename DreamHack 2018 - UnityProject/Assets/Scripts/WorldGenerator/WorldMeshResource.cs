@@ -14,10 +14,11 @@ namespace Game.Environment
             EDGE_CLIFF_STRAIGHT,
             EDGE_CLIFF_STRAIGHT_CASE1,
             EDGE_CLIFF_STRAIGHT_CASE2,
-
+            EDGE_CLIFF_STRAIGHT_CASE3,
             EDGE_CLIFF_STRAIGHT_LONE,
             EDGE_CLIFF_STRAIGHT_LONE_END,
             EDGE_CLIFF_DIAGONAL,
+            EDGE_CLIFF_DIAGONAL_CASE1,
             EDGE_CLIFF_SHARPCORNER,
             EDGE_CLIFF_CORNER_CASE1,
             EDGE_CLIFF_CORNER_CASE21,
@@ -33,9 +34,11 @@ namespace Game.Environment
         private static List<Mesh> m_edgeCliffStraightMeshes;
         private static List<Mesh> m_edgeCliffStraightCase1Meshes;
         private static List<Mesh> m_edgeCliffStraightCase2Meshes;
+        private static List<Mesh> m_edgeCliffStraightCase3Meshes;
         private static List<Mesh> m_edgeCliffStraightLoneMeshes;
         private static List<Mesh> m_edgeCliffStraightLoneEndMeshes;
         private static List<Mesh> m_edgeCliffDiagonalMeshes;
+        private static List<Mesh> m_edgeCliffDiagonalCase1Meshes;
         private static List<Mesh> m_edgeCliffSharpCornerMeshes;
         private static List<Mesh> m_edgeCliffCornerCase1Meshes;
         private static List<Mesh> m_edgeCliffCornerCase21Meshes;
@@ -46,21 +49,23 @@ namespace Game.Environment
 
         public static void UpdateMeshDictionary()
         {
-            m_groundMeshes.Clear();
-            m_groundCliffMeshes.Clear();
-            m_cliffLoneMeshes.Clear();
-            m_edgeCliffStraightMeshes.Clear();
-            m_edgeCliffStraightCase1Meshes.Clear();
-            m_edgeCliffStraightCase2Meshes.Clear();
-            m_edgeCliffStraightLoneMeshes.Clear();
-            m_edgeCliffStraightLoneEndMeshes.Clear();
-            m_edgeCliffDiagonalMeshes.Clear();
-            m_edgeCliffSharpCornerMeshes.Clear();
-            m_edgeCliffCornerCase1Meshes.Clear();
-            m_edgeCliffCornerCase21Meshes.Clear();
-            m_edgeCliffCornerCase22Meshes.Clear();
-            m_edgeCliffCornerCase3Meshes.Clear();
-            m_edgeCliffCornerCase4Meshes.Clear();
+            m_groundMeshes = new List<Mesh>();
+            m_groundCliffMeshes = new List<Mesh>();
+            m_cliffLoneMeshes = new List<Mesh>();
+            m_edgeCliffStraightMeshes = new List<Mesh>();
+            m_edgeCliffStraightCase1Meshes = new List<Mesh>();
+            m_edgeCliffStraightCase2Meshes = new List<Mesh>();
+            m_edgeCliffStraightCase3Meshes = new List<Mesh>();
+            m_edgeCliffStraightLoneMeshes = new List<Mesh>();
+            m_edgeCliffStraightLoneEndMeshes = new List<Mesh>();
+            m_edgeCliffDiagonalMeshes = new List<Mesh>();
+            m_edgeCliffDiagonalMeshes = new List<Mesh>();
+            m_edgeCliffSharpCornerMeshes = new List<Mesh>();
+            m_edgeCliffCornerCase1Meshes = new List<Mesh>();
+            m_edgeCliffCornerCase21Meshes = new List<Mesh>();
+            m_edgeCliffCornerCase22Meshes = new List<Mesh>();
+            m_edgeCliffCornerCase3Meshes = new List<Mesh>();
+            m_edgeCliffCornerCase4Meshes = new List<Mesh>();
 
             for(int i = 0; i < 99; i++)
             {                
@@ -124,6 +129,16 @@ namespace Game.Environment
             }
             for(int i = 0; i < 99; i++)
             {                
+                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase3_" + i.ToString());
+                if(temp != null)
+                {
+                    if(temp.GetComponent<MeshFilter>() != null)
+                        m_edgeCliffStraightCase3Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                    i = 100;                        
+                }
+            }
+            for(int i = 0; i < 99; i++)
+            {                
                 GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightLone_" + i.ToString());
                 if(temp != null)
                 {
@@ -149,6 +164,16 @@ namespace Game.Environment
                 {
                     if(temp.GetComponent<MeshFilter>() != null)
                         m_edgeCliffDiagonalMeshes.Add(temp.GetComponent<MeshFilter>().mesh);
+                    i = 100;                        
+                }
+            }
+            for(int i = 0; i < 99; i++)
+            {                
+                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeDiagonalCase1_" + i.ToString());
+                if(temp != null)
+                {
+                    if(temp.GetComponent<MeshFilter>() != null)
+                        m_edgeCliffDiagonalCase1Meshes.Add(temp.GetComponent<MeshFilter>().mesh);
                     i = 100;                        
                 }
             }
@@ -225,17 +250,23 @@ namespace Game.Environment
                 case MeshType.CLIFF_LONE:
                     return m_cliffLoneMeshes[Random.Range(0,m_cliffLoneMeshes.Count)];
                 case MeshType.EDGE_CLIFF_STRAIGHT:
-                    return m_edgeCliffStraightMeshes[Random.Range(0,m_edgeCliffStraightMeshes.Count)];
+                    return m_edgeCliffStraightMeshes[Random.Range(0,
+                    m_edgeCliffStraightMeshes.Count)];
                 case MeshType.EDGE_CLIFF_STRAIGHT_CASE1:
                     return m_edgeCliffStraightCase1Meshes[Random.Range(0,m_edgeCliffStraightCase1Meshes.Count)];
                 case MeshType.EDGE_CLIFF_STRAIGHT_CASE2:
                     return m_edgeCliffStraightCase2Meshes[Random.Range(0,m_edgeCliffStraightCase2Meshes.Count)];
+                case MeshType.EDGE_CLIFF_STRAIGHT_CASE3:
+                    return m_edgeCliffStraightCase3Meshes[Random.Range(0,m_edgeCliffStraightCase3Meshes.Count)];
                 case MeshType.EDGE_CLIFF_STRAIGHT_LONE:
                     return m_edgeCliffStraightLoneMeshes[Random.Range(0,m_edgeCliffStraightLoneMeshes.Count)];
                 case MeshType.EDGE_CLIFF_STRAIGHT_LONE_END:
                     return m_edgeCliffStraightLoneEndMeshes[Random.Range(0,m_edgeCliffStraightLoneEndMeshes.Count)];                
                 case MeshType.EDGE_CLIFF_DIAGONAL:
-                    return m_edgeCliffDiagonalMeshes[Random.Range(0,m_edgeCliffDiagonalMeshes.Count)];
+                    return m_edgeCliffDiagonalMeshes[Random.Range(0,
+                    m_edgeCliffDiagonalMeshes.Count)];
+                case MeshType.EDGE_CLIFF_DIAGONAL_CASE1:
+                    return m_edgeCliffDiagonalCase1Meshes[Random.Range(0,m_edgeCliffDiagonalCase1Meshes.Count)];
                 case MeshType.EDGE_CLIFF_SHARPCORNER:
                     return m_edgeCliffSharpCornerMeshes[Random.Range(0,m_edgeCliffSharpCornerMeshes.Count)];
                 case MeshType.EDGE_CLIFF_CORNER_CASE1:
