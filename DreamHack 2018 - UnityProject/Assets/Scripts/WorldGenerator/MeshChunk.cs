@@ -6,6 +6,29 @@ using Game.Environment;
 
 namespace Game.Environment
 {
+	public class Neighbors
+	{
+		bool m_xPos;
+		public bool XPos { get{ return m_xPos; } set{ m_xPos = value; } }
+		bool m_xPosZpos;
+		public bool XPosZPos { get{ return m_xPosZpos; } set{ m_xPosZpos = value; } }
+		bool m_xPosZneg;
+		public bool XPosZNeg { get{ return m_xPosZneg; } set{ m_xPosZneg = value; } }
+		bool m_xNeg;
+		public bool XNeg { get{ return m_xNeg; } set{ m_xNeg = value; } }
+		bool m_xNegZPos;
+		public bool XNegZPos { get{ return m_xNegZPos; } set{ m_xNegZPos = value; } }
+		bool m_xNegZNeg;
+		public bool XNegZNeg { get{ return m_xNegZNeg; } set{ m_xNegZNeg = value; } }
+		bool m_zPos;
+		public bool ZPos { get{ return m_zPos; } set{ m_zPos = value; } }
+		bool m_zNeg;
+		public bool ZNeg { get{ return m_zNeg; } set{ m_zNeg = value; } }
+
+		int m_neighborCount;
+		public int NeighborCount { get { return m_neighborCount; } set{ m_neighborCount = value; } }
+	}
+
 	public class MeshChunk : MonoBehaviour {
 		public struct MeshCombine
 		{
@@ -28,37 +51,25 @@ namespace Game.Environment
 			}
 		}
 
-		public struct Neighbors
-		{			
-			public bool XPos { get; set; }
-			public bool XPosZPos { get; set; }
-			public bool XPosZNeg { get; set; }
-			public bool XNeg { get; set; }
-			public bool XNegZPos { get; set; }
-			public bool XNegZNeg { get; set; }
-			public bool ZPos { get; set; }
-			public bool ZNeg { get; set; }
-
-			public int NeighborCount { get; set; }
-		}
-
 		public GameEnvironment Owner { get; private set; }
-		public TilePosition ChunkPosition { get; private set; }
-		public TilePosition ChunkSize { get; private set; }
+		public TilePosition ChunkBasePosition { get; set; }
+
+		public TilePosition ChunkPosition { get; set; }
+		public TilePosition ChunkSize { get; set; }
 		public bool[,] CliffMap { get; set; }
 		public List<MeshCombine> MeshesToAdd { get; private set; }
 		public Material MeshMaterial { get; private set; }
 
-		public MeshChunk(GameEnvironment _owner, TilePosition _chunkPosition, TilePosition _chunkSize, Material _material)
+		public void Initialize(GameEnvironment _owner, TilePosition _chunkBasePosition, TilePosition _chunkPosition, TilePosition _chunkSize, Material _material)
 		{
 			Owner = _owner;
+			ChunkBasePosition = _chunkBasePosition;
 			ChunkPosition = _chunkPosition;
 			ChunkSize = _chunkSize;
 			CliffMap = new bool[_chunkSize.X,_chunkSize.Z];
 			MeshMaterial = _material;
 			gameObject.AddComponent<MeshFilter>();
 			gameObject.AddComponent<MeshRenderer>();
-			transform.position = ChunkSize.Vector3 + new Vector3(0.5f,0,0.5f);
 		}
 
 		public void GenerateMeshMap()
@@ -68,7 +79,7 @@ namespace Game.Environment
 			{
 				for(int z = 0; z < ChunkSize.Z; z++)
 				{
-					TilePosition addPosition = new TilePosition(x,z);
+					TilePosition addPosition = new TilePosition(x + ChunkBasePosition.X,z + ChunkBasePosition.Z);
 					if(!CliffMap[x,z])
 					{
 						MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND)
@@ -76,7 +87,7 @@ namespace Game.Environment
 					}
 					else
 					{
-						Neighbors tileNeighbor = GetNeighboringTile(addPosition);
+						Neighbors tileNeighbor = GetNeighboringTile(new TilePosition(x,z));
 						if(tileNeighbor.NeighborCount == 8)
 						{
 							MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
@@ -256,12 +267,50 @@ namespace Game.Environment
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_CASE2)
 										, addPosition, new Vector3(0,270,0)));
+							}							
+
+							// CASE: BRIDGES
+							else if(!tileNeighbor.ZPos && !tileNeighbor.ZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE)
+										, addPosition, new Vector3(0,0,0)));
 							}
+							else if(!tileNeighbor.XPos && !tileNeighbor.XNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE)
+										, addPosition, new Vector3(0,90,0)));
+							}
+
+							// CASE:
+							//	101
+							//	1P0
+							//	1P1
+							else if(!tileNeighbor.ZPos && !tileNeighbor.XPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL)
+										, addPosition, new Vector3(0,0,0)));
+							}
+							else if(!tileNeighbor.XPos && !tileNeighbor.ZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL)
+										, addPosition, new Vector3(0,90,0)));
+							}
+							else if(!tileNeighbor.ZNeg && !tileNeighbor.XNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL)
+										, addPosition, new Vector3(0,180,0)));
+							}
+							else if(!tileNeighbor.XNeg && !tileNeighbor.ZPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL)
+										, addPosition, new Vector3(0,270,0)));
+							}
+
 							else
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
 										, addPosition, new Vector3(0,0,0)));	
-							}				
+							}
 						}
 						else if(tileNeighbor.NeighborCount == 5)
 						{
@@ -299,22 +348,22 @@ namespace Game.Environment
 
 							else if((!tileNeighbor.XNegZPos || !tileNeighbor.XPosZNeg || !tileNeighbor.XPosZPos) && !tileNeighbor.ZPos && !tileNeighbor.XPos)
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_SHARPCORNER)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL)
 										, addPosition, new Vector3(0,0,0)));
 							}
 							else if((!tileNeighbor.XPosZPos || !tileNeighbor.XNegZNeg || !tileNeighbor.XPosZNeg) && !tileNeighbor.ZNeg && !tileNeighbor.XPos)
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_SHARPCORNER)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL)
 										, addPosition, new Vector3(0,90,0)));
 							}
 							else if((!tileNeighbor.XNegZPos || !tileNeighbor.XPosZNeg || !tileNeighbor.XNegZNeg) && !tileNeighbor.ZNeg && !tileNeighbor.XNeg)
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_SHARPCORNER)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL)
 										, addPosition, new Vector3(0,180,0)));
 							}
 							else if((!tileNeighbor.XPosZPos || !tileNeighbor.XNegZNeg || !tileNeighbor.XNegZPos) && !tileNeighbor.ZPos && !tileNeighbor.XNeg)
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_SHARPCORNER)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL)
 										, addPosition, new Vector3(0,270,0)));
 							}
 
@@ -415,6 +464,33 @@ namespace Game.Environment
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_CASE3)
 										, addPosition, new Vector3(0,270,0)));
 							}
+
+							//	CASE:
+							// 000
+							// 0P0
+							// 111
+
+							else if(tileNeighbor.ZNeg && tileNeighbor.XNegZNeg && tileNeighbor.XPosZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
+										, addPosition, new Vector3(0,0,0)));
+							}
+							else if(tileNeighbor.XNeg && tileNeighbor.XNegZNeg && tileNeighbor.XNegZPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
+										, addPosition, new Vector3(0,90,0)));
+							}
+							else if(tileNeighbor.ZPos && tileNeighbor.XNegZPos && tileNeighbor.XPosZPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
+										, addPosition, new Vector3(0,180,0)));
+							}
+							else if(tileNeighbor.XPos && tileNeighbor.XPosZNeg && tileNeighbor.XPosZPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
+										, addPosition, new Vector3(0,270,0)));
+							}
+
 							else
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
@@ -435,7 +511,7 @@ namespace Game.Environment
 							}
 							else if(tileNeighbor.XNeg && tileNeighbor.XPos && tileNeighbor.ZNeg && tileNeighbor.ZPos)
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.CLIFF_LONE)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_CORNER_CASE4)
 										, addPosition, new Vector3(0,0,0)));
 							}
 
@@ -475,7 +551,7 @@ namespace Game.Environment
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_SHARPCORNER)
 										, addPosition, new Vector3(0,180,0)));
 							}
-							else if(!tileNeighbor.ZPos && !tileNeighbor.XPos && ((!tileNeighbor.XPosZPos && (!tileNeighbor.XNegZNeg || !tileNeighbor.XPosZPos)) || (!tileNeighbor.XNegZPos && !tileNeighbor.XNegZNeg && !tileNeighbor.XPosZPos)))
+							else if(!tileNeighbor.ZPos && !tileNeighbor.XNeg && ((!tileNeighbor.XPosZPos && (!tileNeighbor.XNegZNeg || !tileNeighbor.XPosZPos)) || (!tileNeighbor.XNegZPos && !tileNeighbor.XNegZNeg && !tileNeighbor.XPosZPos)))
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_SHARPCORNER)
 										, addPosition, new Vector3(0,270,0)));
@@ -578,6 +654,28 @@ namespace Game.Environment
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL_CASE1)
 										, addPosition, new Vector3(0,0,0)));
 							}
+							
+							// CASE : INTERSECTION
+							else if(tileNeighbor.ZPos && tileNeighbor.XNeg && !tileNeighbor.ZNeg && tileNeighbor.XPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_CASE3)
+										, addPosition, new Vector3(0,180,0)));
+							}
+							else if(tileNeighbor.ZPos && !tileNeighbor.XNeg && tileNeighbor.ZNeg && tileNeighbor.XPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_CASE3)
+										, addPosition, new Vector3(0,270,0)));
+							}
+							else if(!tileNeighbor.ZPos && tileNeighbor.XNeg && tileNeighbor.ZNeg && tileNeighbor.XPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_CASE3)
+										, addPosition, new Vector3(0,0,0)));
+							}
+							else if(tileNeighbor.ZPos && tileNeighbor.XNeg && tileNeighbor.ZNeg && !tileNeighbor.XPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_CASE3)
+										, addPosition, new Vector3(0,90,0)));
+							}
 						}
 						if(tileNeighbor.NeighborCount == 3)
 						{
@@ -593,22 +691,22 @@ namespace Game.Environment
 							// 0P0
 							// 111
 
-							else if(!tileNeighbor.ZPos && !tileNeighbor.XNeg && !tileNeighbor.XPos && tileNeighbor.ZNeg)
+							else if(tileNeighbor.ZNeg && tileNeighbor.XNegZNeg && tileNeighbor.XPosZNeg)
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
 										, addPosition, new Vector3(0,0,0)));
 							}
-							else if(!tileNeighbor.XPos && !tileNeighbor.ZPos && !tileNeighbor.ZNeg && tileNeighbor.XNeg)
+							else if(tileNeighbor.XNeg && tileNeighbor.XNegZNeg && tileNeighbor.XNegZPos)
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
 										, addPosition, new Vector3(0,90,0)));
 							}
-							else if(!tileNeighbor.ZNeg && !tileNeighbor.XNeg && !tileNeighbor.XNeg && tileNeighbor.ZPos)
+							else if(tileNeighbor.ZPos && tileNeighbor.XNegZPos && tileNeighbor.XPosZPos)
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
 										, addPosition, new Vector3(0,180,0)));
 							}
-							else if(!tileNeighbor.ZPos && !tileNeighbor.ZNeg && !tileNeighbor.XNeg && tileNeighbor.XPos)
+							else if(tileNeighbor.XPos && tileNeighbor.XPosZNeg && tileNeighbor.XPosZPos)
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
 										, addPosition, new Vector3(0,270,0)));
@@ -621,7 +719,7 @@ namespace Game.Environment
 
 							else if(tileNeighbor.XNeg && tileNeighbor.ZNeg && tileNeighbor.XNegZNeg)
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_SHARPCORNER)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL)
 										, addPosition, new Vector3(0,0,0)));
 							}
 							else if(tileNeighbor.XNeg && tileNeighbor.ZPos && tileNeighbor.XNegZPos)
@@ -666,29 +764,29 @@ namespace Game.Environment
 										, addPosition, new Vector3(0,0,0)));
 							}
 							// CASE:
-							// 010
-							// 1P0
 							// 100
+							// 0P0
+							// 011
 
-							else if(tileNeighbor.ZPos && tileNeighbor.XNeg && !tileNeighbor.ZNeg && !tileNeighbor.XPos)
+							else if(tileNeighbor.ZNeg && (tileNeighbor.XPosZNeg || tileNeighbor.XNegZPos) && !tileNeighbor.ZPos)
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL_CASE1)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
+										, addPosition, new Vector3(0,0,0)));
+							}
+							else if(tileNeighbor.XNeg && (tileNeighbor.XNegZNeg || tileNeighbor.XNegZPos) && !tileNeighbor.XPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
 										, addPosition, new Vector3(0,90,0)));
 							}
-							else if(tileNeighbor.ZPos && !tileNeighbor.XNeg && !tileNeighbor.ZNeg && tileNeighbor.XPos)
+							else if(tileNeighbor.ZPos && (tileNeighbor.XPosZPos || tileNeighbor.XNegZPos) && !tileNeighbor.ZNeg)
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL_CASE1)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
 										, addPosition, new Vector3(0,180,0)));
 							}
-							else if(!tileNeighbor.ZPos && !tileNeighbor.XNeg && tileNeighbor.ZNeg && tileNeighbor.XPos)
+							else if(tileNeighbor.XPos && (tileNeighbor.XPosZNeg || tileNeighbor.XPosZPos) && !tileNeighbor.XNeg)
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL_CASE1)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
 										, addPosition, new Vector3(0,270,0)));
-							}
-							else if(!tileNeighbor.ZPos && tileNeighbor.XNeg && tileNeighbor.ZNeg && !tileNeighbor.XPos)
-							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL_CASE1)
-										, addPosition, new Vector3(0,0,0)));
 							}
 							
 							// CASE:
@@ -833,10 +931,10 @@ namespace Game.Environment
 										, addPosition, new Vector3(0,0,0)));	
 							}
 						}
-						else
-						{
-							MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
-									, addPosition, new Vector3(0,0,0)));	
+						else if(tileNeighbor.NeighborCount == 0)
+						{							
+							MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.CLIFF_LONE)
+								, addPosition, new Vector3(0,0,0)));
 						}
 					}
 				}
@@ -849,163 +947,260 @@ namespace Game.Environment
 			for(int i = 0; i < MeshesToAdd.Count; i++)
 			{
 				combineInstance[i].mesh = MeshesToAdd[i].ToAdd;
-				Vector3 position = MeshesToAdd[i].Position.Vector3 + new Vector3(1,0,1) * 0.5f;
+				Vector3 position = MeshesToAdd[i].Position.Vector3;
 				Quaternion rotation = MeshesToAdd[i].Rotation;
 
 				combineInstance[i].transform = Matrix4x4.TRS(position,rotation,Vector3.one);
 			}
 			MeshFilter myFilter = GetComponent<MeshFilter>();
 			myFilter.mesh.CombineMeshes(combineInstance,true,true);
+			GetComponent<MeshRenderer>().sharedMaterial = MeshMaterial;
 		}
 
 		Neighbors GetNeighboringTile(TilePosition _position)
 		{
 			Neighbors tileNeighbor = new Neighbors();
-			tileNeighbor.NeighborCount = 0;
-
-			if(_position.X == 0)
-			{
-				if(ChunkPosition.X > 0)
-				{
-					MeshChunk neighboringChunk = Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z];
-					if(neighboringChunk.CliffMap[neighboringChunk.ChunkSize.X-1,_position.Z])
-					{
-						tileNeighbor.XNeg = true;
-						tileNeighbor.NeighborCount++;
-					}
-
-					if(_position.Z == 0)
-					{
-						if(ChunkPosition.Z > 0)
-						{
-							neighboringChunk = Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z-1];
-							if(neighboringChunk.CliffMap[neighboringChunk.ChunkSize.X-1,neighboringChunk.ChunkSize.Z-1])
-							{
-								tileNeighbor.XNegZNeg = true;
-								tileNeighbor.NeighborCount++;
-							}
-						}
-					}
-
-					if(_position.Z == ChunkSize.Z-1)
-					{
-						if(ChunkPosition.Z < Owner.ChunkCount.Z-1)
-						{
-							neighboringChunk = Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z+1];
-							if(neighboringChunk.CliffMap[neighboringChunk.ChunkSize.X-1,0])
-							{
-								tileNeighbor.XNegZPos = true;
-								tileNeighbor.NeighborCount++;
-							}
-						}
-					}
-				}				
-			}			
-			if(_position.X == ChunkSize.X-1)
-			{
-				if(ChunkPosition.X < Owner.ChunkCount.X-1)
-				{
-					MeshChunk neighboringChunk = Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z];
-					if(neighboringChunk.CliffMap[0,_position.Z])
-					{
-						tileNeighbor.XPos = true;
-						tileNeighbor.NeighborCount++;
-					}
-					if(_position.Z == ChunkSize.Z-1)
-					{
-						if(ChunkPosition.Z < Owner.ChunkCount.Z-1)
-						{
-							neighboringChunk = Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z+1];
-							if(neighboringChunk.CliffMap[0,0])
-							{
-								tileNeighbor.ZPos = true;
-								tileNeighbor.NeighborCount++;
-							}
-						}
-					}
-					if(_position.Z == 0)
-					{
-						if(ChunkPosition.Z > 0)
-						{
-							neighboringChunk = Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z-1];
-							if(neighboringChunk.CliffMap[0,neighboringChunk.ChunkSize.Z-1])
-							{
-								tileNeighbor.XNegZNeg = true;
-								tileNeighbor.NeighborCount++;
-							}
-						}
-					}
-				}
-			}
-			if(_position.Z == 0)
-			{
-				if(ChunkPosition.Z > 0)
-				{
-					MeshChunk neighboringChunk = Owner.Chunks[ChunkPosition.X,ChunkPosition.Z-1];
-					if(neighboringChunk.CliffMap[_position.X,neighboringChunk.ChunkSize.Z-1])
-					{
-						tileNeighbor.ZNeg = true;
-						tileNeighbor.NeighborCount++;
-					}
-				}
-			}
-			if(_position.Z == ChunkSize.Z-1)
-			{
-				if(ChunkPosition.Z < Owner.ChunkCount.Z-1)
-				{
-					MeshChunk neighboringChunk = Owner.Chunks[ChunkPosition.X,ChunkPosition.Z+1];
-					if(neighboringChunk.CliffMap[_position.X,0])
-					{
-						tileNeighbor.ZPos = true;
-						tileNeighbor.NeighborCount++;
-					}
-				}
-			}
-
-			if(_position.X > 0 && _position.X < ChunkSize.X - 1
-				&& _position.Z > 0 && _position.Z < ChunkSize.Z - 1)
-			{
+			tileNeighbor.NeighborCount = 0;			
+			
+			if(_position.X > 0){
 				if(CliffMap[_position.X-1,_position.Z])
 				{
 					tileNeighbor.XNeg = true;
-					tileNeighbor.NeighborCount++;
+					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
 				}
+				if(_position.Z > 0){
+					if(CliffMap[_position.X-1,_position.Z-1])
+					{
+						tileNeighbor.XNegZNeg = true;
+						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+					}
+				}
+				if(_position.Z < ChunkSize.Z-1)
+				{
+					if(CliffMap[_position.X-1,_position.Z+1])
+					{
+						tileNeighbor.XNegZPos = true;
+						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+					}
+				}
+			}
+			else
+			{
+				if(ChunkPosition.X > 0)
+				{
+					if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].CliffMap[
+						Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].ChunkSize.X-1
+						,_position.Z])
+					{
+						tileNeighbor.XNeg = true;
+						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+					}
+
+					if(_position.Z > 0)
+					{
+						if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].CliffMap[
+						Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].ChunkSize.X-1
+						,_position.Z-1])
+						{
+							tileNeighbor.XNegZNeg = true;
+							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+						}
+					}
+					else
+					{
+						if(ChunkPosition.Z > 0)
+						{
+							if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z-1].CliffMap[
+								Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z-1].ChunkSize.X-1
+								,Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z-1].ChunkSize.Z-1])
+							{
+								tileNeighbor.XNegZNeg = true;
+								tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+							}
+						}
+						else
+						{
+							tileNeighbor.XNegZNeg = true;
+							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+						}
+					}
+					if(_position.Z < ChunkSize.Z-1){
+						if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].CliffMap[
+							Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].ChunkSize.X-1
+							,_position.Z])
+						{
+							tileNeighbor.XNegZPos = true;
+							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+						}
+					}
+					else
+					{
+						if(ChunkPosition.Z < Owner.ChunkCount.Z-1)
+						{					
+							if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z+1].CliffMap[
+								Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z+1].ChunkSize.X-1
+								,0])
+							{
+								tileNeighbor.XNegZPos = true;
+								tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+							}
+						}
+						else
+						{
+							tileNeighbor.XNegZPos = true;
+							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+						}
+					}
+				}
+				else
+				{
+					tileNeighbor.XNeg = true;
+					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+				}
+			}
+
+			if(_position.X < ChunkSize.X-1)
+			{
 				if(CliffMap[_position.X+1,_position.Z])
 				{
 					tileNeighbor.XPos = true;
-					tileNeighbor.NeighborCount++;
+					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
 				}
+				if(_position.Z > 0){
+					if(CliffMap[_position.X+1,_position.Z-1])
+					{
+						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+						tileNeighbor.XPosZNeg = true;
+					}
+				}
+				if(_position.Z < ChunkSize.Z - 1){
+					if(CliffMap[_position.X+1,_position.Z+1])
+					{
+						tileNeighbor.XPosZPos = true;
+						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+					}
+				}
+			}
+			else
+			{
+				if(ChunkPosition.X < Owner.ChunkCount.X - 1)
+				{
+					if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z].CliffMap[
+						0,_position.Z])
+					{
+						tileNeighbor.XPos = true;
+						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+					}
+
+					if(_position.Z > 0){
+						if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z].CliffMap[
+						0,_position.Z-1])
+						{
+							tileNeighbor.XPosZNeg = true;
+							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+						}
+					}
+					else
+					{
+						if(ChunkPosition.Z > 0)
+						{
+							if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z-1].CliffMap[
+								0,Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z-1].ChunkSize.Z-1])
+							{
+								tileNeighbor.XPosZNeg = true;
+								tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+							}
+						}
+						else
+						{
+							tileNeighbor.XPosZNeg = true;
+							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+						}
+					}
+
+					if(_position.Z < ChunkSize.Z-1){
+						if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z].CliffMap[
+								0,_position.Z])
+						{
+							tileNeighbor.XPosZPos = true;
+							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+						}
+					}
+					else
+					{
+						if(ChunkPosition.Z < Owner.ChunkCount.Z-1)
+						{					
+							if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z+1].CliffMap[
+								0,0])
+							{
+								tileNeighbor.XPosZPos = true;
+								tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+							}
+						}
+						else
+						{
+							tileNeighbor.XPosZPos = true;
+							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+						}
+					}
+				}
+				else
+				{
+					tileNeighbor.XPos = true;
+					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+				}
+			}
+			
+			if(_position.Z > 0){
 				if(CliffMap[_position.X,_position.Z-1])
 				{
 					tileNeighbor.ZNeg = true;
-					tileNeighbor.NeighborCount++;
+					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
 				}
+			}
+			else
+			{
+				if(ChunkPosition.Z > 0)
+				{
+					if(Owner.Chunks[ChunkPosition.X,ChunkPosition.Z-1].CliffMap[_position.X
+						,Owner.Chunks[ChunkPosition.X,ChunkPosition.Z-1].ChunkSize.Z-1])
+					{
+						tileNeighbor.ZNeg = true;
+						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+					}
+				}
+				else
+				{
+					tileNeighbor.ZNeg = true;
+					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+				}
+			}
+
+			if(_position.Z < ChunkSize.Z-1){
 				if(CliffMap[_position.X,_position.Z+1])
 				{
 					tileNeighbor.ZPos = true;
-					tileNeighbor.NeighborCount++;
-				}
-				if(CliffMap[_position.X-1,_position.Z-1])
-				{
-					tileNeighbor.XNegZNeg = true;
-					tileNeighbor.NeighborCount++;
-				}
-				if(CliffMap[_position.X-1,_position.Z+1])
-				{
-					tileNeighbor.XNegZPos = true;
-					tileNeighbor.NeighborCount++;
-				}
-				if(CliffMap[_position.X+1,_position.Z-1])
-				{
-					tileNeighbor.NeighborCount++;
-					tileNeighbor.XPosZNeg = true;
-				}
-				if(CliffMap[_position.X+1,_position.Z+1])
-				{
-					tileNeighbor.XPosZPos = true;
-					tileNeighbor.NeighborCount++;
+					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
 				}
 			}
+			else
+			{
+				if(ChunkPosition.Z < Owner.ChunkCount.Z-1)
+				{					
+					if(Owner.Chunks[ChunkPosition.X,ChunkPosition.Z+1].CliffMap[_position.X
+						,0])
+					{
+						tileNeighbor.ZPos = true;
+						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+					}
+				}
+				else
+				{
+					tileNeighbor.ZPos = true;
+					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
+				}
+			}
+					
 
 			return tileNeighbor;
 		}

@@ -13,6 +13,7 @@ namespace Game
         public static Dictionary<string, Sprite> Icons { get; private set; }
 
         public static GameObject WorkerPrefab { get; private set; }
+        public static GameObject ChunkPrefab { get; private set; }
         public static GameObject TileDisplayPrefab { get; private set; }
         public static GameObject TileDisplayHoverPrefab { get; private set; }
 
@@ -38,6 +39,7 @@ namespace Game
             foreach (Sprite image in icons)
                 Icons.Add(image.name, image);
 
+            ChunkPrefab = UnityEngine.Resources.Load<GameObject>("ChunkObject");
             WorkerPrefab = UnityEngine.Resources.Load<GameObject>("Worker");
             TileDisplayPrefab = UnityEngine.Resources.Load<GameObject>("TileDisplay");
             TileDisplayHoverPrefab = UnityEngine.Resources.Load<GameObject>("TileDisplayHover");

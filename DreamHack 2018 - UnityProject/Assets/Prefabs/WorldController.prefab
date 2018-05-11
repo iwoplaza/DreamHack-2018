@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_environmentGen: {fileID: 114750575273532464}
-  m_mapSize: {x: 512, y: 512}
+  m_mapSize: {x: 5, y: 5}
   m_mapSeed: seed
 --- !u!114 &114533313627262188
 MonoBehaviour:
@@ -286,6 +286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_baseMap: {fileID: 114991175600298730}
   m_metalMap: {fileID: 114035455154460846}
+  m_mapMaterial: {fileID: 2100000, guid: 1d83630c27e0d3e48a3b48b843305661, type: 2}
 --- !u!114 &114813845523277354
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -377,8 +378,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0f8f4d172358f949b7eaca96cb3a1f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tilePrefab: {fileID: 1626264830057422, guid: 984a862cd49af10459ea7a527e2d9cbe,
-    type: 2}
 --- !u!114 &114991175600298730
 MonoBehaviour:
   m_ObjectHideFlags: 1
