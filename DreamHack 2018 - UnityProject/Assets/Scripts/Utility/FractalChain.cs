@@ -49,6 +49,10 @@ namespace Utility.Noise
 
 			m_currentTexture = new Texture2D(size.x,size.y);
 			m_currentNoise = new float[size.x,size.y];
+			for(int i = 0; i < m_chain.Count; i++)
+			{
+				m_chain[i].CurrentGenerator.GenerateFractal(m_currentRes);
+			}
 
 			for(int x = 0; x < size.x; x++)
 			{
@@ -57,8 +61,6 @@ namespace Utility.Noise
 					float currentValue = 0;
 					for(int i = 0; i < m_chain.Count; i++)
 					{						
-						m_chain[i].CurrentGenerator.GenerateFractal(m_currentRes);
-						
 						if(i != 0)
 						{
 							if(m_chain[i].OperationType == FractalGeneratorChain.OperatorType.ADD)

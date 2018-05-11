@@ -4,7 +4,6 @@ using UnityEngine;
 using Utility.Noise;
 using Game;
 using Game.TileObjects;
-using System.Diagnostics;
 
 namespace Game.Environment
 {
@@ -28,17 +27,13 @@ namespace Game.Environment
 
 		public void GenerateMap()
 		{
-			Stopwatch watch = new Stopwatch();
-			watch.Start();
 			m_TileMap = WorldController.Instance.MainState.TileMap;
 			m_baseMap.GenerateMap(WorldSize, WorldSeed);
 			m_metalMap.GenerateMap(WorldSize, WorldSeed);
 
 			ChunkCount = new TilePosition(Mathf.CeilToInt((float)WorldSize.x/ChunkSize.X),Mathf.CeilToInt((float)WorldSize.y/ChunkSize.Z));
 			
-			Chunks = new MeshChunk[ChunkCount.X,ChunkCount.Z];
-
-			
+			Chunks = new MeshChunk[ChunkCount.X,ChunkCount.Z];			
 
 			for(int x = 0; x < WorldSize.x; x++)
 			{
@@ -64,8 +59,14 @@ namespace Game.Environment
 					}
 				}
 			}
-			watch.Stop();
-			UnityEngine.Debug.Log(watch.ElapsedMilliseconds);	
+			for(int x = 0; x < ChunkCount.X; x++)
+			{
+				for(int y = 0; y < ChunkCount.Z; y++)
+				{
+					Chunks[x,y].GenerateMeshMap();
+					Chunks[x,y].CombineMeshes();
+				}
+			}
 		}
 	}
 }
