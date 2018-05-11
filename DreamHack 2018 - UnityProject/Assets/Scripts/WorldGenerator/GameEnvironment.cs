@@ -11,8 +11,11 @@ namespace Game.Environment
 		
 		public Vector2Int WorldSize { get; set; }
 		public string WorldSeed { get; set; }
-		public float CliffHeight { get; set; }
 		public float CliffThreshold { get; set; }
+		
+		public MeshChunk[,] Chunks { get; private set; } 
+
+		public TilePosition ChunkCount { get; private set; }
 
 		[SerializeField]FractalChain m_baseMap;
 		[SerializeField]FractalChain m_metalMap;

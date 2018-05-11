@@ -18,7 +18,7 @@ namespace Utility.Noise
         public float[,] CurrentNoise { get{ return m_currentNoise; }}
 
         [SerializeField]Vector2Int m_textureRes;
-        public Vector2Int CurrentRes { get{ return m_textureRes; } }
+        public Vector2Int CurrentRes { get{ return m_textureRes; } set { m_textureRes = value; } }
         [Range(1,100)]
         [SerializeField]float m_noiseFrequency;
         [Range(1,10)]
@@ -27,7 +27,7 @@ namespace Utility.Noise
         [Range(0.01f,10.0f)]
         [SerializeField]float m_noiseAmplifier;
         [SerializeField]string m_noiseSeed;
-        public string CurrentSeed { get { return m_noiseSeed; } }
+        public string CurrentSeed { get { return m_noiseSeed; } set { m_noiseSeed = value; } }
         
         [Space(10)]
         [SerializeField]FractalDrawType m_drawType;
