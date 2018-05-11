@@ -25,6 +25,10 @@ namespace Game
         /// <returns>Whether or not the passer can pass.</returns>
         public abstract bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection);
         public abstract bool CanComeOutOfTowards(Pathfinding.MovementDirection entryDirection);
+        /// <summary>
+        /// Determines if something can go to an adjecent tile touching the edge of this tile.
+        /// </summary>
+        public virtual bool CanSkimThrough { get { return true; } }
 
         public abstract bool IsImpenetrable { get; }
 

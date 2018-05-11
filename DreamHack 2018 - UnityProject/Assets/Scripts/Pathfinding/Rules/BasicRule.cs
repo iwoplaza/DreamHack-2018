@@ -17,6 +17,11 @@ namespace Game.Pathfinding.Rules
             return tile != null && tile.CanComeOutOfTowards(dir);
         }
 
+        public bool CanSkimThrough(Tile tile)
+        {
+            return tile != null && tile.CanSkimThrough();
+        }
+
         public bool IsProperEndGoal(Tile tile)
         {
             return tile != null && !tile.IsImpenetrable;

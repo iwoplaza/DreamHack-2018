@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.Utility;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +36,7 @@ namespace Game.Pathfinding
 
             int rotation = (int)direction - 1;
 
-            MovementDirection result = (MovementDirection)(((int)input - 1 - rotation)%8 + 1);
+            MovementDirection result = (MovementDirection)(MathUtils.Mod(((int)input - 1 - rotation), 8) + 1);
             return result;
         }
 

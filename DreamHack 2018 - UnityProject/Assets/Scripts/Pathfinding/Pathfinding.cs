@@ -131,28 +131,28 @@ namespace Game.Pathfinding.Internal
             if (CanGoTowards(rule, map, tilePos, MovementDirection.NEGATIVE_Z))
             {
                 neighbours.Add(new TilePosition(tilePos.X, tilePos.Z - 1));
-                negativeZ = true;
+                negativeZ = rule.CanSkimThrough(map.TileAt(new TilePosition(tilePos.X, tilePos.Z - 1)));
             }
 
             // Bottom
             if (CanGoTowards(rule, map, tilePos, MovementDirection.POSITIVE_Z))
             {
                 neighbours.Add(new TilePosition(tilePos.X, tilePos.Z + 1));
-                positiveZ = true;
+                positiveZ = rule.CanSkimThrough(map.TileAt(new TilePosition(tilePos.X, tilePos.Z + 1)));
             }
 
             // Left
             if(CanGoTowards(rule, map, tilePos, MovementDirection.NEGATIVE_X))
             {
                 neighbours.Add(new TilePosition(tilePos.X - 1, tilePos.Z));
-                negativeX = true;
+                negativeX = rule.CanSkimThrough(map.TileAt(new TilePosition(tilePos.X - 1, tilePos.Z)));
             }
 
             // Right
             if (CanGoTowards(rule, map, tilePos, MovementDirection.POSITIVE_X))
             {
                 neighbours.Add(new TilePosition(tilePos.X + 1, tilePos.Z));
-                positiveX = true;
+                positiveX = rule.CanSkimThrough(map.TileAt(new TilePosition(tilePos.X + 1, tilePos.Z)));
             }
 
             // Top-Left

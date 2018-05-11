@@ -199,5 +199,18 @@ namespace Game
 
             return passable;
         }
+
+        public bool CanSkimThrough()
+        {
+            bool passable = true;
+
+            if (InstalledObject != null)
+                passable = passable && InstalledObject.CanSkimThrough;
+
+            if (InstalledFloor != null)
+                passable = passable && InstalledFloor.CanSkimThrough;
+
+            return passable;
+        }
     }
 }

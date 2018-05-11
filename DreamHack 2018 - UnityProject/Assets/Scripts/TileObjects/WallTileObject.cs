@@ -1,4 +1,5 @@
 ﻿using Game.Pathfinding;
+using Game.Utility;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace Game.TileObjects
     {
         public override string DisplayName { get { return "Wall"; } }
         public override bool IsImpenetrable { get { return false; } }
+        public override bool CanSkimThrough { get { return false; } }
 
         public WallTileObject()
         {
@@ -21,7 +23,8 @@ namespace Game.TileObjects
                 entryDirection, MovementDirectionUtils.NewFrom(Orientation)
             );
 
-            Debug.Log(localEntryDirection);
+            Debug.Log(entryDirection + " -> " + localEntryDirection);
+            Debug.Log("-8 % 8 == " + MathUtils.Mod(-8, 8));
 
             if (localEntryDirection == MovementDirection.POSITIVE_X || //Side
                 localEntryDirection == MovementDirection.NEGATIVE_X || //Side
