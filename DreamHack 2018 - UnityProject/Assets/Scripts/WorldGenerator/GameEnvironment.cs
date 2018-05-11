@@ -20,6 +20,7 @@ namespace Game.Environment
 
 		[SerializeField]FractalChain m_baseMap;
 		[SerializeField]FractalChain m_metalMap;
+		[SerializeField]FractalChain m_vegetationMap;
 
 		[SerializeField]Material m_mapMaterial;
 
@@ -30,6 +31,7 @@ namespace Game.Environment
 			m_TileMap = WorldController.Instance.MainState.TileMap;
 			m_baseMap.GenerateMap(WorldSize, WorldSeed);
 			m_metalMap.GenerateMap(WorldSize, WorldSeed);
+			m_vegetationMap.GenerateMap(WorldSize, WorldSeed);
 
 			ChunkCount = new TilePosition(Mathf.CeilToInt((float)WorldSize.x/ChunkSize.X),Mathf.CeilToInt((float)WorldSize.y/ChunkSize.Z));
 			
@@ -67,6 +69,11 @@ namespace Game.Environment
 					Chunks[x,y].CombineMeshes();
 				}
 			}
+		}
+
+		public float GetMetalAvailability(TilePosition position)
+		{
+			return m_metalMap.CurrentNoise[position.X,position.Z];
 		}
 	}
 }

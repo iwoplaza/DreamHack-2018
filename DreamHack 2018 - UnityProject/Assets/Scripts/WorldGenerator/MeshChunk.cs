@@ -88,6 +88,7 @@ namespace Game.Environment
 					else
 					{
 						Neighbors tileNeighbor = GetNeighboringTile(new TilePosition(x,z));
+						
 						if(tileNeighbor.NeighborCount == 8)
 						{
 							MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
@@ -491,6 +492,32 @@ namespace Game.Environment
 										, addPosition, new Vector3(0,270,0)));
 							}
 
+							//	CASE:
+							// 010
+							// 1P0
+							// 101
+
+							else if(tileNeighbor.XNeg && tileNeighbor.ZPos && !tileNeighbor.XPos && !tileNeighbor.ZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL_CASE1)
+										, addPosition, new Vector3(0,90,0)));
+							}
+							else if(!tileNeighbor.XNeg && tileNeighbor.ZPos && tileNeighbor.XPos && !tileNeighbor.ZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL_CASE1)
+										, addPosition, new Vector3(0,180,0)));
+							}
+							else if(!tileNeighbor.XNeg && !tileNeighbor.ZPos && tileNeighbor.XPos && tileNeighbor.ZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL_CASE1)
+										, addPosition, new Vector3(0,270,0)));
+							}
+							else if(tileNeighbor.XNeg && !tileNeighbor.ZPos && !tileNeighbor.XPos && tileNeighbor.ZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_DIAGONAL_CASE1)
+										, addPosition, new Vector3(0,0,0)));
+							}
+
 							else
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
@@ -631,7 +658,7 @@ namespace Game.Environment
 
 							//	CASE:
 							// 010
-							// 110
+							// 1P0
 							// 101
 
 							else if(tileNeighbor.XNeg && tileNeighbor.ZPos && !tileNeighbor.XPos && !tileNeighbor.ZNeg)
@@ -831,6 +858,28 @@ namespace Game.Environment
 										, addPosition, new Vector3(0,0,0)));
 							}
 
+							//CASE : SINGLE CONNECTION
+							else if(tileNeighbor.ZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
+										, addPosition, new Vector3(0,0,0)));
+							}
+							else if(tileNeighbor.XNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
+										, addPosition, new Vector3(0,90,0)));
+							}
+							else if(tileNeighbor.ZPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
+										, addPosition, new Vector3(0,180,0)));
+							}
+							else if(tileNeighbor.XPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE_END)
+										, addPosition, new Vector3(0,270,0)));
+							}
+
 							else
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
@@ -897,7 +946,7 @@ namespace Game.Environment
 
 							else
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.CLIFF_LONE)
 										, addPosition, new Vector3(0,0,0)));	
 							}
 						}
@@ -947,7 +996,7 @@ namespace Game.Environment
 			for(int i = 0; i < MeshesToAdd.Count; i++)
 			{
 				combineInstance[i].mesh = MeshesToAdd[i].ToAdd;
-				Vector3 position = MeshesToAdd[i].Position.Vector3;
+				Vector3 position = MeshesToAdd[i].Position.Vector3 + new Vector3(0.5f,0,0.5f);
 				Quaternion rotation = MeshesToAdd[i].Rotation;
 
 				combineInstance[i].transform = Matrix4x4.TRS(position,rotation,Vector3.one);
@@ -962,247 +1011,117 @@ namespace Game.Environment
 			Neighbors tileNeighbor = new Neighbors();
 			tileNeighbor.NeighborCount = 0;			
 			
-			if(_position.X > 0){
-				if(CliffMap[_position.X-1,_position.Z])
-				{
-					tileNeighbor.XNeg = true;
-					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-				}
-				if(_position.Z > 0){
-					if(CliffMap[_position.X-1,_position.Z-1])
-					{
-						tileNeighbor.XNegZNeg = true;
-						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-					}
-				}
-				if(_position.Z < ChunkSize.Z-1)
-				{
-					if(CliffMap[_position.X-1,_position.Z+1])
-					{
-						tileNeighbor.XNegZPos = true;
-						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-					}
-				}
-			}
-			else
+			if(GetTile(new Vector2Int(_position.X+1,_position.Z)))
 			{
-				if(ChunkPosition.X > 0)
-				{
-					if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].CliffMap[
-						Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].ChunkSize.X-1
-						,_position.Z])
-					{
-						tileNeighbor.XNeg = true;
-						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-					}
-
-					if(_position.Z > 0)
-					{
-						if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].CliffMap[
-						Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].ChunkSize.X-1
-						,_position.Z-1])
-						{
-							tileNeighbor.XNegZNeg = true;
-							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-						}
-					}
-					else
-					{
-						if(ChunkPosition.Z > 0)
-						{
-							if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z-1].CliffMap[
-								Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z-1].ChunkSize.X-1
-								,Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z-1].ChunkSize.Z-1])
-							{
-								tileNeighbor.XNegZNeg = true;
-								tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-							}
-						}
-						else
-						{
-							tileNeighbor.XNegZNeg = true;
-							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-						}
-					}
-					if(_position.Z < ChunkSize.Z-1){
-						if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].CliffMap[
-							Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z].ChunkSize.X-1
-							,_position.Z])
-						{
-							tileNeighbor.XNegZPos = true;
-							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-						}
-					}
-					else
-					{
-						if(ChunkPosition.Z < Owner.ChunkCount.Z-1)
-						{					
-							if(Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z+1].CliffMap[
-								Owner.Chunks[ChunkPosition.X-1,ChunkPosition.Z+1].ChunkSize.X-1
-								,0])
-							{
-								tileNeighbor.XNegZPos = true;
-								tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-							}
-						}
-						else
-						{
-							tileNeighbor.XNegZPos = true;
-							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-						}
-					}
-				}
-				else
-				{
-					tileNeighbor.XNeg = true;
-					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-				}
+				tileNeighbor.XPos = true;
+				tileNeighbor.NeighborCount += 1;
 			}
-
-			if(_position.X < ChunkSize.X-1)
+			if(GetTile(new Vector2Int(_position.X+1,_position.Z+1)))
 			{
-				if(CliffMap[_position.X+1,_position.Z])
-				{
-					tileNeighbor.XPos = true;
-					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-				}
-				if(_position.Z > 0){
-					if(CliffMap[_position.X+1,_position.Z-1])
-					{
-						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-						tileNeighbor.XPosZNeg = true;
-					}
-				}
-				if(_position.Z < ChunkSize.Z - 1){
-					if(CliffMap[_position.X+1,_position.Z+1])
-					{
-						tileNeighbor.XPosZPos = true;
-						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-					}
-				}
+				tileNeighbor.XPosZPos = true;
+				tileNeighbor.NeighborCount += 1;
 			}
-			else
+			if(GetTile(new Vector2Int(_position.X+1,_position.Z-1)))
 			{
-				if(ChunkPosition.X < Owner.ChunkCount.X - 1)
-				{
-					if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z].CliffMap[
-						0,_position.Z])
-					{
-						tileNeighbor.XPos = true;
-						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-					}
-
-					if(_position.Z > 0){
-						if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z].CliffMap[
-						0,_position.Z-1])
-						{
-							tileNeighbor.XPosZNeg = true;
-							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-						}
-					}
-					else
-					{
-						if(ChunkPosition.Z > 0)
-						{
-							if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z-1].CliffMap[
-								0,Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z-1].ChunkSize.Z-1])
-							{
-								tileNeighbor.XPosZNeg = true;
-								tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-							}
-						}
-						else
-						{
-							tileNeighbor.XPosZNeg = true;
-							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-						}
-					}
-
-					if(_position.Z < ChunkSize.Z-1){
-						if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z].CliffMap[
-								0,_position.Z])
-						{
-							tileNeighbor.XPosZPos = true;
-							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-						}
-					}
-					else
-					{
-						if(ChunkPosition.Z < Owner.ChunkCount.Z-1)
-						{					
-							if(Owner.Chunks[ChunkPosition.X+1,ChunkPosition.Z+1].CliffMap[
-								0,0])
-							{
-								tileNeighbor.XPosZPos = true;
-								tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-							}
-						}
-						else
-						{
-							tileNeighbor.XPosZPos = true;
-							tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-						}
-					}
-				}
-				else
-				{
-					tileNeighbor.XPos = true;
-					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-				}
+				tileNeighbor.XPosZNeg = true;
+				tileNeighbor.NeighborCount += 1;
 			}
-			
-			if(_position.Z > 0){
-				if(CliffMap[_position.X,_position.Z-1])
-				{
-					tileNeighbor.ZNeg = true;
-					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-				}
-			}
-			else
+			if(GetTile(new Vector2Int(_position.X,_position.Z+1)))
 			{
-				if(ChunkPosition.Z > 0)
-				{
-					if(Owner.Chunks[ChunkPosition.X,ChunkPosition.Z-1].CliffMap[_position.X
-						,Owner.Chunks[ChunkPosition.X,ChunkPosition.Z-1].ChunkSize.Z-1])
-					{
-						tileNeighbor.ZNeg = true;
-						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-					}
-				}
-				else
-				{
-					tileNeighbor.ZNeg = true;
-					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-				}
+				tileNeighbor.ZPos = true;
+				tileNeighbor.NeighborCount += 1;
 			}
-
-			if(_position.Z < ChunkSize.Z-1){
-				if(CliffMap[_position.X,_position.Z+1])
-				{
-					tileNeighbor.ZPos = true;
-					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-				}
-			}
-			else
+			if(GetTile(new Vector2Int(_position.X,_position.Z-1)))
 			{
-				if(ChunkPosition.Z < Owner.ChunkCount.Z-1)
-				{					
-					if(Owner.Chunks[ChunkPosition.X,ChunkPosition.Z+1].CliffMap[_position.X
-						,0])
-					{
-						tileNeighbor.ZPos = true;
-						tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-					}
-				}
-				else
-				{
-					tileNeighbor.ZPos = true;
-					tileNeighbor.NeighborCount = tileNeighbor.NeighborCount + 1;
-				}
+				tileNeighbor.ZNeg = true;
+				tileNeighbor.NeighborCount += 1;
 			}
-					
-
+			if(GetTile(new Vector2Int(_position.X-1,_position.Z-1)))
+			{
+				tileNeighbor.XNegZNeg = true;
+				tileNeighbor.NeighborCount += 1;
+			}
+			if(GetTile(new Vector2Int(_position.X-1,_position.Z)))
+			{
+				tileNeighbor.XNeg = true;
+				tileNeighbor.NeighborCount += 1;
+			}
+			if(GetTile(new Vector2Int(_position.X-1,_position.Z+1)))
+			{
+				tileNeighbor.XNegZPos = true;
+				tileNeighbor.NeighborCount += 1;
+			}
 			return tileNeighbor;
+		}
+
+		bool GetTile(Vector2Int _pos)
+		{
+			TilePosition targetChunk = new TilePosition(ChunkPosition.X,ChunkPosition.Z);
+			TilePosition targetTile = new TilePosition(_pos.x,_pos.y);
+			if(_pos.x < 0)
+			{
+				if(targetChunk.X == 0)
+				{
+					return true;
+				}
+				else
+				{
+					targetChunk.X -= 1;
+				}
+			}
+			if(_pos.x > ChunkSize.X - 1)
+			{
+				if(ChunkPosition.X == Owner.ChunkCount.X - 1)
+				{
+					return true;
+				}
+				else
+				{
+					targetChunk.X += 1;
+				}
+			}
+			if(_pos.y < 0)
+			{
+				if(targetChunk.Z == 0)
+				{
+					return true;
+				}
+				else
+				{
+					targetChunk.Z -= 1;
+				}
+			}
+			if(_pos.y > ChunkSize.Z - 1)
+			{
+				if(ChunkPosition.Z == Owner.ChunkCount.Z - 1)
+				{
+					return true;
+				}
+				else
+				{
+					targetChunk.Z += 1;
+				}
+			}
+
+			if(targetChunk.X - ChunkPosition.X < 0)
+			{
+				targetTile.X = (ushort)(Owner.Chunks[targetChunk.X,targetChunk.Z].ChunkSize.X - 1);
+			}
+			else if(targetChunk.X - ChunkPosition.X > 0)
+			{
+				targetTile.X = 0;
+			}
+
+			if(targetChunk.Z - ChunkPosition.Z < 0)
+			{
+				targetTile.Z = (ushort)(Owner.Chunks[targetChunk.X,targetChunk.Z].ChunkSize.Z - 1);
+			}
+			else if(targetChunk.Z - ChunkPosition.Z > 0)
+			{
+				targetTile.Z = 0;
+			}
+
+			return Owner.Chunks[targetChunk.X,targetChunk.Z].CliffMap[targetTile.X,targetTile.Z];
 		}
 	}
 }
