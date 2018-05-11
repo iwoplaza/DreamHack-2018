@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using Game.Tasks;
 using Game.Acting;
 using Game.Acting.Actions;
-using Game.Components;
+using Game.Scene;
 using Game.Building;
 
 namespace Game

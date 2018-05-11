@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33138758244752098}
   - component: {fileID: 23204252581809824}
   m_Layer: 0
-  m_Name: CliffEdgeDiagonalCase1_0
+  m_Name: CliffEdgeDiagonalCase1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

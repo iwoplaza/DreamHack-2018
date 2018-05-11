@@ -41,7 +41,7 @@ namespace Game
                 {
                     PortraitCamera.transform.parent = newTarget.PortraitPivot;
                     PortraitCamera.transform.localRotation = Quaternion.Euler(0, -150, 0);
-                    PortraitCamera.transform.localPosition = new Vector3(0.553F, 0.661F, 0.969F);
+                    PortraitCamera.transform.localPosition = new Vector3(0.553F, 0.6F, 0.969F);
                 }
 
                 if (m_focusGainHandlers != null)

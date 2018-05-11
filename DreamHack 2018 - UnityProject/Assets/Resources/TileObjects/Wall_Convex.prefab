@@ -36,6 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4589786378809282}
+  - component: {fileID: 65738284688212440}
   m_Layer: 0
   m_Name: Wall_Convex
   m_TagString: Untagged
@@ -112,3 +113,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1005022268967640}
   m_Mesh: {fileID: 4300040, guid: 407d0898880ae964e8fc90f5347ba805, type: 3}
+--- !u!65 &65738284688212440
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1916091078269240}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.26, y: 1, z: 0.26}
+  m_Center: {x: 0.42, y: 0.5, z: 0.42}
