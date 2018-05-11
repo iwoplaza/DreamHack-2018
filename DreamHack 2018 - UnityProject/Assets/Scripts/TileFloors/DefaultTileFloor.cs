@@ -7,8 +7,9 @@ namespace Game.TileFloors
     public class DefaultTileFloor : TileFloorBase
     {
         public override string DisplayName { get { return "Default Floor"; } }
+        public override bool IsImpenetrable { get { return false; } }
 
-        public override bool IsPassableFor(Living passer, Direction entryDirection)
+        public override bool IsPassableFor(Direction entryDirection)
         {
             return true;
         }

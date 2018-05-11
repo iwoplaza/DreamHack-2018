@@ -9,7 +9,9 @@ namespace Game.TileObjects
 
         public override bool IsStatic { get { return true; } }
         public override string DisplayName { get { return "Cliff"; } }
-        public override bool IsPassableFor(Living passer, Direction entryDirection)
+        public override bool IsImpenetrable { get { return true; } }
+
+        public override bool IsPassableFor(Direction entryDirection)
         {
             return false;
         }

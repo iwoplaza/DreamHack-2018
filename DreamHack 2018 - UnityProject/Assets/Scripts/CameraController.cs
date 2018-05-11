@@ -244,12 +244,12 @@ namespace Game
                 {
                     buildModeManager.SetCursorPosition(tilePositionAtMouse);
 
-                    if (Input.GetMouseButtonDown(0))
+                    if (Input.GetMouseButton(0))
                     {
                         buildModeManager.Place();
                     }
 
-                    if(Input.GetMouseButtonDown(1))
+                    if(Input.GetMouseButton(1))
                     {
                         Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
                         if (targetTile != null)

@@ -9,12 +9,14 @@ namespace Game.UI
     {
         [SerializeField] protected Text m_nameText;
 
+        protected FocusPortrait m_focusPortrait;
         protected TaskQueuePanel m_tileQueuePanel;
 
         protected IFocusTarget m_focusTarget = null;
 
         void Awake()
         {
+            m_focusPortrait = GetComponentInChildren<FocusPortrait>();
             m_tileQueuePanel = GetComponentInChildren<TaskQueuePanel>();
         }
 
@@ -38,6 +40,7 @@ namespace Game.UI
             if (m_focusTarget != null)
             {
                 m_nameText.text = m_focusTarget.DisplayName;
+                m_focusPortrait.Populate(m_focusTarget);
 
                 if (m_focusTarget is Worker)
                 {

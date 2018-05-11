@@ -119,7 +119,52 @@ ModelImporter:
     13700004: ChestEquipment
     13700006: Gloves
     13700008: Helmet
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Accent
+    second: {fileID: 2100000, guid: bb3bde06c6bb90d4da444431609518b7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Armour
+    second: {fileID: 2100000, guid: 326e8456ef392d846b1bc167dc42e887, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: ea866592ae95b5c4a8f343aca7cf431d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GunBlack
+    second: {fileID: 2100000, guid: 621193200ab8de240820d8111e387e31, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GunWhite
+    second: {fileID: 2100000, guid: 424c5be00e25c494b8d21d534fe3b08c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 7f566a105f24ac84284690fe9faf0f77, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Skin
+    second: {fileID: 2100000, guid: 384bfc5a6bd79bf408f29bc929117eb8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Sole
+    second: {fileID: 2100000, guid: bb1a84f2cfeae80408c6c9320a62e3a5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Undersuit
+    second: {fileID: 2100000, guid: 0a181ccaead4db0479f507f3b01953c9, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

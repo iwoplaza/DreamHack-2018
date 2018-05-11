@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,12 +8,13 @@ namespace Game.TileObjects
     public class WallTileObject : TileObjectBase
     {
         public override string DisplayName { get { return "Wall"; } }
+        public override bool IsImpenetrable { get { return true; } }
 
         public WallTileObject()
         {
         }
 
-        public override bool IsPassableFor(Living passer, Direction entryDirection)
+        public override bool IsPassableFor(Direction entryDirection)
         {
             return false;
         }
@@ -31,7 +33,7 @@ namespace Game.TileObjects
             GameObject prefab = GetPrefab();
             if (prefab != null)
             {
-                InstalledGameObject = Object.Instantiate(prefab);
+                InstalledGameObject = UnityEngine.Object.Instantiate(prefab);
                 InstalledGameObject.transform.SetPositionAndRotation(origin, Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F));
             }
         }
@@ -41,7 +43,7 @@ namespace Game.TileObjects
             GameObject prefab = GetPrefab();
             if (prefab != null)
             {
-                return Object.Instantiate(prefab);
+                return UnityEngine.Object.Instantiate(prefab);
             }
 
             return null;

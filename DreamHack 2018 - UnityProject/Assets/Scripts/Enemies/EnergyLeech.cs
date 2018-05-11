@@ -13,6 +13,7 @@ namespace Game.Enemies
     {
         public override string DisplayName { get { return "Energy Leech"; } }
         public override int MaxHealth { get { return 10; } }
+        Transform IFocusTarget.PortraitPivot { get { return null; } }
 
         public EnergyLeechVisual Visual { get; private set; }
         public bool IsWalking { get; private set; }

@@ -21,6 +21,19 @@ namespace Game
         public bool CanInstallObject { get { return !HasObject && !HasCliff; } }
         public bool CanInstallFloor { get { return !HasFloor && !HasCliff; } }
 
+        public bool IsImpenetrable
+        {
+            get
+            {
+                bool impenetrable = false;
+                if (InstalledObject != null)
+                    impenetrable = impenetrable || InstalledObject.IsImpenetrable;
+                if (InstalledFloor != null)
+                    impenetrable = impenetrable || InstalledFloor.IsImpenetrable;
+                return impenetrable;
+            }
+        }
+
         public Tile(TileMap owner, TilePosition position)
         {
             Owner = owner;
@@ -144,18 +157,17 @@ namespace Game
         /// Returns if the passer can go through this tile.
         /// More in <see cref="TileProp"/>
         /// </summary>
-        /// <param name="passer"></param>
         /// <param name="entryDirection"></param>
         /// <returns></returns>
-        public bool IsPassableFor(Living passer, Direction entryDirection)
+        public bool CanPassThrough(Direction entryDirection)
         {
             bool passable = true;
 
             if (InstalledObject != null)
-                passable = passable && InstalledObject.IsPassableFor(passer, entryDirection);
+                passable = passable && InstalledObject.IsPassableFor(entryDirection);
 
             if (InstalledFloor != null)
-                passable = passable && InstalledFloor.IsPassableFor(passer, entryDirection);
+                passable = passable && InstalledFloor.IsPassableFor(entryDirection);
 
             return passable;
         }
