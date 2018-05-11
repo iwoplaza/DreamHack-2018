@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using Game.Utility;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Animation
 {
     [RequireComponent(typeof(Worker))]
+    [RequireComponent(typeof(AudioSource))]
     public class WorkerVisual : MonoBehaviour
     {
         [SerializeField] GameObject m_handHolder;
@@ -12,15 +14,19 @@ namespace Game.Animation
         [SerializeField] GameObject m_blaster;
         [Header("Prefabs")]
         [SerializeField] GameObject m_shootEffectPrefab;
+        [Header("AudioClips")]
+        [SerializeField] AudioClip[] m_blasterSounds;
 
         private Animator m_animator;
         private Quaternion m_initialBlasterRotation;
+        private AudioSource m_audioSource;
 
         public Worker Worker { get; private set; }
         
         void Awake()
         {
             m_animator = GetComponentInChildren<Animator>();
+            m_audioSource = GetComponentInChildren<AudioSource>();
             Worker = GetComponent<Worker>();
 
             m_initialBlasterRotation = m_blaster.transform.localRotation;
@@ -67,6 +73,7 @@ namespace Game.Animation
             effect.transform.Rotate(new Vector3(90, 0, 0));
 
             m_animator.SetTrigger("Shoot");
+            m_audioSource.PlayOneShot(AudioUtils.GetRandom(m_blasterSounds));
         }
 
         public void UpdateAnimator()

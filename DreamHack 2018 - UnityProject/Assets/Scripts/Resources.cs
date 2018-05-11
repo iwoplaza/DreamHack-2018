@@ -11,6 +11,7 @@ namespace Game
         public static Dictionary<string, GameObject> TileFloorPrefabs { get; private set; }
         public static Dictionary<string, GameObject> EnvironmentObjectPrefabs { get; private set; }
         public static Dictionary<string, Sprite> Icons { get; private set; }
+        public static Dictionary<string, AudioClip> Sounds { get; private set; }
 
         public static GameObject WorkerPrefab { get; private set; }
         public static GameObject ChunkPrefab { get; private set; }
@@ -38,6 +39,11 @@ namespace Game
             Icons = new Dictionary<string, Sprite>();
             foreach (Sprite image in icons)
                 Icons.Add(image.name, image);
+
+            AudioClip[] sounds = UnityEngine.Resources.LoadAll<AudioClip>("Sounds");
+            Sounds = new Dictionary<string, AudioClip>();
+            foreach (AudioClip sound in sounds)
+                Sounds.Add(sound.name, sound);
 
             ChunkPrefab = UnityEngine.Resources.Load<GameObject>("ChunkObject");
             WorkerPrefab = UnityEngine.Resources.Load<GameObject>("Worker");
@@ -83,6 +89,16 @@ namespace Game
                 return null;
             }
             return Icons[name];
+        }
+
+        public static AudioClip FindSounds(string name)
+        {
+            if (!Sounds.ContainsKey(name))
+            {
+                Debug.LogError("Couldn't find the sound (" + name + ").");
+                return null;
+            }
+            return Sounds[name];
         }
     }
 }

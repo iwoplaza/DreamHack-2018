@@ -47,7 +47,7 @@ namespace Game
             GameEnvironment.WorldSeed = "seed";
             GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
             GameEnvironment.ChunkSize = new Vector2Int(10, 10);
-            GameEnvironment.GenerateMap();
+            // GameEnvironment.GenerateMap();
 
             Worker worker1 = SpawnWorker();
         }
