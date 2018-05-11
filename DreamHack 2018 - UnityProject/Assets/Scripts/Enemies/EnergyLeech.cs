@@ -12,7 +12,7 @@ namespace Game.Enemies
     public class EnergyLeech : Enemy, ISubject, IFocusTarget
     {
         public override string DisplayName { get { return "Energy Leech"; } }
-        public override int MaxHealth { get { return 10; } }
+        public override int MaxHealth { get { return 100; } }
         Transform IFocusTarget.PortraitPivot { get { return null; } }
 
         public EnergyLeechVisual Visual { get; private set; }

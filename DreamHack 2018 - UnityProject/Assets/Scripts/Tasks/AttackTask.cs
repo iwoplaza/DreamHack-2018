@@ -7,13 +7,13 @@ namespace Game.Tasks
 {
     public class AttackTask : TaskBase
     {
-        public Living Target { get; private set; }
+        public IAttackable Target { get; private set; }
 
         public bool IsComplete
         {
             get
             {
-                return Target == null || !Target.Alive;
+                return Target == null || Target.IsDestroyed;
             }
         }
 

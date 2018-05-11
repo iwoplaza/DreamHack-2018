@@ -23,6 +23,18 @@ namespace Game.Pathfinding
             }
         }
 
+        public TilePosition EndGoal
+        {
+            get
+            {
+                if (CurrentStatus == PathfindingStatus.HAS_PATH)
+                {
+                    return m_currentPath[m_currentPath.Count - 1];
+                }
+                return null;
+            }
+        }
+
 		private PathfindingRule m_clientRule;
 		private List<TilePosition> m_currentPath;
 		private TilePosition m_currentEndTile;
@@ -71,6 +83,21 @@ namespace Game.Pathfinding
 			m_pathfindingThread.Start();
 		}
 
+        public void GeneratePartialPath(TilePosition from, TilePosition to, int steps)
+        {
+            m_currentEndTile = to;
+
+            CurrentStatus = PathfindingStatus.GENERATING_PATH;
+
+            if (m_pathfindingThread != null)
+            {
+                m_pathfindingThread.Abort();
+            }
+
+            m_pathfindingThread = new Thread(() => PartialPathThread(from, to, steps));
+            m_pathfindingThread.Start();
+        }
+
         public void CancelPath()
         {
             m_currentPath.Clear();
@@ -90,7 +117,24 @@ namespace Game.Pathfinding
             }
 		}
 
-		public TilePosition GetNextTile()
+        private void PartialPathThread(TilePosition from, TilePosition to, int steps)
+        {
+            m_currentPath = Internal.Pathfinding.FindPath(m_clientRule, m_currentMap, from, to);
+            if (m_currentPath.Count > 0)
+            {
+                if (steps < m_currentPath.Count)
+                {
+                    m_currentPath.RemoveRange(steps, m_currentPath.Count - steps);
+                }
+                m_pathThreadStatusChanges.Enqueue(PathfindingStatus.HAS_PATH);
+            }
+            else
+            {
+                m_pathThreadStatusChanges.Enqueue(PathfindingStatus.PATH_FINISHED);
+            }
+        }
+
+        public TilePosition GetNextTile()
 		{
 			if(m_currentPath.Count > 0)
 			    return m_currentPath[0];

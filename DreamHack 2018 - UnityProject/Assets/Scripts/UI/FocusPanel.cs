@@ -10,13 +10,15 @@ namespace Game.UI
         [SerializeField] protected Text m_nameText;
 
         protected FocusPortrait m_focusPortrait;
+        protected HealthBar m_healthBar;
         protected TaskQueuePanel m_tileQueuePanel;
-
+        
         protected IFocusTarget m_focusTarget = null;
 
         void Awake()
         {
             m_focusPortrait = GetComponentInChildren<FocusPortrait>();
+            m_healthBar = GetComponentInChildren<HealthBar>();
             m_tileQueuePanel = GetComponentInChildren<TaskQueuePanel>();
         }
 
@@ -41,6 +43,15 @@ namespace Game.UI
             {
                 m_nameText.text = m_focusTarget.DisplayName;
                 m_focusPortrait.Populate(m_focusTarget);
+                if (m_focusTarget.Health != null)
+                {
+                    m_healthBar.gameObject.SetActive(true);
+                    m_healthBar.Bind(m_focusTarget.Health);
+                }
+                else
+                {
+                    m_healthBar.gameObject.SetActive(false);
+                }
 
                 if (m_focusTarget is Worker)
                 {
@@ -60,6 +71,7 @@ namespace Game.UI
         void OnFocusLost(IFocusTarget focusTarget)
         {
             gameObject.SetActive(false);
+            m_healthBar.Unbind();
         }
     }
 }

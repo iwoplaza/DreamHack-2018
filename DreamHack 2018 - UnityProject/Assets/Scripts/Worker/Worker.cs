@@ -4,6 +4,7 @@ using Game.Pathfinding;
 using Game.Animation;
 using Game.Acting;
 using Game.Acting.Actions;
+using System;
 
 namespace Game
 {
@@ -23,6 +24,17 @@ namespace Game
         public WorkerVisual Visual { get; private set; }
         public bool IsWalking { get; private set; }
         public bool IsWeaponOut { get; private set; }
+        public Vector3 EyePosition { get { return Position + new Vector3(0, 0.5F, 0); } }
+        public float MaxShootingDistance { get { return 5.0F; } }
+        public TilePosition MoveTarget
+        {
+            get
+            {
+                if (PathfindingAgent.CurrentStatus == PathfindingStatus.HAS_PATH)
+                    return PathfindingAgent.EndGoal;
+                return null;
+            }
+        }
 
         [SerializeField] private float m_walkSpeed;
         [SerializeField] private float m_runSpeed;
@@ -157,12 +169,21 @@ namespace Game
                     else if(task is AttackTask)
                     {
                         AttackTask attackTask = task as AttackTask;
-                        TaskQueue.StartTask();
-                        if(AttackBehaviour != null)
-                            AttackBehaviour.Activate(attackTask);
+                        if (attackTask.IsComplete)
+                        {
+                            TaskQueue.StartTask();
+                            TaskQueue.CompleteTask();
+                        }
+                        else
+                        {
+                            TaskQueue.StartTask();
+                            if (AttackBehaviour != null)
+                                AttackBehaviour.Activate(attackTask);
+                        }
                     }
                     else
                     {
+                        TaskQueue.StartTask();
                         TaskQueue.CompleteTask();
                     }
                 }
@@ -200,7 +221,17 @@ namespace Game
             body.AddForceAtPosition(m_characterController.velocity * 0.1f, hit.point, ForceMode.Impulse);
         }
 
+        public void CancelMove()
+        {
+            PathfindingAgent.CancelPath();
+        }
+
         public void MoveTo(TilePosition target)
+        {
+            PathfindingAgent.GeneratePath(CurrentTile, target);
+        }
+
+        public void MoveToPartially(TilePosition target, float distance)
         {
             PathfindingAgent.GeneratePath(CurrentTile, target);
         }
@@ -221,13 +252,56 @@ namespace Game
             transform.rotation = Quaternion.Euler(0, Mathf.Atan2(difference.x, difference.z) / Mathf.PI * 180.0F, 0);
         }
 
-        public void Shoot()
+        public void Shoot(IAttackable target)
         {
             if(AttackBehaviour.CanShootYet)
             {
+                if(CanShotReachTarget(target))
+                {
+                    target.Damage(10, GameObject);
+                }
+
                 if (Visual != null)
                     Visual.OnShoot();
             }
+        }
+
+        public bool CanSee(Transform transform)
+        {
+            Vector3 direction = transform.position - EyePosition;
+            direction.y = 0;
+            float distance = direction.magnitude;
+            direction.Normalize();
+
+            Ray ray = new Ray(EyePosition, direction);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo, distance))
+            {
+                if (hitInfo.collider.transform != transform && hitInfo.collider != null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool CanShotReachTarget(IAttackable target)
+        {
+            if (target == null)
+                return false;
+
+            if (CanSee(target.GameObject.transform))
+            {
+                Vector3 direction = target.Position - Position;
+                direction.y = 0;
+                float distance = direction.magnitude;
+                if (distance <= MaxShootingDistance)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>

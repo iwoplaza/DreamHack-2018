@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Components
+namespace Game.Scene
 {
     public class TileMapComponent : MonoBehaviour
     {
