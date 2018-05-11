@@ -24,6 +24,25 @@ GameObject:
   - component: {fileID: 114138516676037096}
   - component: {fileID: 114533313627262188}
   m_Layer: 0
+  m_Name: VegetationFractal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1014974642887750
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4708702779177704}
+  - component: {fileID: 114497296106415012}
+  - component: {fileID: 114798171406571202}
+  - component: {fileID: 114624667914288664}
+  - component: {fileID: 114438074963943238}
+  m_Layer: 0
   m_Name: ResourceFractal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,6 +157,19 @@ Transform:
   m_Father: {fileID: 4859495707864948}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4708702779177704
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1014974642887750}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4859495707864948}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4859495707864948
 Transform:
   m_ObjectHideFlags: 1
@@ -149,6 +181,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4645973435742988}
+  - {fileID: 4708702779177704}
   - {fileID: 4950212679267844}
   m_Father: {fileID: 4629295418056858}
   m_RootOrder: 1
@@ -164,7 +197,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4859495707864948}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &108829769905304028
 Light:
@@ -239,7 +272,7 @@ MonoBehaviour:
   m_noiseSeed: seed
   m_drawType: 3
   m_filterHeight: 0
-  m_segmentCount: 8
+  m_segmentCount: 7
 --- !u!114 &114178402231670718
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -254,12 +287,12 @@ MonoBehaviour:
   m_environmentGen: {fileID: 114750575273532464}
   m_mapSize: {x: 5, y: 5}
   m_mapSeed: seed
---- !u!114 &114533313627262188
+--- !u!114 &114438074963943238
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1009174850881100}
+  m_GameObject: {fileID: 1014974642887750}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
@@ -273,6 +306,63 @@ MonoBehaviour:
   m_drawType: 2
   m_filterHeight: 0.323
   m_segmentCount: 0
+--- !u!114 &114497296106415012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1014974642887750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eccb1ba921635342aa5159572846391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentRes: {x: 512, y: 512}
+  m_chain:
+  - m_generator: {fileID: 114798171406571202}
+    m_operation: 0
+  - m_generator: {fileID: 114624667914288664}
+    m_operation: 1
+  - m_generator: {fileID: 114438074963943238}
+    m_operation: 1
+--- !u!114 &114533313627262188
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1009174850881100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_textureRes: {x: 512, y: 512}
+  m_noiseFrequency: 14.7
+  m_noiseOctave: 3
+  m_noiseAmplifier: 1.17
+  m_noiseSeed: seed
+  m_drawType: 2
+  m_filterHeight: 0.323
+  m_segmentCount: 0
+--- !u!114 &114624667914288664
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1014974642887750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_textureRes: {x: 512, y: 512}
+  m_noiseFrequency: 42.2
+  m_noiseOctave: 4
+  m_noiseAmplifier: 1.7
+  m_noiseSeed: seed
+  m_drawType: 3
+  m_filterHeight: 0
+  m_segmentCount: 8
 --- !u!114 &114750575273532464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -285,8 +375,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_baseMap: {fileID: 114991175600298730}
-  m_metalMap: {fileID: 114035455154460846}
+  m_metalMap: {fileID: 114497296106415012}
+  m_vegetationMap: {fileID: 114035455154460846}
   m_mapMaterial: {fileID: 2100000, guid: 1d83630c27e0d3e48a3b48b843305661, type: 2}
+--- !u!114 &114798171406571202
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1014974642887750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_textureRes: {x: 512, y: 512}
+  m_noiseFrequency: 15.8
+  m_noiseOctave: 4
+  m_noiseAmplifier: 1.61
+  m_noiseSeed: seed
+  m_drawType: 3
+  m_filterHeight: 0
+  m_segmentCount: 6
 --- !u!114 &114813845523277354
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -299,9 +409,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 15.8
+  m_noiseFrequency: 26.1
   m_noiseOctave: 4
-  m_noiseAmplifier: 1.61
+  m_noiseAmplifier: 1.29
   m_noiseSeed: seed
   m_drawType: 3
   m_filterHeight: 0
@@ -318,9 +428,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 13.1
+  m_noiseFrequency: 14.7
   m_noiseOctave: 3
-  m_noiseAmplifier: 1.33
+  m_noiseAmplifier: 1.17
   m_noiseSeed: seed
   m_drawType: 2
   m_filterHeight: 0.323
