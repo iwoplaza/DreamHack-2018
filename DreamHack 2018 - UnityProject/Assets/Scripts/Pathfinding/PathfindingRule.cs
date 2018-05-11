@@ -5,5 +5,6 @@ namespace Game.Pathfinding
     public interface PathfindingRule
     {
         bool CanPassThrough(Tile tile, Direction dir);
+        bool IsProperEndGoal(Tile tile);
     }
 }

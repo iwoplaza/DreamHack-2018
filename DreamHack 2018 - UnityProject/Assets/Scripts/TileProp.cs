@@ -20,11 +20,12 @@ namespace Game
         /// Determines if something/someone can pass through this TileObject.
         /// Used for Path Finding.
         /// </summary>
-        /// <param name="passer">The passer that's trying to pass through this object.</param>
         /// <param name="entryDirection">The direction it's coming from.
         ///                              (relative to the object, not the passer)</param>
         /// <returns>Whether or not the passer can pass.</returns>
-        public abstract bool IsPassableFor(Living passer, Direction entryDirection);
+        public abstract bool IsPassableFor(Direction entryDirection);
+
+        public abstract bool IsImpenetrable { get; }
 
         /// <summary>
         /// Used for determining how passable compared to others this object is.

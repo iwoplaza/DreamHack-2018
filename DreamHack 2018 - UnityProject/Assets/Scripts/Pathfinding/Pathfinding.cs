@@ -10,6 +10,11 @@ namespace Game.Pathfinding.Internal
     {
         public static List<TilePosition> FindPath(PathfindingRule rule, TileMap map, TilePosition start, TilePosition end)
         {
+            if(!rule.IsProperEndGoal(map.TileAt(end)))
+            {
+                return new List<TilePosition>();
+            }
+
             if(map.TileAt(start).HasObject || start == end)
             {
                 Debug.Log("No path found! Either the starting position is obstructed or the start and end pos is the same!");
