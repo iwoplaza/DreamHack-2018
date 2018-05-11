@@ -15,8 +15,7 @@ namespace Game
 
         override public string DisplayName { get { return m_name; } }
         override public int MaxHealth { get { return 100; } }
-        string IFocusTarget.DisplayName { get { return m_name; } }
-        Vector3 IFocusTarget.Position { get { return transform.position; } }
+        Transform IFocusTarget.PortraitPivot { get { return transform; } }
 
         public TaskQueue TaskQueue { get; private set; }
         public PathfindingAgent PathfindingAgent { get; private set; }

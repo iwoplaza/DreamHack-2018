@@ -8,6 +8,7 @@ namespace Game
     {
         string DisplayName { get; }
         Vector3 Position { get; }
+        Transform PortraitPivot { get; }
 
         void OnFocusGained();
         void OnFocusLost();
