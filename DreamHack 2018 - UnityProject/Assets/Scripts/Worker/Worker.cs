@@ -4,7 +4,6 @@ using Game.Pathfinding;
 using Game.Animation;
 using Game.Acting;
 using Game.Acting.Actions;
-using System;
 
 namespace Game
 {
@@ -332,6 +331,7 @@ namespace Game
                 {
                     if (AttackBehaviour != null)
                         AttackBehaviour.Deactivate();
+                    CancelMove();
                 }
             }
         }
