@@ -9,6 +9,7 @@ namespace Game.UI
     public class BuildCataloguePanel : MonoBehaviour
     {
         [SerializeField] Transform m_categoriesHolder;
+        [SerializeField] Transform m_entriesContainer;
         [SerializeField] Transform m_entriesHolder;
         [SerializeField] Text m_pageTitleText;
         [SerializeField] Button m_backButton;
@@ -75,6 +76,18 @@ namespace Game.UI
             {
                 buildModeManager.Hold(entry.PropType, entry.PropVariation);
             }
+
+            foreach (BuildEntryButton button in m_entryButtonObjects)
+            {
+                if(button.BuildEntry == entry)
+                {
+                    button.Select();
+                }
+                else
+                {
+                    button.Deselect();
+                }
+            }
         }
 
         public void GoBack()
@@ -94,13 +107,16 @@ namespace Game.UI
                 {
                     case CataloguePage.CATEGORIES:
                         m_categoriesHolder.gameObject.SetActive(true);
-                        m_entriesHolder.gameObject.SetActive(false);
+                        m_entriesContainer.gameObject.SetActive(false);
                         m_pageTitleText.text = "Categories";
                         m_backButton.interactable = false;
+
                         break;
                     case CataloguePage.ENTRIES:
+                        BuildModeManager buildModeManager = WorldController.Instance.MainState.BuildModeManager;
+
                         m_categoriesHolder.gameObject.SetActive(false);
-                        m_entriesHolder.gameObject.SetActive(true);
+                        m_entriesContainer.gameObject.SetActive(true);
                         m_pageTitleText.text = CurrentCategory.DisplayName;
                         m_backButton.interactable = true;
 
@@ -115,6 +131,9 @@ namespace Game.UI
                             GameObject entryButtonObject = Instantiate(m_entryButtonPrefab, m_entriesHolder);
                             BuildEntryButton button = entryButtonObject.GetComponent<BuildEntryButton>();
                             button.Setup(this, entry);
+                            if (buildModeManager != null &&
+                                buildModeManager.HeldObjectType == entry.PropType)
+                                button.Select();
                             m_entryButtonObjects.Add(button);
                         }
 
