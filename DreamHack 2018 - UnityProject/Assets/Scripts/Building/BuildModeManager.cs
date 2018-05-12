@@ -48,19 +48,26 @@ namespace Game.Building
             if (TemporaryDisplayObject != null)
                 UnityEngine.Object.Destroy(TemporaryDisplayObject);
 
+            if (TileDisplayObjects != null)
+            {
+                foreach (GameObject obj in TileDisplayObjects)
+                {
+                    UnityEngine.Object.Destroy(obj);
+                }
+                TileDisplayObjects = null;
+            }
+
             HeldObjectType = null;
         }
 
         public void Hold(Type tileObjectType, int variant = 0)
         {
-            if(TemporaryDisplayObject != null)
-            {
+            if (TemporaryDisplayObject != null)
                 UnityEngine.Object.Destroy(TemporaryDisplayObject);
-            }
 
-            if(TileDisplayObjects != null)
+            if (TileDisplayObjects != null)
             {
-                foreach(GameObject obj in TileDisplayObjects)
+                foreach (GameObject obj in TileDisplayObjects)
                 {
                     UnityEngine.Object.Destroy(obj);
                 }
@@ -161,8 +168,8 @@ namespace Game.Building
                 {
                     for (int z = 0; z < length; ++z)
                     {
-                        TilePosition tile = TilePosition.RotateInBlock(new TilePosition(x, z), width, length, PropOrientation);
-                        TileDisplayObjects[z * length + x].transform.position = Cursor.Vector3 + tile.Vector3 + new Vector3(0.5F, 0, 0.5F);
+                        TilePosition position = TilePosition.RotateInBlock(new TilePosition(x, z), width, length, PropOrientation);
+                        TileDisplayObjects[z * length + x].transform.position = Cursor.Vector3 + position.Vector3 + new Vector3(0.5F, 0, 0.5F);
                     }
                 }
             }

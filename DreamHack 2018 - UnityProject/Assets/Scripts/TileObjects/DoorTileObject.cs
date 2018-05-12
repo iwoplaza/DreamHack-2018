@@ -63,7 +63,9 @@ namespace Game.TileObjects
         {
             if (!Installed)
                 return;
-            Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(0.5F, 0, 0.5F);
+            
+            Vector2Int dimensions = OrientedDimensions;
+            Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(dimensions.x / 2.0F, 0.0F, dimensions.y / 2.0F);
 
             GameObject prefab = GetPrefab();
             if (prefab != null)

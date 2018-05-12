@@ -197,6 +197,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b236d0624bed8f04c8bce4895eb26db7, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &239667966 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114677193854695380, guid: d35cb86640a2a294cb847d3bb13dbfea,
+    type: 2}
+  m_PrefabInternal: {fileID: 622092793}
+  m_Script: {fileID: 11500000, guid: 1c77215224bf7244e96d323fa173710a, type: 3}
 --- !u!1001 &403150659
 Prefab:
   m_ObjectHideFlags: 0
@@ -440,7 +446,7 @@ Prefab:
     - target: {fileID: 224695744506019696, guid: d35cb86640a2a294cb847d3bb13dbfea,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -6.4405212
+      value: -6.440613
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d35cb86640a2a294cb847d3bb13dbfea, type: 2}
@@ -684,14 +690,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f22866023820f9249b3bc05da533e489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_gameHud: {fileID: 239667966}
   m_moveSpeedFactor: 0.3
   m_moveSpeedZoomInfluence: 0.18
   m_rotationSpeedFactor: 4.12
   m_cameraTurnIncrement: 22.5
   m_focusFollowSpeed: 0.4
-  m_distance: 3
+  m_distance: 9
   m_minDistance: 3
-  m_maxDistance: 70
+  m_maxDistance: 25
+  m_defaultFocusDistance: 9
   m_scrollSpeed: 1.83
   m_scrollAccellerationFactor: 0.3
 --- !u!4 &1476166492

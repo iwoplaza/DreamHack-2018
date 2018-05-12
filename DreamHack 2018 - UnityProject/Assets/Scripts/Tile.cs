@@ -54,41 +54,121 @@ namespace Game
 
         public Tile(TileMap owner, int x, int y) : this(owner, new TilePosition(x, y)) {}
 
+        public bool CanInstallProp(TileProp.PropType type)
+        {
+            if (type == TileProp.PropType.OBJECT)
+                return CanInstallObject;
+            else if (type == TileProp.PropType.FLOOR)
+                return CanInstallFloor;
+            else
+                return false;
+        }
+
         /// <summary>
         /// Installs the specified object on this tile.
         /// </summary>
         /// <param name="objectToInstall">The object to install</param>
-        public void InstallAsRoot(TileObjectBase objectToInstall)
+        public bool InstallAsRoot(TileObjectBase objectToInstall)
         {
+            Vector2Int dimensions = objectToInstall.OrientedDimensions;
+            if (dimensions.x > 1 || dimensions.y > 1 && !Owner.CanInstallPropAtArea(TileProp.PropType.OBJECT, Position, dimensions))
+            {
+                return false;
+            }
+
             if(CanInstallObject && !objectToInstall.Installed)
             {
                 objectToInstall.OnInstalledAt(this);
                 InstalledObject = objectToInstall;
                 IsRootForObject = true;
-            }
-            Owner.OnModifyEvent(Position);
-        }
 
-        public void InstallAsRoot(TileProp tileProp)
-        {
-            if (tileProp is TileObjectBase)
-                InstallAsRoot(tileProp as TileObjectBase);
-            else if (tileProp is TileFloorBase)
-                InstallAsRoot(tileProp as TileFloorBase);
+                for (ushort x = 0; x < dimensions.x; ++x)
+                {
+                    for (ushort z = 0; z < dimensions.y; ++z)
+                    {
+                        if (x == 0 && z == 0)
+                            continue;
+                        TilePosition position = Position.GetOffset(x, z);
+                        Tile tile = Owner.TileAt(position);
+                        if (tile != null)
+                            tile.Install(objectToInstall);
+                    }
+                }
+
+                Owner.OnModifyEvent(Position);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
         /// Installs the specified object on this tile.
         /// </summary>
-        /// <param name="objectToInstall">The object to install</param>
-        public void InstallAsRoot(TileFloorBase floorToInstall)
+        /// <param name="floorToInstall">The floor to install</param>
+        public bool InstallAsRoot(TileFloorBase floorToInstall)
         {
+            Vector2Int dimensions = floorToInstall.OrientedDimensions;
+            if (dimensions.x > 1 || dimensions.y > 1 && !Owner.CanInstallPropAtArea(TileProp.PropType.FLOOR, Position, dimensions))
+            {
+                return false;
+            }
+
             if (CanInstallFloor && !floorToInstall.Installed)
             {
                 floorToInstall.OnInstalledAt(this);
                 InstalledFloor = floorToInstall;
+                IsRootForFloor = true;
+
+                if (dimensions.x > 1 || dimensions.y > 1)
+                {
+                    for (ushort x = 0; x < dimensions.x; ++x)
+                    {
+                        for (ushort z = 0; z < dimensions.y; ++z)
+                        {
+                            if (x == 0 && z == 0)
+                                continue;
+                            TilePosition position = Position.GetOffset(x, z);
+                            Tile tile = Owner.TileAt(position);
+                            if (tile != null)
+                                tile.Install(floorToInstall);
+                        }
+                    }
+                }
+
+                Owner.OnModifyEvent(Position);
+                return true;
             }
-            Owner.OnModifyEvent(Position);
+            return false;
+        }
+
+        public bool InstallAsRoot(TileProp tileProp)
+        {
+            if (tileProp is TileObjectBase)
+                return InstallAsRoot(tileProp as TileObjectBase);
+            else if (tileProp is TileFloorBase)
+                return InstallAsRoot(tileProp as TileFloorBase);
+            else
+                return false;
+        }
+
+        void Install(TileObjectBase objectToInstall)
+        {
+            if (CanInstallObject)
+            {
+                InstalledObject = objectToInstall;
+                IsRootForObject = false;
+                Owner.OnModifyEvent(Position);
+            }
+        }
+
+        void Install(TileFloorBase floorToInstall)
+        {
+            if (CanInstallObject)
+            {
+                InstalledFloor = floorToInstall;
+                IsRootForFloor = false;
+                Owner.OnModifyEvent(Position);
+            }
         }
 
         public void UninstallObject()
@@ -98,15 +178,15 @@ namespace Game
                 if (IsRootForObject)
                 {
                     InstalledObject.OnUninstalled();
-                    InstalledObject = null;
                     IsRootForObject = false;
                 }
                 else
                 {
                     InstalledObject.InstalledAt.UninstallObject();
                 }
+                InstalledObject = null;
+                Owner.OnModifyEvent(Position);
             }
-            Owner.OnModifyEvent(Position);
         }
 
         public void UninstallFloor()
@@ -116,15 +196,15 @@ namespace Game
                 if (IsRootForFloor)
                 {
                     InstalledFloor.OnUninstalled();
-                    InstalledFloor = null;
                     IsRootForFloor = false;
                 }
                 else
                 {
                     InstalledFloor.InstalledAt.UninstallFloor();
                 }
+                InstalledFloor = null;
+                Owner.OnModifyEvent(Position);
             }
-            Owner.OnModifyEvent(Position);
         }
 
         public void SetHasCliff(bool flag)

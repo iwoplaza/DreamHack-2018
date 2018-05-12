@@ -50,7 +50,7 @@ namespace Game
             GameEnvironment.ChunkSize = new Vector2Int(15, 15);
             GameEnvironment.EmptyRadius = GameEnvironment.WorldSize.magnitude * 0.075f;
             GameEnvironment.GenerateMap();
-            GameEnvironment.PopulateMap();
+            //GameEnvironment.PopulateMap();
 
             Worker worker1 = SpawnWorker();
         }

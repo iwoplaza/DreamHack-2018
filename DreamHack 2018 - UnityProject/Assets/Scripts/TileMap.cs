@@ -114,6 +114,21 @@ namespace Game
             return true;
         }
 
+        public bool CanInstallPropAtArea(TileProp.PropType type, TilePosition origin, Vector2Int dimensions)
+        {
+            for (ushort x = 0; x < dimensions.x; ++x)
+            {
+                for (ushort z = 0; z < dimensions.y; ++z)
+                {
+                    TilePosition position = origin.GetOffset(x, z);
+                    Tile tile = TileAt(position);
+                    if (tile == null || !tile.CanInstallProp(type))
+                        return false;
+                }
+            }
+            return true;
+        }
+
         public void RegisterEventHandler(TileMapEventHandler newListener, TileMapEvent eventType)
         {
             switch(eventType)

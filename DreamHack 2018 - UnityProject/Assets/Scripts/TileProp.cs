@@ -147,5 +147,10 @@ namespace Game
             TilePosition local = global - InstalledAt.Position;
             return TilePosition.RotateInBlock(local, Width, Length, Orientation);
         }
+
+        public enum PropType
+        {
+            OBJECT, FLOOR
+        }
     }
 }

@@ -25,13 +25,15 @@ namespace Game
         [SerializeField] protected float m_cameraTurnIncrement = 45.0F;
         [SerializeField] protected float m_focusFollowSpeed = 0.7F;
         [Header("Distance")]
-        [SerializeField] protected float m_distance = 7.8F;
+        [SerializeField] protected float m_distance = 9F;
         [SerializeField] protected float m_minDistance = 5.0F;
         [SerializeField] protected float m_maxDistance = 16.0F;
+        [SerializeField] protected float m_defaultFocusDistance = 9F;
         [SerializeField] protected float m_scrollSpeed = 2.0F;
         [SerializeField] protected float m_scrollAccellerationFactor = 0.5F;
 
         protected float m_lastDistance = 0.0F;
+        protected float m_targetDistance = 9F;
         protected Plane m_groundPlane = new Plane(Vector3.up, Vector3.zero);
         protected IFocusTarget m_focusTarget = null;
 
@@ -47,6 +49,8 @@ namespace Game
                 Debug.LogError("No camera was found as a part of the CameraController.");
                 Destroy(gameObject);
             }
+
+            m_targetDistance = m_distance;
         }
 
         void Start()
@@ -180,9 +184,14 @@ namespace Game
                 }
             }
 
-            if (scrollWheel != 0 || m_lastDistance != m_distance)
+            if(scrollWheel != 0)
             {
-                m_distance = Mathf.Clamp(m_distance - scrollWheel * m_scrollSpeed * (1 + m_distance * m_scrollAccellerationFactor), m_minDistance, m_maxDistance);
+                m_targetDistance = Mathf.Clamp(m_targetDistance - scrollWheel * m_scrollSpeed * (1 + m_targetDistance * m_scrollAccellerationFactor), m_minDistance, m_maxDistance);
+            }
+            m_distance += (m_targetDistance - m_distance) * 0.3F;
+
+            if (m_lastDistance != m_distance)
+            {
                 UpdateCameraPosition();
                 m_lastDistance = m_distance;
             }
@@ -294,6 +303,7 @@ namespace Game
         void OnFocusGained(IFocusTarget target)
         {
             m_focusTarget = target;
+            m_targetDistance = m_defaultFocusDistance;
         }
 
         void OnFocusLost(IFocusTarget target)
@@ -304,6 +314,7 @@ namespace Game
         void OnFocusRegained(IFocusTarget target)
         {
             m_focusTarget = target;
+            m_targetDistance = m_defaultFocusDistance;
         }
     }
 }

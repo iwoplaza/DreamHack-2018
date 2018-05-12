@@ -88,10 +88,23 @@ namespace Game
             }
         }
 
+        public void Offset(ushort x, ushort z)
+        {
+            X += x;
+            Z += z;
+        }
+
         public TilePosition GetOffset(MovementDirection direction)
         {
             TilePosition position = new TilePosition(this);
             position.Offset(direction);
+            return position;
+        }
+
+        public TilePosition GetOffset(ushort x, ushort z)
+        {
+            TilePosition position = new TilePosition(this);
+            position.Offset(x, y);
             return position;
         }
 
@@ -144,11 +157,11 @@ namespace Game
             switch(direction)
             {
                 case Direction.POSITIVE_X:
-                    return new TilePosition(local.Z, length - local.X);
+                    return new TilePosition(local.Z, width - 1 - local.X);
                 case Direction.NEGATIVE_Z:
-                    return new TilePosition(width - local.X, length - local.Z);
+                    return new TilePosition(width - 1 - local.X, length - 1 - local.Z);
                 case Direction.NEGATIVE_X:
-                    return new TilePosition(width - local.Z, local.X);
+                    return new TilePosition(length - 1 - local.Z, local.X);
                 default:
                     return local;
             }
