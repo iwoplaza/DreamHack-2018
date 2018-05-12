@@ -12,8 +12,8 @@ namespace Game.TileObjects
         public override string DisplayName { get { return "Door"; } }
         public override bool IsImpenetrable { get { return false; } }
         public override bool CanSkimThrough { get { return false; } }
-        public override int Width { get { return 1; } }
-        public override int Length { get { return 2; } }
+        public override int Width { get { return 2; } }
+        public override int Length { get { return 1; } }
 
         public DoorTileObject()
         {

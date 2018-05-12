@@ -133,5 +133,20 @@ namespace Game
         {
             return new TilePosition((short)Mathf.FloorToInt(worldPos.x), (short)Mathf.FloorToInt(worldPos.z));
         }
+
+        public static TilePosition RotateInBlock(TilePosition local, int width, int length, Direction direction)
+        {
+            switch(direction)
+            {
+                case Direction.POSITIVE_X:
+                    return new TilePosition(local.Z, length - local.X);
+                case Direction.NEGATIVE_Z:
+                    return new TilePosition(width - local.X, length - local.Z);
+                case Direction.NEGATIVE_X:
+                    return new TilePosition(width - local.Z, local.X);
+                default:
+                    return local;
+            }
+        }
     }
 }
