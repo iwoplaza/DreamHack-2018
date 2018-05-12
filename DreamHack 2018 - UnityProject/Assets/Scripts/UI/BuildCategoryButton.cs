@@ -17,7 +17,7 @@ namespace Game.UI
         {
             ParentPanel = panel;
             BuildCategory = category;
-            Sprite sprite = Resources.FindIcon(category.IconName);
+            Sprite sprite = Resources.Icons.Find(category.IconName);
             m_iconImage.sprite = sprite;
         }
 

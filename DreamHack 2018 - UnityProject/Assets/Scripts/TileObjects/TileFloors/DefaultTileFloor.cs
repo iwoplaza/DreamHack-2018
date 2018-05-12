@@ -21,7 +21,7 @@ namespace Game.TileFloors
 
         public GameObject GetPrefab()
         {
-            return Resources.FindTileFloorPrefab("Floor_" + (Variant + 1));
+            return Resources.TileFloorPrefabs.Find("Floor_" + (Variant + 1));
         }
 
         public override void ConstructGameObject()

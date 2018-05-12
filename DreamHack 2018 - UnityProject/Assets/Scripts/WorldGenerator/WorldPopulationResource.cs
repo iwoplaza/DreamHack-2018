@@ -28,7 +28,7 @@ namespace Game.Environment
             {
                 if(Resources.TileObjectPrefabs.ContainsKey("PlantDesert_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindTileObjectPrefab("PlantDesert_" + i.ToString());
+                    GameObject temp = Resources.TileObjectPrefabs.Find("PlantDesert_" + i.ToString());
                     if(temp != null)
                     {
                         m_desertVegetation.Add(temp);
@@ -39,7 +39,7 @@ namespace Game.Environment
             {
                 if(Resources.TileObjectPrefabs.ContainsKey("RockSmall_" + i.ToString()))
                 {     
-                    GameObject temp = Resources.FindTileObjectPrefab("RockSmall_" + i.ToString());
+                    GameObject temp = Resources.TileObjectPrefabs.Find("RockSmall_" + i.ToString());
                     if(temp != null)
                     {
                         m_RocksSmall.Add(temp);
@@ -50,7 +50,7 @@ namespace Game.Environment
             {                
                 if(Resources.TileObjectPrefabs.ContainsKey("RockLarge_" + i.ToString()))
                 {     
-                    GameObject temp = Resources.FindTileObjectPrefab("RockLarge_" + i.ToString());
+                    GameObject temp = Resources.TileObjectPrefabs.Find("RockLarge_" + i.ToString());
                     if(temp != null)
                     {
                         m_RocksLarge.Add(temp);

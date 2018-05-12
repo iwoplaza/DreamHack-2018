@@ -5,13 +5,30 @@ using UnityEngine.UI;
 
 namespace Game.UI.PopUp
 {
-    public class PopUpWindow : MonoBehaviour
+    public abstract class PopUpWindow : MonoBehaviour
     {
         [SerializeField] protected Button m_closeButton;
+        protected GameHUD m_gameHud;
 
-        public void CloseWindow()
+        public abstract bool IsSingluar { get; }
+
+        void Start()
         {
+            m_gameHud = GetComponentInParent<GameHUD>();
+            if(m_gameHud == null)
+            {
+                Debug.LogError("Tried to create a PopUp window that isn't a part of the GameHUD.");
+                Destroy(gameObject);
+                return;
+            }
 
+            if(!m_gameHud.OnPopUpOpened(this))
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
+
+        public virtual void CloseWindow() {}
     }
 }

@@ -37,7 +37,7 @@ namespace Game.TileObjects
                 return;
             Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(0.5F, 0, 0.5F);
 
-            GameObject prefab = Resources.FindEnvironmentObjectPrefab("Cliff");
+            GameObject prefab = Resources.EnvironmentObjectPrefabs.Find("Cliff");
             if (prefab != null)
             {
                 InstalledGameObject = Object.Instantiate(prefab);
@@ -47,7 +47,7 @@ namespace Game.TileObjects
 
         public override GameObject CreateTemporaryDisplay()
         {
-            GameObject prefab = Resources.FindEnvironmentObjectPrefab("Cliff");
+            GameObject prefab = Resources.EnvironmentObjectPrefabs.Find("Cliff");
             if (prefab != null)
             {
                 return Object.Instantiate(prefab);
