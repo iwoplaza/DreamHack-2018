@@ -13,6 +13,7 @@ namespace Game.UI
         public TimePanel TimePanel { get; private set; }
 
         public List<PopUpWindow> OpenedPopUps { get; private set; }
+        public bool HasInputFocus { get { return OpenedPopUps.Count > 0; } }
 
         void Awake()
         {
@@ -53,6 +54,25 @@ namespace Game.UI
         public void OnPopUpClosed(PopUpWindow popUp)
         {
             OpenedPopUps.Remove(popUp);
+        }
+
+        public bool HandleInput()
+        {
+            if (HasInputFocus)
+            {
+                if (Input.GetMouseButton(0))
+                {
+                    foreach (PopUpWindow window in OpenedPopUps)
+                    {
+                        if (window.IsMouseOver && window.ShouldCloseOnFocusLost)
+                        {
+                            window.CloseWindow();
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
         }
     }
 }

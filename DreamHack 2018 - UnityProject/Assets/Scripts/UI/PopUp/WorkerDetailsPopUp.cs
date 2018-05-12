@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Game.UI.PopUp
@@ -8,6 +9,8 @@ namespace Game.UI.PopUp
     public class WorkerDetailsPopUp : PopUpWindow
     {
         public override bool IsSingluar { get { return true; } }
+        public override bool ShouldCloseOnFocusLost { get { return false; } }
+        
 
         public Text m_nameText;
         public Text m_ageText;

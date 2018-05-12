@@ -10,6 +10,7 @@ using Game.Acting.Actions;
 using Game.Scene;
 using Game.Building;
 using Game.Utility;
+using Game.UI;
 
 namespace Game
 {
@@ -17,6 +18,7 @@ namespace Game
     {
         protected Camera m_camera;
 
+        [SerializeField] protected GameHUD m_gameHud;
         [SerializeField] protected float m_moveSpeedFactor = 1.0F;
         [SerializeField] protected float m_moveSpeedZoomInfluence = 2.0F;
         [SerializeField] protected float m_rotationSpeedFactor = 1.0F;
@@ -98,80 +100,84 @@ namespace Game
             else
                 tileMapComponent.HoverOver(null);
 
-            if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
-            {
-                HandleBuildModeControls();
-            }
-            else
-            {
-                if (!EventSystem.current.IsPointerOverGameObject())
-                {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                        RaycastHit hitInfo;
 
-                        if (Physics.Raycast(ray, out hitInfo))
+            if (!m_gameHud.HandleInput())
+            {
+                if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
+                {
+                    HandleBuildModeControls();
+                }
+                else
+                {
+                    if (!EventSystem.current.IsPointerOverGameObject())
+                    {
+                        if (Input.GetMouseButtonDown(0))
                         {
-                            if (hitInfo.collider != null)
+                            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                            RaycastHit hitInfo;
+
+                            if (Physics.Raycast(ray, out hitInfo))
                             {
-                                IFocusTarget focusTarget = hitInfo.collider.GetComponent<IFocusTarget>();
-                                WorldController.Instance.MainState.Focus.On(focusTarget);
+                                if (hitInfo.collider != null)
+                                {
+                                    IFocusTarget focusTarget = hitInfo.collider.GetComponent<IFocusTarget>();
+                                    WorldController.Instance.MainState.Focus.On(focusTarget);
+                                }
                             }
                         }
-                    }
 
-                    if (Input.GetMouseButtonDown(1))
-                    {
-                        if(!HandleSubjectClick())
+                        if (Input.GetMouseButtonDown(1))
                         {
-                            if (tilePositionAtMouse != null)
+                            if (!HandleSubjectClick())
                             {
-                                Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
-                                if (targetTile != null)
+                                if (tilePositionAtMouse != null)
                                 {
-                                    Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
-                                    if (selectedWorker != null)
+                                    Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
+                                    if (targetTile != null)
                                     {
-                                        selectedWorker.TaskQueue.AddTask(new GoToTask(tilePositionAtMouse));
+                                        Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
+                                        if (selectedWorker != null)
+                                        {
+                                            selectedWorker.TaskQueue.AddTask(new GoToTask(tilePositionAtMouse));
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            if (Input.GetMouseButton(2))
-            {
-                Vector3 forward = transform.forward;
-                forward.y = 0;
-                forward.Normalize();
-                Vector3 right = transform.right;
-                right.y = 0;
-                right.Normalize();
+                if (Input.GetMouseButton(2))
+                {
+                    Vector3 forward = transform.forward;
+                    forward.y = 0;
+                    forward.Normalize();
+                    Vector3 right = transform.right;
+                    right.y = 0;
+                    right.Normalize();
 
-                Vector3 position = transform.position;
-                position += -right * horizontal * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
-                position += -forward * vertical * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
-                transform.position = position;
+                    Vector3 position = transform.position;
+                    position += -right * horizontal * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
+                    position += -forward * vertical * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
+                    transform.position = position;
 
-                m_focusTarget = null;
-            }
+                    m_focusTarget = null;
+                }
 
-            if(CrossPlatformInputManager.GetButtonDown("Turn Camera Left"))
-            {
-                RotateBy(m_cameraTurnIncrement);
-            }
+                if (CrossPlatformInputManager.GetButtonDown("Turn Camera Left"))
+                {
+                    RotateBy(m_cameraTurnIncrement);
+                }
 
-            if (CrossPlatformInputManager.GetButtonDown("Turn Camera Right"))
-            {
-                RotateBy(-m_cameraTurnIncrement);
-            }
+                if (CrossPlatformInputManager.GetButtonDown("Turn Camera Right"))
+                {
+                    RotateBy(-m_cameraTurnIncrement);
+                }
 
-            if(CrossPlatformInputManager.GetButtonDown("Build Mode Toggle"))
-            {
-                WorldController.Instance.ToggleBuildMode();
+                if (CrossPlatformInputManager.GetButtonDown("Build Mode Toggle"))
+                {
+                    WorldController.Instance.ToggleBuildMode();
+                }
             }
 
             if (scrollWheel != 0 || m_lastDistance != m_distance)
@@ -212,11 +218,14 @@ namespace Game
                 ISubject subject = hitInfo.collider.GetComponent<ISubject>();
                 if (subject != null)
                 {
-                    List<ActionBase> actions = subject.GetActionsFor(actor);
+                    UI.PopUp.ActionSelectPopUp popUp = UI.PopUp.ActionSelectPopUp.Create(m_gameHud);
+                    popUp.Populate(subject);
+                    popUp.Open();
+                    /*List<ActionBase> actions = subject.GetActionsFor(actor);
                     if (actions.Count > 0)
                     {
                         actor.PerformAction(actions[0], subject);
-                    }
+                    }*/
                     return true;
                 }
             }

@@ -85,7 +85,9 @@ namespace Game.UI
         {
             if (m_focusTarget is Worker)
             {
-                PopUp.WorkerDetailsPopUp.Create(m_gameHud).Populate(m_focusTarget as Worker);
+                PopUp.WorkerDetailsPopUp popUp = PopUp.WorkerDetailsPopUp.Create(m_gameHud);
+                popUp.Populate(m_focusTarget as Worker);
+                popUp.Open();
             }
         }
 
