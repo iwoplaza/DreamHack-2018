@@ -150,7 +150,7 @@ namespace Game.Environment
 							}
 							else
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.CLIFF_LONE)
 										, addPosition, new Vector3(0,0,0)));	
 							}
 						}
@@ -310,7 +310,7 @@ namespace Game.Environment
 
 							else
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.CLIFF_LONE)
 										, addPosition, new Vector3(0,0,0)));	
 							}
 						}
@@ -467,6 +467,44 @@ namespace Game.Environment
 										, addPosition, new Vector3(0,270,0)));
 							}
 
+							// CASE:
+							//	010
+							//	1P1
+							//	110
+
+							else if(!tileNeighbor.XNegZNeg && !tileNeighbor.XNegZPos && !tileNeighbor.XPosZPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_CORNER_CASE3)
+										, addPosition, new Vector3(0,0,0)));
+							}
+							else if(!tileNeighbor.XNegZPos && !tileNeighbor.XPosZPos && !tileNeighbor.XPosZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_CORNER_CASE3)
+										, addPosition, new Vector3(0,90,0)));
+							}
+							else if(!tileNeighbor.XPosZPos && !tileNeighbor.XPosZNeg && !tileNeighbor.XNegZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_CORNER_CASE3)
+										, addPosition, new Vector3(0,180,0)));
+							}
+							else if(!tileNeighbor.XPosZNeg && !tileNeighbor.XNegZNeg && !tileNeighbor.XNegZPos)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_CORNER_CASE3)
+										, addPosition, new Vector3(0,270,0)));
+							}
+
+							// CASE: BRIDGES
+							else if(!tileNeighbor.ZPos && !tileNeighbor.ZNeg && tileNeighbor.XPos && tileNeighbor.XNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE)
+										, addPosition, new Vector3(0,90,0)));
+							}
+							else if(!tileNeighbor.XPos && !tileNeighbor.XNeg && tileNeighbor.ZPos && tileNeighbor.ZNeg)
+							{
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE)
+										, addPosition, new Vector3(0,0,0)));
+							}
+
 							//	CASE:
 							// 000
 							// 0P0
@@ -521,7 +559,7 @@ namespace Game.Environment
 
 							else
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.CLIFF_LONE)
 										, addPosition, new Vector3(0,0,0)));	
 							}
 						}					
@@ -551,12 +589,12 @@ namespace Game.Environment
 							else if(!tileNeighbor.ZPos && !tileNeighbor.ZNeg)
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE)
-										, addPosition, new Vector3(0,0,0)));
+										, addPosition, new Vector3(0,90,0)));
 							}
 							else if(!tileNeighbor.XPos && !tileNeighbor.XNeg)
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE)
-										, addPosition, new Vector3(0,90,0)));
+										, addPosition, new Vector3(0,0,0)));
 							}
 							
 							// CASE:
@@ -883,7 +921,7 @@ namespace Game.Environment
 
 							else
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.CLIFF_LONE)
 										, addPosition, new Vector3(0,0,0)));	
 							}
 						}
@@ -977,7 +1015,7 @@ namespace Game.Environment
 
 							else
 							{
-								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.GROUND_CLIFF)
+								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.CLIFF_LONE)
 										, addPosition, new Vector3(0,0,0)));	
 							}
 						}
