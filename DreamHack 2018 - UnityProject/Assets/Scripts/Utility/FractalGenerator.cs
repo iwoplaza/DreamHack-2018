@@ -18,19 +18,18 @@ namespace Utility.Noise
             CIRCLE_GRADIENT_SEGMENTED
         }
 
-        float[,] m_currentNoise;
-        public float[,] CurrentNoise { get{ return m_currentNoise; }}
+        public float[,] CurrentNoise { get; private set; }
 
         [SerializeField]Vector2Int m_textureRes;
         public Vector2Int CurrentRes { get{ return m_textureRes; } set { m_textureRes = value; } }
         [Range(1,100)]
-        [SerializeField]float m_noiseFrequency;
+        [SerializeField] float m_noiseFrequency;
         [Range(1,10)]
-        [SerializeField]int m_noiseOctave;
+        [SerializeField] int m_noiseOctave;
 
         [Range(0.01f,10.0f)]
-        [SerializeField]float m_noiseAmplifier;
-        [SerializeField]string m_noiseSeed;
+        [SerializeField] float m_noiseAmplifier;
+        [SerializeField] string m_noiseSeed;
         public string CurrentSeed { get { return m_noiseSeed; } set { m_noiseSeed = value; } }
         
         [Space(10)]
@@ -95,47 +94,47 @@ namespace Utility.Noise
                             (m_textureRes.x, m_textureRes.y, m_noiseFrequency
                             , m_noiseOctave, m_noiseAmplifier, m_noiseSeed);
             }
-            m_currentNoise = new float[m_textureRes.x,m_textureRes.y];
+            CurrentNoise = new float[m_textureRes.x, m_textureRes.y];
             if(m_drawType == FractalDrawType.ORIGINAL){
-                m_currentNoise = noise;
+                CurrentNoise = noise;
             }
             for(int x = 0; x < m_textureRes.x; x++)
             {
                 for(int y = 0; y < m_textureRes.y; y++)
                 {
                     if(m_drawType == FractalDrawType.ORIGINAL){
-                        m_currentNoise = noise;
-                        Color color = new Color(noise[x,y],noise[x,y],noise[x,y],1);
-                        m_noiseTex.SetPixel(x,y,color);
+                        CurrentNoise = noise;
+                        Color color = new Color(noise[x, y],noise[x, y],noise[x, y], 1);
+                        m_noiseTex.SetPixel(x, y, color);
                     }
                     if(m_drawType == FractalDrawType.FILTERED_BLACK_WHITE)
                     {
-                        if(noise[x,y] > FilterHeight)
+                        if(noise[x, y] > FilterHeight)
                         {
-                            m_currentNoise[x,y] = 1;
-                            Color color = new Color(1,1,1,1);
-                            m_noiseTex.SetPixel(x,y,color);
+                            CurrentNoise[x, y] = 1;
+                            Color color = new Color(1, 1, 1, 1);
+                            m_noiseTex.SetPixel(x, y, color);
                         }
                         else
                         {
-                            m_currentNoise[x,y] = 0;
+                            CurrentNoise[x, y] = 0;
                             Color color = new Color(0,0,0,1);
-                            m_noiseTex.SetPixel(x,y,color);
+                            m_noiseTex.SetPixel(x, y, color);
                         }
                     }
                     if(m_drawType == FractalDrawType.FILTERED)
                     {
                         if(noise[x,y] > FilterHeight)
                         {
-                            m_currentNoise[x,y] = noise[x,y];
-                            Color color = new Color(noise[x,y],noise[x,y],noise[x,y],1);
-                            m_noiseTex.SetPixel(x,y,color);
+                            CurrentNoise[x, y] = noise[x, y];
+                            Color color = new Color(noise[x, y],noise[x, y],noise[x, y], 1);
+                            m_noiseTex.SetPixel(x, y, color);
                         }
                         else
                         {
-                            m_currentNoise[x,y] = 0;
-                            Color color = new Color(0,0,0,1);
-                            m_noiseTex.SetPixel(x,y,color);
+                            CurrentNoise[x, y] = 0;
+                            Color color = new Color(0, 0, 0, 1);
+                            m_noiseTex.SetPixel(x, y, color);
                         }
                     }
                     if(m_drawType == FractalDrawType.SEGMENTED || m_drawType == FractalDrawType.SEGMENTED_FILTERED)
@@ -145,21 +144,21 @@ namespace Utility.Noise
                         {
                             if(noise[x,y] > m_filterHeight)
                             {
-                                m_currentNoise[x,y] = colorPoint;
+                                CurrentNoise[x,y] = colorPoint;
                                 Color color = new Color(colorPoint,colorPoint,colorPoint,1);
                                 m_noiseTex.SetPixel(x,y,color);
                             }
                             else
                             {
                                 colorPoint = 0;
-                                m_currentNoise[x,y] = colorPoint;
+                                CurrentNoise[x,y] = colorPoint;
                                 Color color = new Color(colorPoint,colorPoint,colorPoint,1);
                                 m_noiseTex.SetPixel(x,y,color);
                             }
                         }
                         else
                         {
-                            m_currentNoise[x,y] = colorPoint;
+                            CurrentNoise[x,y] = colorPoint;
                             Color color = new Color(colorPoint,colorPoint,colorPoint,1);
                             m_noiseTex.SetPixel(x,y,color);
                         }
@@ -186,14 +185,14 @@ namespace Utility.Noise
                                 colorPoint = (float)Mathf.RoundToInt(colorPoint * SegmentCount)/SegmentCount;
                             }
                             Color color = new Color(colorPoint,colorPoint,colorPoint,1);
-                            m_currentNoise[x,y] = colorPoint;
+                            CurrentNoise[x,y] = colorPoint;
                             m_noiseTex.SetPixel(x,y,color);
                         }
                         else
                         {
                             colorPoint = 0;
                             Color color = new Color(colorPoint,colorPoint,colorPoint,1);
-                            m_currentNoise[x,y] = colorPoint;
+                            CurrentNoise[x,y] = colorPoint;
                             m_noiseTex.SetPixel(x,y,color);
                         }
                     }

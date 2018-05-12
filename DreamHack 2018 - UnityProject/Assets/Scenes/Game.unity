@@ -440,7 +440,7 @@ Prefab:
     - target: {fileID: 224695744506019696, guid: d35cb86640a2a294cb847d3bb13dbfea,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -6.440512
+      value: -6.4405212
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d35cb86640a2a294cb847d3bb13dbfea, type: 2}
@@ -796,6 +796,66 @@ Prefab:
     - target: {fileID: 4629295418056858, guid: ed3f662100abeaf49a1c076c27de8d39, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114798171406571202, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseFrequency
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114336934929699066, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseAmplifier
+      value: 3.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 114336934929699066, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_filterHeight
+      value: 0.437
+      objectReference: {fileID: 0}
+    - target: {fileID: 114336934929699066, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseFrequency
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114357539436573696, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseFrequency
+      value: 82
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397124074544, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseAmplifier
+      value: 5.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 114533313627262188, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseAmplifier
+      value: 1.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 114138516676037096, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseFrequency
+      value: 85.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114138516676037096, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseAmplifier
+      value: 4.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114813845523277354, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseFrequency
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114813845523277354, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseAmplifier
+      value: 5.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 114357539436573696, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_noiseAmplifier
+      value: 2.46
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed3f662100abeaf49a1c076c27de8d39, type: 2}
