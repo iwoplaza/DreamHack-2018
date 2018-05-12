@@ -14,6 +14,7 @@ ModelImporter:
     100016: Cube_007
     100018: Cube_008
     100020: Skull
+    100022: Cube_009
     400000: Cube
     400002: Cube_001
     400004: Cube_002
@@ -25,6 +26,7 @@ ModelImporter:
     400016: Cube_007
     400018: Cube_008
     400020: Skull
+    400022: Cube_009
     2100000: Unified
     2100002: Unified__Palette_png
     2100004: Skull
@@ -38,6 +40,7 @@ ModelImporter:
     2300014: Cube_007
     2300016: Cube_008
     2300018: Skull
+    2300020: Cube_009
     3300000: Cube
     3300002: Cube_001
     3300004: Cube_002
@@ -48,6 +51,7 @@ ModelImporter:
     3300014: Cube_007
     3300016: Cube_008
     3300018: Skull
+    3300020: Cube_009
     4300000: Cube_006
     4300002: Cube_005
     4300004: Cube_004
@@ -58,6 +62,7 @@ ModelImporter:
     4300014: Cube_008
     4300016: Cube_007
     4300018: Skull
+    4300020: Cube_009
     7400000: Default Take
     9500000: //RootNode
   externalObjects: {}
