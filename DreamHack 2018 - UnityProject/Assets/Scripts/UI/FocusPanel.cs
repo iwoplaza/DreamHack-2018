@@ -88,5 +88,10 @@ namespace Game.UI
                 PopUp.WorkerDetailsPopUp.Create(m_gameHud).Populate(m_focusTarget as Worker);
             }
         }
+
+        public void Refocus()
+        {
+            WorldController.Instance.MainState.Focus.Refocus();
+        }
     }
 }

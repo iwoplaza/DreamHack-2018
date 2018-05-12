@@ -9,6 +9,7 @@ using Game.Acting;
 using Game.Acting.Actions;
 using Game.Scene;
 using Game.Building;
+using Game.Utility;
 
 namespace Game
 {
@@ -53,6 +54,7 @@ namespace Game
             if (WorldController.Instance != null)
             {
                 WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_GAIN, OnFocusGained);
+                WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_REGAIN, OnFocusRegained);
                 WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_LOSS, OnFocusLost);
 
                 if(WorldController.Instance.MainState.TileMap != null)
@@ -190,9 +192,8 @@ namespace Game
 
             if (m_focusTarget != null)
             {
-                Vector3 difference = m_focusTarget.Position - transform.position;
-                float t = Mathf.Min(Mathf.Pow(m_focusFollowSpeed, Time.deltaTime * 100), 1);
-                transform.position += difference * (t);
+                float t = Mathf.Min(m_focusFollowSpeed, 1);
+                transform.position += (m_focusTarget.Position - transform.position) * t;
             }
         }
 
@@ -289,6 +290,11 @@ namespace Game
         void OnFocusLost(IFocusTarget target)
         {
             m_focusTarget = null;
+        }
+
+        void OnFocusRegained(IFocusTarget target)
+        {
+            m_focusTarget = target;
         }
     }
 }

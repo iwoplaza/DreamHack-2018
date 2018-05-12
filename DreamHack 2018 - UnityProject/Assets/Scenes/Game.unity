@@ -566,45 +566,6 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224771382678018218, guid: d35cb86640a2a294cb847d3bb13dbfea,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0.545
-      objectReference: {fileID: 0}
-    - target: {fileID: 224771382678018218, guid: d35cb86640a2a294cb847d3bb13dbfea,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224342987229349690, guid: d35cb86640a2a294cb847d3bb13dbfea,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0.951
-      objectReference: {fileID: 0}
-    - target: {fileID: 224342987229349690, guid: d35cb86640a2a294cb847d3bb13dbfea,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224124405542241788, guid: d35cb86640a2a294cb847d3bb13dbfea,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0.124
-      objectReference: {fileID: 0}
-    - target: {fileID: 224124405542241788, guid: d35cb86640a2a294cb847d3bb13dbfea,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1354563336833174, guid: d35cb86640a2a294cb847d3bb13dbfea, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224695744506019696, guid: d35cb86640a2a294cb847d3bb13dbfea,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -6.449802
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d35cb86640a2a294cb847d3bb13dbfea, type: 2}
   m_IsPrefabParent: 0
@@ -1159,7 +1120,7 @@ MonoBehaviour:
   m_moveSpeedZoomInfluence: 0.18
   m_rotationSpeedFactor: 4.12
   m_cameraTurnIncrement: 22.5
-  m_focusFollowSpeed: 0.361
+  m_focusFollowSpeed: 0.4
   m_distance: 3
   m_minDistance: 3
   m_maxDistance: 70
