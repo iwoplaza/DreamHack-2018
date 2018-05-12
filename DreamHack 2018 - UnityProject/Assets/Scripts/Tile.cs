@@ -134,13 +134,15 @@ namespace Game
             {
                 InstalledProps[(int) type] = propToInstall;
                 PropRootFlags[(int) type] = false;
+                Debug.Log("Installing not root at: " + Position + ", Has " + type + ": " + Has(type));
                 Owner.OnModifyEvent(Position);
             }
         }
 
         public void Uninstall(PropType type)
         {
-            if(Has(type))
+            Debug.Log("Uninstalling at " + Position + ", has type " + type + ": " + Has(type));
+            if (Has(type))
             {
                 if (IsRootForProp(type))
                 {
@@ -195,11 +197,17 @@ namespace Game
 
             XElement installedObjectElement = element.Element("InstalledObject");
             if (installedObjectElement != null)
-                tile.InstalledProps[(int)PropType.OBJECT] = TileObjectBase.CreateAndParse(installedObjectElement, tile);
+            {
+                tile.PropRootFlags[(int)PropType.OBJECT] = true;
+                tile.InstalledProps[(int)PropType.OBJECT] = TileObjectBase.CreateAndParse(installedObjectElement);
+            }
 
             XElement installedFloorElement = element.Element("InstalledFloor");
             if (installedFloorElement != null)
-                tile.InstalledProps[(int) PropType.FLOOR] = TileFloorBase.CreateAndParse(installedFloorElement, tile);
+            {
+                tile.PropRootFlags[(int)PropType.FLOOR] = true;
+                tile.InstalledProps[(int)PropType.FLOOR] = TileFloorBase.CreateAndParse(installedFloorElement);
+            }
 
             return tile;
         }
@@ -213,7 +221,7 @@ namespace Game
             for (int i = 0; i < InstalledProps.Length; ++i)
             {
                 TileProp prop = InstalledProps[i];
-                if (prop != null)
+                if (prop != null && IsRootForProp((PropType)i))
                 {
                     InstalledProps[i] = null;
                     InstallAsRoot(prop);

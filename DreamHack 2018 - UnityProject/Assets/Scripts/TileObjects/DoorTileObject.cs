@@ -50,7 +50,6 @@ namespace Game.TileObjects
                 return false;
             }
 
-            Debug.Log("Returned true for " + localDirection);
             return true;
         }
 

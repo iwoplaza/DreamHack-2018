@@ -47,6 +47,20 @@ namespace Game
             XAttribute widthAttrib = element.Attribute("width");
             XAttribute heightAttrib = element.Attribute("height");
 
+            if (widthAttrib != null)
+                Width = Int32.Parse(widthAttrib.Value);
+            if (heightAttrib != null)
+                Height = Int32.Parse(heightAttrib.Value);
+
+            m_tiles = new Tile[Width, Height];
+            for (int x = 0; x < Width; ++x)
+            {
+                for (int y = 0; y < Height; ++y)
+                {
+                    m_tiles[x, y] = new Tile(this, x, y);
+                }
+            }
+
             IEnumerable<XElement> tileElements = element.Elements("Tile");
             foreach(XElement tileElement in tileElements)
             {
@@ -63,11 +77,6 @@ namespace Game
                         m_tiles[x, y].AfterParse();
                 }
             }
-
-            if (widthAttrib != null)
-                Width = Int32.Parse(widthAttrib.Value);
-            if (heightAttrib != null)
-                Height = Int32.Parse(heightAttrib.Value);
         }
 
         public void Populate(XElement element)

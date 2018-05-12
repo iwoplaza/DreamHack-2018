@@ -23,9 +23,6 @@ namespace Game.TileObjects
                 entryDirection, MovementDirectionUtils.NewFrom(Orientation)
             );
 
-            Debug.Log(entryDirection + " -> " + localEntryDirection);
-            Debug.Log("-8 % 8 == " + MathUtils.Mod(-8, 8));
-
             if (localEntryDirection == MovementDirection.POSITIVE_X || //Side
                 localEntryDirection == MovementDirection.NEGATIVE_X || //Side
                 localEntryDirection == MovementDirection.POSITIVE_Z || //Front
@@ -51,7 +48,6 @@ namespace Game.TileObjects
                 return false;
             }
 
-            Debug.Log("Returned true for " + localDirection);
             return true;
         }
 
