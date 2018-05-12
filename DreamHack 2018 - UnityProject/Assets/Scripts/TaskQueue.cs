@@ -35,6 +35,11 @@ namespace Game.Tasks
         /// <param name="newTask">The task to add to the queue</param>
         public void AddTask(TaskBase newTask)
         {
+            if(CurrentTask != null && CurrentTask is GoToTask)
+            {
+                CancelTask(CurrentTask);
+            }
+
             if (!Tasks.Exists(t => t.Equals(newTask)))
             {
                 Tasks.Add(newTask);

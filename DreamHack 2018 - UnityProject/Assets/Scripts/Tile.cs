@@ -12,32 +12,30 @@ namespace Game
     {
         public TileMap Owner { get; private set; }
         public TilePosition Position { get; private set; }
-        public TileObjectBase InstalledObject { get; private set; }
-        public TileFloorBase InstalledFloor { get; private set; }
-        public bool IsRootForObject { get; private set; }
-        public bool IsRootForFloor { get; private set; }
+        public TileProp[] InstalledProps { get; private set; }
+        public bool[] PropRootFlags { get; private set; }
         public bool HasCliff { get; private set; }
         public int PathfindingWeight { get; private set; }
-        public bool HasObject { get { return InstalledObject != null; } }
-        public bool HasFloor { get { return InstalledFloor != null; } }
-        public bool Empty { get { return !HasObject && !HasFloor && !HasCliff; } }
-        public bool CanInstallObject { get { return !HasObject && !HasCliff; } }
-        public bool CanInstallFloor { get { return !HasFloor && !HasCliff; } }
+        public bool Empty { get { return !Has(PropType.OBJECT) && !Has(PropType.FLOOR) && !HasCliff; } }
         /// <summary>
         /// Tells the Populate function if it should create an element for this Tile
         /// when serializing.
         /// </summary>
-        public bool IsWorthSaving { get { return !Empty; } }
+        public bool IsWorthSaving { get { return Has(PropType.OBJECT) || Has(PropType.FLOOR); } }
 
         public bool IsImpenetrable
         {
             get
             {
                 bool impenetrable = false;
-                if (InstalledObject != null)
-                    impenetrable = impenetrable || InstalledObject.IsImpenetrable;
-                if (InstalledFloor != null)
-                    impenetrable = impenetrable || InstalledFloor.IsImpenetrable;
+                foreach(TileProp prop in InstalledProps)
+                {
+                    if (prop != null && prop.IsImpenetrable)
+                    {
+                        impenetrable = true;
+                        break;
+                    }
+                }
                 return impenetrable;
             }
         }
@@ -46,41 +44,60 @@ namespace Game
         {
             Owner = owner;
             Position = position;
-            InstalledObject = null;
-            InstalledFloor = null;
-            IsRootForObject = false;
-            IsRootForFloor = false;
+
+            int propTypeAmount = Enum.GetNames(typeof(PropType)).Length;
+            InstalledProps = new TileProp[propTypeAmount];
+            PropRootFlags = new bool[propTypeAmount];
         }
 
         public Tile(TileMap owner, int x, int y) : this(owner, new TilePosition(x, y)) {}
 
-        public bool CanInstallProp(TileProp.PropType type)
+        public bool Has(PropType type)
         {
-            if (type == TileProp.PropType.OBJECT)
-                return CanInstallObject;
-            else if (type == TileProp.PropType.FLOOR)
-                return CanInstallFloor;
-            else
-                return false;
+            return InstalledProps[(int) type] != null;
+        }
+
+        public TileProp GetProp(PropType type)
+        {
+            return InstalledProps[(int) type];
+        }
+
+        public bool IsRootForProp(PropType type)
+        {
+            return PropRootFlags[(int) type];
+        }
+
+        public bool CanInstall(PropType type)
+        {
+            return !Has(type) && !HasCliff;
+        }
+
+        public bool CanInstall(Type type)
+        {
+            if (type.IsSubclassOf(typeof(TileObjectBase)))
+                return CanInstall(PropType.OBJECT);
+            else if (type.IsSubclassOf(typeof(TileFloorBase)))
+                return CanInstall(PropType.FLOOR);
+            return false;
         }
 
         /// <summary>
         /// Installs the specified object on this tile.
         /// </summary>
         /// <param name="objectToInstall">The object to install</param>
-        public bool InstallAsRoot(TileObjectBase objectToInstall)
+        public bool InstallAsRoot(TileProp propToInstall, PropType type)
         {
-            Vector2Int dimensions = objectToInstall.OrientedDimensions;
-            if (dimensions.x > 1 || dimensions.y > 1 && !Owner.CanInstallPropAtArea(TileProp.PropType.OBJECT, Position, dimensions))
+            Vector2Int dimensions = propToInstall.OrientedDimensions;
+            if ((dimensions.x > 1 || dimensions.y > 1) && !Owner.CanInstallPropAtArea(type, Position, dimensions))
             {
                 return false;
             }
 
-            if(CanInstallObject && !objectToInstall.Installed)
+            if(CanInstall(type) && !propToInstall.Installed)
             {
-                objectToInstall.OnInstalledAt(this);
-                InstalledObject = objectToInstall;
-                IsRootForObject = true;
+                propToInstall.OnInstalledAt(this);
+                InstalledProps[(int) type] = propToInstall;
+                PropRootFlags[(int) type] = true;
 
                 for (ushort x = 0; x < dimensions.x; ++x)
                 {
@@ -91,47 +108,7 @@ namespace Game
                         TilePosition position = Position.GetOffset(x, z);
                         Tile tile = Owner.TileAt(position);
                         if (tile != null)
-                            tile.Install(objectToInstall);
-                    }
-                }
-
-                Owner.OnModifyEvent(Position);
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Installs the specified object on this tile.
-        /// </summary>
-        /// <param name="floorToInstall">The floor to install</param>
-        public bool InstallAsRoot(TileFloorBase floorToInstall)
-        {
-            Vector2Int dimensions = floorToInstall.OrientedDimensions;
-            if (dimensions.x > 1 || dimensions.y > 1 && !Owner.CanInstallPropAtArea(TileProp.PropType.FLOOR, Position, dimensions))
-            {
-                return false;
-            }
-
-            if (CanInstallFloor && !floorToInstall.Installed)
-            {
-                floorToInstall.OnInstalledAt(this);
-                InstalledFloor = floorToInstall;
-                IsRootForFloor = true;
-
-                if (dimensions.x > 1 || dimensions.y > 1)
-                {
-                    for (ushort x = 0; x < dimensions.x; ++x)
-                    {
-                        for (ushort z = 0; z < dimensions.y; ++z)
-                        {
-                            if (x == 0 && z == 0)
-                                continue;
-                            TilePosition position = Position.GetOffset(x, z);
-                            Tile tile = Owner.TileAt(position);
-                            if (tile != null)
-                                tile.Install(floorToInstall);
-                        }
+                            tile.Install(propToInstall, type);
                     }
                 }
 
@@ -144,65 +121,52 @@ namespace Game
         public bool InstallAsRoot(TileProp tileProp)
         {
             if (tileProp is TileObjectBase)
-                return InstallAsRoot(tileProp as TileObjectBase);
+                return InstallAsRoot(tileProp, PropType.OBJECT);
             else if (tileProp is TileFloorBase)
-                return InstallAsRoot(tileProp as TileFloorBase);
+                return InstallAsRoot(tileProp, PropType.FLOOR);
             else
                 return false;
         }
 
-        void Install(TileObjectBase objectToInstall)
+        void Install(TileProp propToInstall, PropType type)
         {
-            if (CanInstallObject)
+            if (CanInstall(type))
             {
-                InstalledObject = objectToInstall;
-                IsRootForObject = false;
+                InstalledProps[(int) type] = propToInstall;
+                PropRootFlags[(int) type] = false;
                 Owner.OnModifyEvent(Position);
             }
         }
 
-        void Install(TileFloorBase floorToInstall)
+        public void Uninstall(PropType type)
         {
-            if (CanInstallObject)
+            if(Has(type))
             {
-                InstalledFloor = floorToInstall;
-                IsRootForFloor = false;
-                Owner.OnModifyEvent(Position);
-            }
-        }
-
-        public void UninstallObject()
-        {
-            if(HasObject)
-            {
-                if (IsRootForObject)
+                if (IsRootForProp(type))
                 {
-                    InstalledObject.OnUninstalled();
-                    IsRootForObject = false;
+                    Vector2Int dimensions = GetProp(type).OrientedDimensions;
+                    GetProp(type).OnUninstalled();
+
+                    for (ushort x = 0; x < dimensions.x; ++x)
+                    {
+                        for (ushort z = 0; z < dimensions.y; ++z)
+                        {
+                            if (x == 0 && z == 0)
+                                continue;
+                            TilePosition position = Position.GetOffset(x, z);
+                            Tile tile = Owner.TileAt(position);
+                            if (tile != null)
+                                tile.Uninstall(type);
+                        }
+                    }
+                    PropRootFlags[(int)type] = false;
                 }
                 else
                 {
-                    InstalledObject.InstalledAt.UninstallObject();
+                    if(GetProp(type).InstalledAt != null)
+                        GetProp(type).InstalledAt.Uninstall(type);
                 }
-                InstalledObject = null;
-                Owner.OnModifyEvent(Position);
-            }
-        }
-
-        public void UninstallFloor()
-        {
-            if (HasFloor)
-            {
-                if (IsRootForFloor)
-                {
-                    InstalledFloor.OnUninstalled();
-                    IsRootForFloor = false;
-                }
-                else
-                {
-                    InstalledFloor.InstalledAt.UninstallFloor();
-                }
-                InstalledFloor = null;
+                InstalledProps[(int) type] = null;
                 Owner.OnModifyEvent(Position);
             }
         }
@@ -229,22 +193,32 @@ namespace Game
 
             Tile tile = new Tile(tileMap, x, y);
 
-            XAttribute rootForObject = element.Attribute("rootForObject");
-            XAttribute rootForFloor = element.Attribute("rootForFloor");
-            if (rootForObject != null)
-                tile.IsRootForObject = true;
-            if (rootForFloor != null)
-                tile.IsRootForFloor = true;
-
             XElement installedObjectElement = element.Element("InstalledObject");
             if (installedObjectElement != null)
-                tile.InstalledObject = TileObjectBase.CreateAndParse(installedObjectElement, tile);
+                tile.InstalledProps[(int)PropType.OBJECT] = TileObjectBase.CreateAndParse(installedObjectElement, tile);
 
             XElement installedFloorElement = element.Element("InstalledFloor");
             if (installedFloorElement != null)
-                tile.InstalledFloor = TileFloorBase.CreateAndParse(installedFloorElement, tile);
+                tile.InstalledProps[(int) PropType.FLOOR] = TileFloorBase.CreateAndParse(installedFloorElement, tile);
 
             return tile;
+        }
+
+        /// <summary>
+        /// This is called after every Tile has been created and parse, so that
+        /// you can do stuff that required all tiles to be created.
+        /// </summary>
+        public void AfterParse()
+        {
+            for (int i = 0; i < InstalledProps.Length; ++i)
+            {
+                TileProp prop = InstalledProps[i];
+                if (prop != null)
+                {
+                    InstalledProps[i] = null;
+                    InstallAsRoot(prop);
+                }
+            }
         }
 
         /// <summary>
@@ -256,23 +230,18 @@ namespace Game
             element.SetAttributeValue("x", Position.X);
             element.SetAttributeValue("y", Position.Z);
 
-            if (IsRootForObject)
-                element.SetAttributeValue("rootForObject", true);
-            if (IsRootForFloor)
-                element.SetAttributeValue("rootForFloor", true);
-
-            if (InstalledObject != null)
+            if (IsRootForProp(PropType.OBJECT))
             {
                 XElement installedObjectElement = new XElement("InstalledObject");
                 element.Add(installedObjectElement);
-                InstalledObject.Populate(installedObjectElement);
+                GetProp(PropType.OBJECT).Populate(installedObjectElement);
             }
 
-            if (InstalledFloor != null)
+            if (IsRootForProp(PropType.FLOOR))
             {
                 XElement installedFloorElement = new XElement("InstalledFloor");
                 element.Add(installedFloorElement);
-                InstalledFloor.Populate(installedFloorElement);
+                GetProp(PropType.FLOOR).Populate(installedFloorElement);
             }
         }
 
@@ -284,15 +253,11 @@ namespace Game
         /// <returns></returns>
         public bool CanGoIntoFrom(Pathfinding.MovementDirection direction)
         {
-            bool passable = true;
+            foreach (TileProp prop in InstalledProps)
+                if (prop != null && !prop.CanGoIntoFrom(Position, direction))
+                    return false;
 
-            if (InstalledObject != null) 
-                passable = passable && InstalledObject.CanGoIntoFrom(Position, direction);
-
-            if (InstalledFloor != null)
-                passable = passable && InstalledFloor.CanGoIntoFrom(Position,direction);
-
-            return passable;
+            return true;
         }
 
         /// <summary>
@@ -303,28 +268,20 @@ namespace Game
         /// <returns></returns>
         public bool CanComeOutOfTowards(Pathfinding.MovementDirection direction)
         {
-            bool passable = true;
+            foreach (TileProp prop in InstalledProps)
+                if (prop != null && !prop.CanComeOutOfTowards(Position, direction))
+                    return false;
 
-            if (InstalledObject != null)
-                passable = passable && InstalledObject.CanComeOutOfTowards(Position, direction);
-
-            if (InstalledFloor != null)
-                passable = passable && InstalledFloor.CanComeOutOfTowards(Position, direction);
-
-            return passable;
+            return true;
         }
 
         public bool CanSkimThrough()
         {
-            bool passable = true;
+            foreach (TileProp prop in InstalledProps)
+                if (prop != null && !prop.CanSkimThrough)
+                    return false;
 
-            if (InstalledObject != null)
-                passable = passable && InstalledObject.CanSkimThrough;
-
-            if (InstalledFloor != null)
-                passable = passable && InstalledFloor.CanSkimThrough;
-
-            return passable;
+            return true;
         }
     }
 }

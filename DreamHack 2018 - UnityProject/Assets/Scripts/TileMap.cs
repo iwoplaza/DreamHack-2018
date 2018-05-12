@@ -55,7 +55,16 @@ namespace Game
                     m_tiles[tile.Position.X, tile.Position.Z] = tile;
             }
 
-            if(widthAttrib != null)
+            for (int x = 0; x < Width; ++x)
+            {
+                for (int y = 0; y < Height; ++y)
+                {
+                    if (m_tiles[x, y] != null)
+                        m_tiles[x, y].AfterParse();
+                }
+            }
+
+            if (widthAttrib != null)
                 Width = Int32.Parse(widthAttrib.Value);
             if (heightAttrib != null)
                 Height = Int32.Parse(heightAttrib.Value);
@@ -114,7 +123,7 @@ namespace Game
             return true;
         }
 
-        public bool CanInstallPropAtArea(TileProp.PropType type, TilePosition origin, Vector2Int dimensions)
+        public bool CanInstallPropAtArea(PropType type, TilePosition origin, Vector2Int dimensions)
         {
             for (ushort x = 0; x < dimensions.x; ++x)
             {
@@ -122,7 +131,7 @@ namespace Game
                 {
                     TilePosition position = origin.GetOffset(x, z);
                     Tile tile = TileAt(position);
-                    if (tile == null || !tile.CanInstallProp(type))
+                    if (tile == null || !tile.CanInstall(type))
                         return false;
                 }
             }

@@ -78,13 +78,17 @@ namespace Game
 
         public virtual void OnUninstalled()
         {
+            InstalledAt = null;
             RemoveGameObject();
         }
 
-        public virtual void Parse(XElement element, Tile optionalTile = null)
+        public virtual void Parse(XElement element, Tile optionalRootTile = null)
         {
-            XAttribute orientationAttrib = element.Attribute("orientation");
             XAttribute variantAttrib = element.Attribute("variant");
+            XAttribute orientationAttrib = element.Attribute("orientation");
+
+            if (variantAttrib != null)
+                Variant = int.Parse(variantAttrib.Value);
 
             if (orientationAttrib != null)
             {
@@ -92,12 +96,10 @@ namespace Game
                 if (Orientation == Direction.NONE)
                     Orientation = Direction.POSITIVE_Z;
             }
-            if (variantAttrib != null)
-                Variant = int.Parse(variantAttrib.Value);
 
-            if (optionalTile != null)
+            if (optionalRootTile != null)
             {
-                InstalledAt = optionalTile;
+                InstalledAt = optionalRootTile;
                 ConstructGameObject();
             }
         }
@@ -146,11 +148,6 @@ namespace Game
         {
             TilePosition local = global - InstalledAt.Position;
             return TilePosition.RotateInBlock(local, Width, Length, Orientation);
-        }
-
-        public enum PropType
-        {
-            OBJECT, FLOOR
         }
     }
 }

@@ -273,8 +273,8 @@ namespace Game
                         Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
                         if (targetTile != null)
                         {
-                            targetTile.UninstallObject();
-                            targetTile.UninstallFloor();
+                            targetTile.Uninstall(PropType.OBJECT);
+                            targetTile.Uninstall(PropType.FLOOR);
                         }
                     }
                 }

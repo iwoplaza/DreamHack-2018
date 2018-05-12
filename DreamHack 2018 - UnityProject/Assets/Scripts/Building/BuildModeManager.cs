@@ -114,7 +114,7 @@ namespace Game.Building
             if (HeldObjectType != null)
             {
                 Tile tile = m_gameState.TileMap.TileAt(Cursor);
-                if (tile != null && tile.CanInstallObject)
+                if (tile != null && tile.CanInstall(HeldObjectType))
                 {
                     TileProp tileProp = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileProp;
                     if (tileProp != null)

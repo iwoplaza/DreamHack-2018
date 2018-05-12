@@ -104,7 +104,7 @@ namespace Game
         public TilePosition GetOffset(ushort x, ushort z)
         {
             TilePosition position = new TilePosition(this);
-            position.Offset(x, y);
+            position.Offset(x, z);
             return position;
         }
 
