@@ -5,11 +5,11 @@ using Game.Environment;
 
 namespace Game.TileObjects
 {
-    public class DesertVegetation : TileObjectBase 
+    public class SmallRock : TileObjectBase 
     {
 
         public override bool IsStatic { get { return true; } }
-        public override string DisplayName { get { return "Desert type vegetation"; } }
+        public override string DisplayName { get { return "Small Rock"; } }
         public override bool IsImpenetrable { get { return false; } }
 
         public override bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection)
@@ -31,9 +31,9 @@ namespace Game.TileObjects
         {
             if (!Installed)
                 return;
-            Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(0.5F, 0, 0.5F) + (Vector3.Scale(Random.onUnitSphere,new Vector3(1,0.15f,1)) * 0.75f);
+            Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(0.5F, 0, 0.5F) + (Vector3.Scale(Random.onUnitSphere,new Vector3(0.5f,0.15f,0.5f)) * 0.75f);
 
-            GameObject prefab = WorldPopulationResource.GetResources(WorldPopulationResource.PopulationType.VEGETATION_DESERT);
+            GameObject prefab = WorldPopulationResource.GetResources(WorldPopulationResource.PopulationType.ROCK_SMALL);
             if (prefab != null)
             {
                 InstalledGameObject = Object.Instantiate(prefab);
@@ -43,7 +43,7 @@ namespace Game.TileObjects
 
         public override GameObject CreateTemporaryDisplay()
         {
-            GameObject prefab = WorldPopulationResource.GetResources(WorldPopulationResource.PopulationType.VEGETATION_DESERT);
+            GameObject prefab = WorldPopulationResource.GetResources(WorldPopulationResource.PopulationType.ROCK_SMALL);
             if (prefab != null)
             {
                 return Object.Instantiate(prefab);

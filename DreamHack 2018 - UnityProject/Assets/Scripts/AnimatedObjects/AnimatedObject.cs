@@ -16,6 +16,8 @@ namespace Game
 
 		[SerializeField]List<AnimatedComponent> m_animatedComponents;
 
+		[SerializeField]bool m_activatedByDefault;
+
 		public delegate void EventListener();
 
 		private EventListener m_onActivationListeners;
@@ -43,7 +45,11 @@ namespace Game
 						Debug.LogWarning("List contains an empty object!");
 					}				
 				}
-			}		
+			}
+			if(m_activatedByDefault)
+			{
+				Activate();
+			}
 		}
 		
 		// Update is called once per frame

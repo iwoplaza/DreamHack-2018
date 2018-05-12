@@ -68,173 +68,208 @@ namespace Game.Environment
             m_edgeCliffCornerCase4Meshes = new List<Mesh>();
 
             for(int i = 0; i < 99; i++)
-            {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("Ground_" + i.ToString());
-                if(temp != null)
-                {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_groundMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+            {
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("Ground_" + i.ToString()))
+                {          
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("Ground_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_groundMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("GroundCliff_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("GroundCliff_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_groundCliffMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("GroundCliff_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_groundCliffMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffLone_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffLone_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_cliffLoneMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffLone_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_cliffLoneMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraight_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraight_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraight_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffStraightMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase1_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightCase1_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightCase1Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase1_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffStraightCase1Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase2_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightCase2_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightCase2Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase2_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffStraightCase2Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase3_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightCase3_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightCase3Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase3_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffStraightCase3Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightLone_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightLone_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightLoneMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightLone_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffStraightLoneMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightLoneEnd_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightLoneEnd_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffStraightLoneEndMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightLoneEnd_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffStraightLoneEndMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeDiagonal_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeDiagonal_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffDiagonalMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeDiagonal_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffDiagonalMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeDiagonalCase1_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeDiagonalCase1_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffDiagonalCase1Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeDiagonalCase1_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffDiagonalCase1Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeSharp_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeSharp_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffSharpCornerMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeSharp_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffSharpCornerMeshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase1_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase1_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase1Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase1_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffCornerCase1Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                        i = 100;                        
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase21_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase21_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase21Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase21_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffCornerCase21Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase22_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase22_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase22Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase22_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffCornerCase22Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase3_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase3_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase3Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase3_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffCornerCase3Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
             for(int i = 0; i < 99; i++)
             {                
-                GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase4_" + i.ToString());
-                if(temp != null)
+                if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase4_" + i.ToString()))
                 {
-                    if(temp.GetComponent<MeshFilter>() != null)
-                        m_edgeCliffCornerCase4Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
-                    i = 100;                        
+                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase4_" + i.ToString());
+                    if(temp != null)
+                    {
+                        if(temp.GetComponent<MeshFilter>() != null)
+                            m_edgeCliffCornerCase4Meshes.Add(temp.GetComponent<MeshFilter>().sharedMesh);
+                    }
                 }
             }
         }

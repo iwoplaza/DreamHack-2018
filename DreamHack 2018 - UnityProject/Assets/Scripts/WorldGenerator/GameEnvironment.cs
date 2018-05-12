@@ -23,6 +23,7 @@ namespace Game.Environment
 		[SerializeField] FractalChain m_baseMap;
 		[SerializeField] FractalChain m_metalMap;
 		[SerializeField] FractalChain m_vegetationMap;
+		[SerializeField] FractalChain m_rockMap;
 
 		[SerializeField] Material m_mapMaterial;
 
@@ -34,6 +35,7 @@ namespace Game.Environment
 			m_baseMap.GenerateMap(WorldSize, WorldSeed);
 			m_metalMap.GenerateMap(WorldSize, WorldSeed);
 			m_vegetationMap.GenerateMap(WorldSize, WorldSeed);
+			m_rockMap.GenerateMap(WorldSize, WorldSeed);
 
 			ChunkCount = new Vector2Int(Mathf.CeilToInt((float)WorldSize.x/ChunkSize.x), Mathf.CeilToInt((float)WorldSize.y/ChunkSize.y));
 			
@@ -86,7 +88,45 @@ namespace Game.Environment
 					{
 						if(Random.Range(0.00f,1.00f) < m_vegetationMap.CurrentNoise[x,y])
 						{
-							m_tileMap.InstallAt(new DesertVegetation(), new TilePosition(x,y));
+							if(Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) < EmptyRadius)
+							{
+								if(Random.Range(0.00f,1.00f) > 0.85f)
+									m_tileMap.InstallAt(new DesertVegetation(), new TilePosition(x,y));
+							}
+							else
+								m_tileMap.InstallAt(new DesertVegetation(), new TilePosition(x,y));
+						}
+					}
+
+					if(m_baseMap.CurrentNoise[x,y] <= CliffThreshold)
+					{
+						if(Random.Range(0.00f,1.00f) < m_rockMap.CurrentNoise[x,y])
+						{
+							if(Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) < EmptyRadius)
+							{
+								if(Random.Range(0.00f,1.00f) > 0.85f)
+								{
+									if(Random.Range(0.00f, 1.00f) > 0.65f)
+									{
+										m_tileMap.InstallAt(new LargeRock(), new TilePosition(x,y));
+									}
+									else
+									{
+										m_tileMap.InstallAt(new SmallRock(), new TilePosition(x,y));
+									}
+								}
+							}
+							else
+							{
+								if(Random.Range(0.00f, 1.00f) > 0.65f)
+								{
+									m_tileMap.InstallAt(new LargeRock(), new TilePosition(x,y));
+								}
+								else
+								{
+									m_tileMap.InstallAt(new SmallRock(), new TilePosition(x,y));
+								}
+							}
 						}
 					}
 				}

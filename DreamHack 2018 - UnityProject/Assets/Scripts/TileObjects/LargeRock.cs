@@ -5,21 +5,21 @@ using Game.Environment;
 
 namespace Game.TileObjects
 {
-    public class DesertVegetation : TileObjectBase 
+    public class LargeRock : TileObjectBase 
     {
 
         public override bool IsStatic { get { return true; } }
-        public override string DisplayName { get { return "Desert type vegetation"; } }
-        public override bool IsImpenetrable { get { return false; } }
+        public override string DisplayName { get { return "Large Rock"; } }
+        public override bool IsImpenetrable { get { return true; } }
 
         public override bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection)
         {
-            return true;
+            return false;
         }
 
         public override bool CanComeOutOfTowards(Pathfinding.MovementDirection direction)
         {
-            return true;
+            return false;
         }
 
         protected override void OnInstalled()
@@ -31,9 +31,9 @@ namespace Game.TileObjects
         {
             if (!Installed)
                 return;
-            Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(0.5F, 0, 0.5F) + (Vector3.Scale(Random.onUnitSphere,new Vector3(1,0.15f,1)) * 0.75f);
+            Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(0.5F, 0, 0.5F) + (Vector3.Scale(Random.onUnitSphere,new Vector3(0.15f,0.15f,0.15f)) * 0.75f);
 
-            GameObject prefab = WorldPopulationResource.GetResources(WorldPopulationResource.PopulationType.VEGETATION_DESERT);
+            GameObject prefab = WorldPopulationResource.GetResources(WorldPopulationResource.PopulationType.ROCK_LARGE);
             if (prefab != null)
             {
                 InstalledGameObject = Object.Instantiate(prefab);
@@ -43,7 +43,7 @@ namespace Game.TileObjects
 
         public override GameObject CreateTemporaryDisplay()
         {
-            GameObject prefab = WorldPopulationResource.GetResources(WorldPopulationResource.PopulationType.VEGETATION_DESERT);
+            GameObject prefab = WorldPopulationResource.GetResources(WorldPopulationResource.PopulationType.ROCK_LARGE);
             if (prefab != null)
             {
                 return Object.Instantiate(prefab);
