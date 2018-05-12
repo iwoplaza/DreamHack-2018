@@ -42,6 +42,8 @@ namespace Game
         /// by the player or the environment.
         /// </summary>
         public virtual bool IsStatic { get { return false; } }
+        public virtual int Width { get { return 1; } }
+        public virtual int Height { get { return 1; } }
 
         public TileProp()
         {
@@ -110,12 +112,15 @@ namespace Game
 
         public virtual void Rotate(Direction direction)
         {
-            if (direction != Direction.NONE)
+            if (!Installed)
             {
-                Orientation = direction;
-                if (InstalledGameObject != null)
+                if (direction != Direction.NONE)
                 {
-                    InstalledGameObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F);
+                    Orientation = direction;
+                    if (InstalledGameObject != null)
+                    {
+                        InstalledGameObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F);
+                    }
                 }
             }
         }
