@@ -12,7 +12,10 @@ namespace Utility.Noise
             FILTERED,
             FILTERED_BLACK_WHITE,
             SEGMENTED,
-            CIRCLE_GRADIENT
+            SEGMENTED_FILTERED,
+
+            CIRCLE_GRADIENT,
+            CIRCLE_GRADIENT_SEGMENTED
         }
 
         float[,] m_currentNoise;
@@ -135,14 +138,33 @@ namespace Utility.Noise
                             m_noiseTex.SetPixel(x,y,color);
                         }
                     }
-                    if(m_drawType == FractalDrawType.SEGMENTED)
+                    if(m_drawType == FractalDrawType.SEGMENTED || m_drawType == FractalDrawType.SEGMENTED_FILTERED)
                     {
                         float colorPoint = (float)Mathf.RoundToInt(noise[x,y] * SegmentCount)/SegmentCount;
-                        m_currentNoise[x,y] = colorPoint;
-                        Color color = new Color(colorPoint,colorPoint,colorPoint,1);
-                        m_noiseTex.SetPixel(x,y,color);             
+                        if(m_drawType == FractalDrawType.SEGMENTED_FILTERED)
+                        {
+                            if(noise[x,y] > m_filterHeight)
+                            {
+                                m_currentNoise[x,y] = colorPoint;
+                                Color color = new Color(colorPoint,colorPoint,colorPoint,1);
+                                m_noiseTex.SetPixel(x,y,color);
+                            }
+                            else
+                            {
+                                colorPoint = 0;
+                                m_currentNoise[x,y] = colorPoint;
+                                Color color = new Color(colorPoint,colorPoint,colorPoint,1);
+                                m_noiseTex.SetPixel(x,y,color);
+                            }
+                        }
+                        else
+                        {
+                            m_currentNoise[x,y] = colorPoint;
+                            Color color = new Color(colorPoint,colorPoint,colorPoint,1);
+                            m_noiseTex.SetPixel(x,y,color);
+                        }
                     }
-                    if(m_drawType == FractalDrawType.CIRCLE_GRADIENT)
+                    if(m_drawType == FractalDrawType.CIRCLE_GRADIENT || m_drawType == FractalDrawType.CIRCLE_GRADIENT_SEGMENTED)
                     {
                         float resolutionRatio = (float)m_textureRes.x/(float)m_textureRes.y;
                         float xPosition = ((float)x / resolutionRatio);
@@ -159,6 +181,10 @@ namespace Utility.Noise
                         if(distToCenter <= 1)
                         {
                             colorPoint = Mathf.Pow(1f- distToCenter, m_circlePower);
+                            if(m_drawType == FractalDrawType.CIRCLE_GRADIENT_SEGMENTED)
+                            {
+                                colorPoint = (float)Mathf.RoundToInt(colorPoint * SegmentCount)/SegmentCount;
+                            }
                             Color color = new Color(colorPoint,colorPoint,colorPoint,1);
                             m_currentNoise[x,y] = colorPoint;
                             m_noiseTex.SetPixel(x,y,color);

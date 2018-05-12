@@ -20,25 +20,29 @@ public class FractalGeneratorUtilityEditor : Editor {
 
 		FractalGenerator t = (target as FractalGenerator);
 
-		if(t.DrawType == FractalGenerator.FractalDrawType.FILTERED || t.DrawType == FractalGenerator.FractalDrawType.FILTERED_BLACK_WHITE)
+		if(t.DrawType == FractalGenerator.FractalDrawType.FILTERED || 
+			t.DrawType == FractalGenerator.FractalDrawType.FILTERED_BLACK_WHITE ||
+			t.DrawType == FractalGenerator.FractalDrawType.SEGMENTED_FILTERED)
 		{
 			m_filterHeight = t.FilterHeight;
 			m_filterHeight = EditorGUILayout.Slider("Filter out below",m_filterHeight,0,1);
 			t.FilterHeight = m_filterHeight;
 		}
 
-		if(t.DrawType == FractalGenerator.FractalDrawType.SEGMENTED)
+		if(t.DrawType == FractalGenerator.FractalDrawType.SEGMENTED || 
+			t.DrawType == FractalGenerator.FractalDrawType.SEGMENTED_FILTERED || 
+			t.DrawType == FractalGenerator.FractalDrawType.CIRCLE_GRADIENT_SEGMENTED)
 		{
 			m_segmentCount = t.SegmentCount;
 			m_segmentCount = EditorGUILayout.IntSlider("Segment count",m_segmentCount,0,32);
 			t.SegmentCount = m_segmentCount;
 		}
 
-		if(t.DrawType == FractalGenerator.FractalDrawType.CIRCLE_GRADIENT)
+		if(t.DrawType == FractalGenerator.FractalDrawType.CIRCLE_GRADIENT || t.DrawType == FractalGenerator.FractalDrawType.CIRCLE_GRADIENT_SEGMENTED)
 		{
 			m_circleRad = t.CircleRadius;
 			m_circlePow = t.CirclePower;
-			m_circleRad = EditorGUILayout.Slider("Circle radius",m_circleRad,0.0f,1f);			
+			m_circleRad = EditorGUILayout.Slider("Circle radius",m_circleRad,0.0f,10f);			
 			m_circlePow = EditorGUILayout.Slider("Circle power",m_circlePow,0f,8f);
 
 			t.CircleRadius = m_circleRad;

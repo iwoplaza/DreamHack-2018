@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 4708702779177704}
   - component: {fileID: 114497296106415012}
   - component: {fileID: 114798171406571202}
+  - component: {fileID: 114336934929699066}
   - component: {fileID: 114624667914288664}
   m_Layer: 0
   m_Name: ResourceFractal
@@ -60,6 +61,7 @@ GameObject:
   - component: {fileID: 114357539436573696}
   - component: {fileID: 114832161913479426}
   - component: {fileID: 114014661323152762}
+  - component: {fileID: 114998397124074544}
   m_Layer: 0
   m_Name: VegetationFractal
   m_TagString: Untagged
@@ -94,6 +96,7 @@ GameObject:
   - component: {fileID: 114991175600298730}
   - component: {fileID: 114875316782996832}
   - component: {fileID: 114494252897242536}
+  - component: {fileID: 114616329936767842}
   m_Layer: 0
   m_Name: WorldFractal
   m_TagString: Untagged
@@ -156,7 +159,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1688867136804160}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.85709584, y: 0.11935008, z: -0.22965813, w: 0.44542056}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1.0000001, z: 0.99999994}
   m_Children: []
@@ -169,7 +172,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1814686605505182}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: -0.44542056, y: 0.22965813, z: 0.11935008, w: 0.85709584}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -270,8 +273,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0, g: 0.42352945, b: 0.4666667, a: 0}
+  m_Intensity: 0
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -306,8 +309,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.55637264, g: 0.83065355, b: 0.8602361, a: 0.7254902}
+  m_Intensity: 0.7254902
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -348,7 +351,7 @@ MonoBehaviour:
   m_noiseFrequency: 14.7
   m_noiseOctave: 3
   m_noiseAmplifier: 0.61
-  m_noiseSeed: seed
+  m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0.323
   m_segmentCount: 6
@@ -370,7 +373,7 @@ MonoBehaviour:
   - m_generator: {fileID: 114813845523277354}
     m_operation: 0
   - m_generator: {fileID: 114138516676037096}
-    m_operation: 0
+    m_operation: 1
   - m_generator: {fileID: 114533313627262188}
     m_operation: 1
 --- !u!114 &114138516676037096
@@ -388,10 +391,31 @@ MonoBehaviour:
   m_noiseFrequency: 59.3
   m_noiseOctave: 4
   m_noiseAmplifier: 3.38
-  m_noiseSeed: seed
+  m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 7
+  m_circleRadius: 0
+  m_circlePower: 0
+--- !u!114 &114336934929699066
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1014974642887750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_textureRes: {x: 512, y: 512}
+  m_noiseFrequency: 67.8
+  m_noiseOctave: 1
+  m_noiseAmplifier: 2.5
+  m_noiseSeed: glory
+  m_drawType: 2
+  m_filterHeight: 0.259
+  m_segmentCount: 10
   m_circleRadius: 0
   m_circlePower: 0
 --- !u!114 &114357539436573696
@@ -409,7 +433,7 @@ MonoBehaviour:
   m_noiseFrequency: 26.1
   m_noiseOctave: 4
   m_noiseAmplifier: 1.29
-  m_noiseSeed: seed
+  m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 6
@@ -426,16 +450,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_textureRes: {x: 1024, y: 1024}
+  m_textureRes: {x: 512, y: 512}
   m_noiseFrequency: 21.9
   m_noiseOctave: 9
-  m_noiseAmplifier: 1.42
-  m_noiseSeed: seed
-  m_drawType: 4
+  m_noiseAmplifier: 3.4
+  m_noiseSeed: glory
+  m_drawType: 3
   m_filterHeight: 0.346
-  m_segmentCount: 0
-  m_circleRadius: 0.962
-  m_circlePower: 2.28
+  m_segmentCount: 14
+  m_circleRadius: 0.571
+  m_circlePower: 0.85
 --- !u!114 &114497296106415012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -451,6 +475,8 @@ MonoBehaviour:
   m_chain:
   - m_generator: {fileID: 114798171406571202}
     m_operation: 0
+  - m_generator: {fileID: 114336934929699066}
+    m_operation: 2
   - m_generator: {fileID: 114624667914288664}
     m_operation: 1
 --- !u!114 &114533313627262188
@@ -468,12 +494,12 @@ MonoBehaviour:
   m_noiseFrequency: 16.4
   m_noiseOctave: 3
   m_noiseAmplifier: 2.16
-  m_noiseSeed: seed
-  m_drawType: 3
+  m_noiseSeed: glory
+  m_drawType: 4
   m_filterHeight: 0.323
   m_segmentCount: 10
-  m_circleRadius: 0
-  m_circlePower: 0
+  m_circleRadius: 0.519
+  m_circlePower: 1.58
 --- !u!114 &114595829478396146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -493,6 +519,29 @@ MonoBehaviour:
     m_operation: 0
   - m_generator: {fileID: 114014661323152762}
     m_operation: 1
+  - m_generator: {fileID: 114998397124074544}
+    m_operation: 1
+--- !u!114 &114616329936767842
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1357665033571714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_textureRes: {x: 512, y: 512}
+  m_noiseFrequency: 38.5
+  m_noiseOctave: 4
+  m_noiseAmplifier: 2.64
+  m_noiseSeed: glory
+  m_drawType: 5
+  m_filterHeight: 0.346
+  m_segmentCount: 5
+  m_circleRadius: 0.566
+  m_circlePower: 0.79
 --- !u!114 &114624667914288664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -507,13 +556,13 @@ MonoBehaviour:
   m_textureRes: {x: 512, y: 512}
   m_noiseFrequency: 42.2
   m_noiseOctave: 4
-  m_noiseAmplifier: 1.7
-  m_noiseSeed: seed
-  m_drawType: 3
+  m_noiseAmplifier: 1.95
+  m_noiseSeed: glory
+  m_drawType: 6
   m_filterHeight: 0
-  m_segmentCount: 8
-  m_circleRadius: 0
-  m_circlePower: 0
+  m_segmentCount: 5
+  m_circleRadius: 2.59
+  m_circlePower: 2.04
 --- !u!114 &114750575273532464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -529,7 +578,7 @@ MonoBehaviour:
   m_metalMap: {fileID: 114497296106415012}
   m_vegetationMap: {fileID: 114595829478396146}
   m_rockMap: {fileID: 114035455154460846}
-  m_mapMaterial: {fileID: 2100000, guid: 1d83630c27e0d3e48a3b48b843305661, type: 2}
+  m_mapMaterial: {fileID: 2100000, guid: df66146e87ed9ba4b804064509a15031, type: 2}
 --- !u!114 &114798171406571202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -542,13 +591,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 15.8
+  m_noiseFrequency: 76.4
   m_noiseOctave: 4
-  m_noiseAmplifier: 1.61
-  m_noiseSeed: seed
+  m_noiseAmplifier: 0.29
+  m_noiseSeed: glory
   m_drawType: 3
-  m_filterHeight: 0
-  m_segmentCount: 6
+  m_filterHeight: 0.259
+  m_segmentCount: 10
   m_circleRadius: 0
   m_circlePower: 0
 --- !u!114 &114813845523277354
@@ -566,7 +615,7 @@ MonoBehaviour:
   m_noiseFrequency: 85.6
   m_noiseOctave: 4
   m_noiseAmplifier: 4.47
-  m_noiseSeed: seed
+  m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 6
@@ -587,7 +636,7 @@ MonoBehaviour:
   m_noiseFrequency: 42.2
   m_noiseOctave: 4
   m_noiseAmplifier: 1.7
-  m_noiseSeed: seed
+  m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 7
@@ -604,13 +653,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_textureRes: {x: 1024, y: 1024}
+  m_textureRes: {x: 512, y: 512}
   m_noiseFrequency: 21.9
-  m_noiseOctave: 9
-  m_noiseAmplifier: 1.42
-  m_noiseSeed: seed
+  m_noiseOctave: 4
+  m_noiseAmplifier: 1.47
+  m_noiseSeed: glory
   m_drawType: 2
-  m_filterHeight: 0.346
+  m_filterHeight: 0.387
   m_segmentCount: 0
   m_circleRadius: 0
   m_circlePower: 0
@@ -708,9 +757,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eccb1ba921635342aa5159572846391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentRes: {x: 1024, y: 1024}
+  m_currentRes: {x: 512, y: 512}
   m_chain:
   - m_generator: {fileID: 114875316782996832}
     m_operation: 0
-  - m_generator: {fileID: 114494252897242536}
+  - m_generator: {fileID: 114616329936767842}
     m_operation: 1
+  - m_generator: {fileID: 114494252897242536}
+    m_operation: 0
+  - m_generator: {fileID: 114616329936767842}
+    m_operation: 1
+--- !u!114 &114998397124074544
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1018905693276734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_textureRes: {x: 512, y: 512}
+  m_noiseFrequency: 26.1
+  m_noiseOctave: 4
+  m_noiseAmplifier: 1.29
+  m_noiseSeed: glory
+  m_drawType: 4
+  m_filterHeight: 0
+  m_segmentCount: 6
+  m_circleRadius: 0.311
+  m_circlePower: 0.68

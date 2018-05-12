@@ -90,8 +90,7 @@ namespace Game.Environment
 						{
 							if(Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) < EmptyRadius)
 							{
-								if(Random.Range(0.00f,1.00f) > 0.85f)
-									m_tileMap.InstallAt(new DesertVegetation(), new TilePosition(x,y));
+								
 							}
 							else
 								m_tileMap.InstallAt(new DesertVegetation(), new TilePosition(x,y));
@@ -104,17 +103,7 @@ namespace Game.Environment
 						{
 							if(Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) < EmptyRadius)
 							{
-								if(Random.Range(0.00f,1.00f) > 0.85f)
-								{
-									if(Random.Range(0.00f, 1.00f) > 0.65f)
-									{
-										m_tileMap.InstallAt(new LargeRock(), new TilePosition(x,y));
-									}
-									else
-									{
-										m_tileMap.InstallAt(new SmallRock(), new TilePosition(x,y));
-									}
-								}
+								
 							}
 							else
 							{
@@ -131,6 +120,9 @@ namespace Game.Environment
 					}
 				}
 			}
+			m_mapMaterial.SetFloat("_ResolutionX", WorldSize.x);
+			m_mapMaterial.SetFloat("_ResolutionY", WorldSize.y);
+			m_mapMaterial.SetTexture("_ResourceMap", m_metalMap.CurrentTexture);
 		}
 
 		public float GetMetalAvailability(TilePosition position)
