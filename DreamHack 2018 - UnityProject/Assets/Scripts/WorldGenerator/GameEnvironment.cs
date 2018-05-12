@@ -15,6 +15,8 @@ namespace Game.Environment
 		
 		public MeshChunk[,] Chunks { get; private set; } 
 
+		public float EmptyRadius { get; set; }
+
 		public Vector2Int ChunkCount { get; private set; }
 		public Vector2Int ChunkSize { get; set; }
 
@@ -53,19 +55,40 @@ namespace Game.Environment
 							Chunks[x/ChunkSize.y, y/ChunkSize.y] = chunkObj.GetComponent<MeshChunk>();
 						}
 					}
-					if(m_baseMap.CurrentNoise[x,y] > CliffThreshold)
+					if((m_baseMap.CurrentNoise[x,y] > CliffThreshold 
+						&& Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) > EmptyRadius )
+						|| (x == 0 || y == 0 || x == WorldSize.x - 1 || y == WorldSize.y - 1))
 					{
 						Chunks[Mathf.FloorToInt((float)x/ChunkSize.x),Mathf.FloorToInt((float)y/ChunkSize.y)]
 						.CliffMap[x%ChunkSize.x, y%ChunkSize.y] = true;
+						m_tileMap.TileAt(new TilePosition(x,y)).SetHasCliff(true);
 					}
 				}
 			}
+
 			for(int x = 0; x < ChunkCount.x; x++)
 			{
 				for(int y = 0; y < ChunkCount.y; y++)
 				{
 					Chunks[x, y].GenerateMeshMap();
 					Chunks[x, y].CombineMeshes();
+				}
+			}
+		}
+
+		public void PopulateMap()
+		{
+			for(int x = 0; x < WorldSize.x; x++)
+			{
+				for(int y = 0; y < WorldSize.y; y++)
+				{
+					if(m_baseMap.CurrentNoise[x,y] <= CliffThreshold)
+					{
+						if(Random.Range(0.00f,1.00f) < m_vegetationMap.CurrentNoise[x,y])
+						{
+							m_tileMap.InstallAt(new DesertVegetation(), new TilePosition(x,y));
+						}
+					}
 				}
 			}
 		}

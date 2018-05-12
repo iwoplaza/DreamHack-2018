@@ -42,7 +42,7 @@ namespace Game.Pathfinding.Internal
                 PathNode cheapestNode = pathHeaps.GetSmallest();
                 foreach(TilePosition pos in GetNeighbours(map, rule, cheapestNode.Location))
                 {
-                    float newWeight = cheapestNode.Weight + GetCost(cheapestNode.Location,pos);
+                    float newWeight = cheapestNode.Weight + GetCost(cheapestNode.Location,pos) + map.TileAt(pos).PathfindingWeight;
                     if(weightMap[pos.X, pos.Z] < 0 || newWeight < weightMap[pos.X, pos.Z])
                     {
                         weightMap[pos.X, pos.Z] = newWeight;

@@ -70,6 +70,7 @@ namespace Game.Environment
 			MeshMaterial = _material;
 			gameObject.AddComponent<MeshFilter>();
 			gameObject.AddComponent<MeshRenderer>();
+			gameObject.name = "Chunk " + ChunkPosition.ToString();
 		}
 
 		public void GenerateMeshMap()
@@ -274,12 +275,12 @@ namespace Game.Environment
 							else if(!tileNeighbor.ZPos && !tileNeighbor.ZNeg)
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE)
-										, addPosition, new Vector3(0,0,0)));
+										, addPosition, new Vector3(0,90,0)));
 							}
 							else if(!tileNeighbor.XPos && !tileNeighbor.XNeg)
 							{
 								MeshesToAdd.Add(new MeshCombine(WorldMeshResource.GetResources(WorldMeshResource.MeshType.EDGE_CLIFF_STRAIGHT_LONE)
-										, addPosition, new Vector3(0,90,0)));
+										, addPosition, new Vector3(0,0,0)));
 							}
 
 							// CASE:

@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 4859495707864948}
   - component: {fileID: 114750575273532464}
   m_Layer: 0
-  m_Name: EnvironmentGenerator
+  m_Name: GameEnvironment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,7 +108,6 @@ GameObject:
   - component: {fileID: 4629295418056858}
   - component: {fileID: 114936902961294008}
   - component: {fileID: 114934049841417054}
-  - component: {fileID: 114178402231670718}
   m_Layer: 0
   m_Name: WorldController
   m_TagString: Untagged
@@ -273,20 +272,6 @@ MonoBehaviour:
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 7
---- !u!114 &114178402231670718
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1725485953961606}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45bda4fae97ffc549bd178d791659514, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_environmentGen: {fileID: 114750575273532464}
-  m_mapSize: {x: 5, y: 5}
-  m_mapSeed: seed
 --- !u!114 &114438074963943238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -428,12 +413,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 14.7
-  m_noiseOctave: 3
-  m_noiseAmplifier: 1.17
+  m_noiseFrequency: 21.9
+  m_noiseOctave: 4
+  m_noiseAmplifier: 1.42
   m_noiseSeed: seed
   m_drawType: 2
-  m_filterHeight: 0.323
+  m_filterHeight: 0.346
   m_segmentCount: 0
 --- !u!114 &114934049841417054
 MonoBehaviour:

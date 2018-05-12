@@ -43,11 +43,14 @@ namespace Game
         public void Generate()
         {
             WorldMeshResource.UpdateMeshDictionary();
+            WorldPopulationResource.UpdatePopulationDirectory();
             GameEnvironment.CliffThreshold = 0.5f;
             GameEnvironment.WorldSeed = "seed";
             GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
-            GameEnvironment.ChunkSize = new Vector2Int(10, 10);
-            // GameEnvironment.GenerateMap();
+            GameEnvironment.ChunkSize = new Vector2Int(15, 15);
+            GameEnvironment.EmptyRadius = GameEnvironment.WorldSize.magnitude * 0.075f;
+            GameEnvironment.GenerateMap();
+            GameEnvironment.PopulateMap();
 
             Worker worker1 = SpawnWorker();
         }

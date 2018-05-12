@@ -15,6 +15,7 @@ namespace Game
         public TileObjectBase InstalledObject { get; private set; }
         public TileFloorBase InstalledFloor { get; private set; }
         public bool HasCliff { get; private set; }
+        public int PathfindingWeight { get; private set; }
         public bool HasObject { get { return InstalledObject != null; } }
         public bool HasFloor { get { return InstalledFloor != null; } }
         public bool Empty { get { return !HasObject && !HasFloor && !HasCliff; } }

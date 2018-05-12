@@ -126,7 +126,8 @@ namespace Game
 
         public void OnModifyEvent(TilePosition modifiedPos)
         {
-            m_TileMapModifiedHandler(modifiedPos);
+            if(m_TileMapModifiedHandler != null)
+                m_TileMapModifiedHandler(modifiedPos);
         }
     }
 }
