@@ -19,14 +19,11 @@ namespace Game.TileObjects
         {
         }
 
-        public override bool CanGoIntoFrom(TilePosition position, MovementDirection entryDirection)
+        public override bool CanGoIntoFrom(TilePosition globalPosition, MovementDirection entryDirection)
         {
             MovementDirection localEntryDirection = MovementDirectionUtils.OrientTowardsInverse(
                 entryDirection, MovementDirectionUtils.NewFrom(Orientation)
             );
-
-            Debug.Log(entryDirection + " -> " + localEntryDirection);
-            Debug.Log("-8 % 8 == " + MathUtils.Mod(-8, 8));
 
             if (localEntryDirection == MovementDirection.POSITIVE_X || //Side
                 localEntryDirection == MovementDirection.NEGATIVE_X || //Side
@@ -40,7 +37,7 @@ namespace Game.TileObjects
             return false;
         }
 
-        public override bool CanComeOutOfTowards(TilePosition position, MovementDirection direction)
+        public override bool CanComeOutOfTowards(TilePosition globalPosition, MovementDirection direction)
         {
             MovementDirection localDirection = MovementDirectionUtils.OrientTowardsInverse(
                 direction, MovementDirectionUtils.NewFrom(Orientation)

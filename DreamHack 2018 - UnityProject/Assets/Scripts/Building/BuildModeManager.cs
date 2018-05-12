@@ -116,6 +116,7 @@ namespace Game.Building
         {
             if(TemporaryDisplayObject != null)
             {
+                Vector2Int dimensions = TemporaryProp.OrientedDimensions;
                 TemporaryDisplayObject.transform.position = Cursor.Vector3 + new Vector3(TemporaryProp.Width / 2.0F, 0.001F, TemporaryProp.Length / 2.0F);
                 TemporaryDisplayObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(PropOrientation), 0.0F);
             }
