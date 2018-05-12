@@ -29,6 +29,9 @@ namespace Game.UI.PopUp
             }
         }
 
-        public virtual void CloseWindow() {}
+        public virtual void CloseWindow() {
+            m_gameHud.OnPopUpClosed(this);
+            Destroy(gameObject);
+        }
     }
 }

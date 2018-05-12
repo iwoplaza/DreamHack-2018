@@ -58,7 +58,7 @@ namespace Game
                 if(WorldController.Instance.MainState.TileMap != null)
                 {
                     TileMap tileMap = WorldController.Instance.MainState.TileMap;
-                    //transform.position = new Vector3(tileMap.Width / 2, 0, tileMap.Height / 2);
+                    transform.position = new Vector3(tileMap.Width / 2, 0, tileMap.Height / 2);
                 }
             }
         }

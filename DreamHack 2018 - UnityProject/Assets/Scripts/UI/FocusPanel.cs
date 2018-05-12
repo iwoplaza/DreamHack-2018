@@ -8,7 +8,9 @@ namespace Game.UI
     public class FocusPanel : MonoBehaviour
     {
         [SerializeField] protected Text m_nameText;
+        [SerializeField] protected Button m_detailsButton;
 
+        protected GameHUD m_gameHud;
         protected FocusPortrait m_focusPortrait;
         protected HealthBar m_healthBar;
         protected TaskQueuePanel m_tileQueuePanel;
@@ -17,6 +19,7 @@ namespace Game.UI
 
         void Awake()
         {
+            m_gameHud = GetComponentInParent<GameHUD>();
             m_focusPortrait = GetComponentInChildren<FocusPortrait>();
             m_healthBar = GetComponentInChildren<HealthBar>();
             m_tileQueuePanel = GetComponentInChildren<TaskQueuePanel>();
@@ -58,9 +61,13 @@ namespace Game.UI
                     Worker worker = m_focusTarget as Worker;
                     m_tileQueuePanel.gameObject.SetActive(true);
                     m_tileQueuePanel.Populate(worker.TaskQueue);
+                    m_detailsButton.gameObject.SetActive(true);
                 }
                 else
+                {
                     m_tileQueuePanel.gameObject.SetActive(false);
+                    m_detailsButton.gameObject.SetActive(false);
+                }
             }
             else
             {
@@ -72,6 +79,14 @@ namespace Game.UI
         {
             gameObject.SetActive(false);
             m_healthBar.Unbind();
+        }
+
+        public void OpenDetails()
+        {
+            if (m_focusTarget is Worker)
+            {
+                PopUp.WorkerDetailsPopUp.Create(m_gameHud).Populate(m_focusTarget as Worker);
+            }
         }
     }
 }

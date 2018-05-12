@@ -12,6 +12,7 @@ namespace Game
     {
         [Header("Worker")]
         [SerializeField] protected string m_name;
+        public int Age { get; set; }
 
         override public string DisplayName { get { return m_name; } }
         override public int MaxHealth { get { return 100; } }

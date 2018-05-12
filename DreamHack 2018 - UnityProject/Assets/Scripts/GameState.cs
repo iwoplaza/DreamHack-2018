@@ -73,7 +73,7 @@ namespace Game
                     worker = workerObject.AddComponent<Worker>();
                 }
                 worker.Setup(TileMap);
-                worker.Position = new Vector3(4, 1, 4);
+                worker.Position = new Vector3(TileMap.Width/2, 0, TileMap.Height/2);
 
                 return worker;
             }

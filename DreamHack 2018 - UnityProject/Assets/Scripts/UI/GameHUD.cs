@@ -49,5 +49,10 @@ namespace Game.UI
 
             return true;
         }
+
+        public void OnPopUpClosed(PopUpWindow popUp)
+        {
+            OpenedPopUps.Remove(popUp);
+        }
     }
 }
