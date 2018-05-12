@@ -71,7 +71,7 @@ namespace Game.Environment
             {
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("Ground_" + i.ToString()))
                 {          
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("Ground_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("Ground_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -83,7 +83,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("GroundCliff_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("GroundCliff_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("GroundCliff_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -95,7 +95,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffLone_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffLone_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffLone_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -107,7 +107,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraight_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraight_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeStraight_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -119,7 +119,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightCase1_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase1_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeStraightCase1_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -131,7 +131,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightCase2_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase2_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeStraightCase2_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -143,7 +143,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightCase3_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightCase3_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeStraightCase3_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -155,7 +155,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightLone_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightLone_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeStraightLone_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -167,7 +167,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeStraightLoneEnd_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeStraightLoneEnd_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeStraightLoneEnd_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -179,7 +179,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeDiagonal_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeDiagonal_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeDiagonal_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -191,7 +191,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeDiagonalCase1_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeDiagonalCase1_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeDiagonalCase1_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -203,7 +203,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeSharp_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeSharp_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeSharp_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -215,7 +215,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase1_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase1_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeCornerCase1_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -228,7 +228,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase21_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase21_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeCornerCase21_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -240,7 +240,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase22_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase22_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeCornerCase22_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -252,7 +252,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase3_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase3_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeCornerCase3_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)
@@ -264,7 +264,7 @@ namespace Game.Environment
             {                
                 if(Resources.EnvironmentObjectPrefabs.ContainsKey("CliffEdgeCornerCase4_" + i.ToString()))
                 {
-                    GameObject temp = Resources.FindEnvironmentObjectPrefab("CliffEdgeCornerCase4_" + i.ToString());
+                    GameObject temp = Resources.EnvironmentObjectPrefabs.Find("CliffEdgeCornerCase4_" + i.ToString());
                     if(temp != null)
                     {
                         if(temp.GetComponent<MeshFilter>() != null)

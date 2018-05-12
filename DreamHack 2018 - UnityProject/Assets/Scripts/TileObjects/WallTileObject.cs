@@ -57,7 +57,7 @@ namespace Game.TileObjects
 
         public GameObject GetPrefab()
         {
-            return Resources.FindTileObjectPrefab(Variant == 0 ? "Wall_Straight" : "Wall_Windowed");
+            return Resources.TileObjectPrefabs.Find(Variant == 0 ? "Wall_Straight" : "Wall_Windowed");
         }
 
         public override void ConstructGameObject()

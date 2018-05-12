@@ -21,7 +21,7 @@ namespace Game.TileObjects
 
         public GameObject GetPrefab()
         {
-            return Resources.FindTileObjectPrefab("Wall_Convex");
+            return Resources.TileObjectPrefabs.Find("Wall_Convex");
         }
 
         public override void ConstructGameObject()
