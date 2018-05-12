@@ -7,13 +7,15 @@ using UnityEngine;
 
 namespace Game.TileObjects
 {
-    public class WallTileObject : TileObjectBase
+    public class DoorTileObject : TileObjectBase
     {
-        public override string DisplayName { get { return "Wall"; } }
+        public override string DisplayName { get { return "Door"; } }
         public override bool IsImpenetrable { get { return false; } }
         public override bool CanSkimThrough { get { return false; } }
+        public override int Width { get { return 1; } }
+        public override int Length { get { return 2; } }
 
-        public WallTileObject()
+        public DoorTileObject()
         {
         }
 
@@ -57,7 +59,7 @@ namespace Game.TileObjects
 
         public GameObject GetPrefab()
         {
-            return Resources.TileObjectPrefabs.Find(Variant == 0 ? "Wall_Straight" : "Wall_Windowed");
+            return Resources.TileObjectPrefabs.Find("Door");
         }
 
         public override void ConstructGameObject()

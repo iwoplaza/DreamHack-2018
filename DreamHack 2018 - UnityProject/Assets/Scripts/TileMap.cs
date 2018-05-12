@@ -110,7 +110,7 @@ namespace Game
             if (targetTile == null)
                 return false;
 
-            targetTile.Install(objectToInstall);
+            targetTile.InstallAsRoot(objectToInstall);
             return true;
         }
 

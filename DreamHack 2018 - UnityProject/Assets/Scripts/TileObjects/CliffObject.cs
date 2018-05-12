@@ -11,12 +11,12 @@ namespace Game.TileObjects
         public override string DisplayName { get { return "Cliff"; } }
         public override bool IsImpenetrable { get { return true; } }
 
-        public override bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection)
+        public override bool CanGoIntoFrom(TilePosition position, Pathfinding.MovementDirection entryDirection)
         {
             return false;
         }
 
-        public override bool CanComeOutOfTowards(Pathfinding.MovementDirection direction)
+        public override bool CanComeOutOfTowards(TilePosition position, Pathfinding.MovementDirection direction)
         {
             return false;
         }

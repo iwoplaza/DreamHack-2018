@@ -23,8 +23,8 @@ namespace Game
         /// <param name="entryDirection">The direction it's coming from.
         ///                              (relative to the passer, not the object)</param>
         /// <returns>Whether or not the passer can pass.</returns>
-        public abstract bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection);
-        public abstract bool CanComeOutOfTowards(Pathfinding.MovementDirection entryDirection);
+        public abstract bool CanGoIntoFrom(TilePosition position, Pathfinding.MovementDirection entryDirection);
+        public abstract bool CanComeOutOfTowards(TilePosition position, Pathfinding.MovementDirection entryDirection);
         /// <summary>
         /// Determines if something can go to an adjecent tile touching the edge of this tile.
         /// </summary>
@@ -43,7 +43,7 @@ namespace Game
         /// </summary>
         public virtual bool IsStatic { get { return false; } }
         public virtual int Width { get { return 1; } }
-        public virtual int Height { get { return 1; } }
+        public virtual int Length { get { return 1; } }
 
         public TileProp()
         {

@@ -88,7 +88,7 @@ namespace Game.Building
                     {
                         tileProp.Variant = PropVariant;
                         tileProp.Rotate(PropOrientation);
-                        tile.Install(tileProp);
+                        tile.InstallAsRoot(tileProp);
                     }
                 }
             }
@@ -116,7 +116,7 @@ namespace Game.Building
         {
             if(TemporaryDisplayObject != null)
             {
-                TemporaryDisplayObject.transform.position = Cursor.Vector3 + new Vector3(0.5F, 0.001F, 0.5F);
+                TemporaryDisplayObject.transform.position = Cursor.Vector3 + new Vector3(TemporaryProp.Width / 2.0F, 0.001F, TemporaryProp.Length / 2.0F);
                 TemporaryDisplayObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(PropOrientation), 0.0F);
             }
         }

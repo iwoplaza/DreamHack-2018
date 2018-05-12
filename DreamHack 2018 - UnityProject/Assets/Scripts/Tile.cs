@@ -14,6 +14,8 @@ namespace Game
         public TilePosition Position { get; private set; }
         public TileObjectBase InstalledObject { get; private set; }
         public TileFloorBase InstalledFloor { get; private set; }
+        public bool IsRootForObject { get; private set; }
+        public bool IsRootForFloor { get; private set; }
         public bool HasCliff { get; private set; }
         public int PathfindingWeight { get; private set; }
         public bool HasObject { get { return InstalledObject != null; } }
@@ -46,6 +48,8 @@ namespace Game
             Position = position;
             InstalledObject = null;
             InstalledFloor = null;
+            IsRootForObject = false;
+            IsRootForFloor = false;
         }
 
         public Tile(TileMap owner, int x, int y) : this(owner, new TilePosition(x, y)) {}
@@ -54,29 +58,30 @@ namespace Game
         /// Installs the specified object on this tile.
         /// </summary>
         /// <param name="objectToInstall">The object to install</param>
-        public void Install(TileObjectBase objectToInstall)
+        public void InstallAsRoot(TileObjectBase objectToInstall)
         {
             if(CanInstallObject && !objectToInstall.Installed)
             {
                 objectToInstall.OnInstalledAt(this);
                 InstalledObject = objectToInstall;
+                IsRootForObject = true;
             }
             Owner.OnModifyEvent(Position);
         }
 
-        public void Install(TileProp tileProp)
+        public void InstallAsRoot(TileProp tileProp)
         {
             if (tileProp is TileObjectBase)
-                Install(tileProp as TileObjectBase);
+                InstallAsRoot(tileProp as TileObjectBase);
             else if (tileProp is TileFloorBase)
-                Install(tileProp as TileFloorBase);
+                InstallAsRoot(tileProp as TileFloorBase);
         }
 
         /// <summary>
         /// Installs the specified object on this tile.
         /// </summary>
         /// <param name="objectToInstall">The object to install</param>
-        public void Install(TileFloorBase floorToInstall)
+        public void InstallAsRoot(TileFloorBase floorToInstall)
         {
             if (CanInstallFloor && !floorToInstall.Installed)
             {
@@ -90,8 +95,16 @@ namespace Game
         {
             if(HasObject)
             {
-                InstalledObject.OnUninstalled();
-                InstalledObject = null;
+                if (IsRootForObject)
+                {
+                    InstalledObject.OnUninstalled();
+                    InstalledObject = null;
+                    IsRootForObject = false;
+                }
+                else
+                {
+                    InstalledObject.InstalledAt.UninstallObject();
+                }
             }
             Owner.OnModifyEvent(Position);
         }
@@ -100,8 +113,16 @@ namespace Game
         {
             if (HasFloor)
             {
-                InstalledFloor.OnUninstalled();
-                InstalledFloor = null;
+                if (IsRootForFloor)
+                {
+                    InstalledFloor.OnUninstalled();
+                    InstalledFloor = null;
+                    IsRootForFloor = false;
+                }
+                else
+                {
+                    InstalledFloor.InstalledAt.UninstallFloor();
+                }
             }
             Owner.OnModifyEvent(Position);
         }
@@ -128,6 +149,13 @@ namespace Game
 
             Tile tile = new Tile(tileMap, x, y);
 
+            XAttribute rootForObject = element.Attribute("rootForObject");
+            XAttribute rootForFloor = element.Attribute("rootForFloor");
+            if (rootForObject != null)
+                tile.IsRootForObject = true;
+            if (rootForFloor != null)
+                tile.IsRootForFloor = true;
+
             XElement installedObjectElement = element.Element("InstalledObject");
             if (installedObjectElement != null)
                 tile.InstalledObject = TileObjectBase.CreateAndParse(installedObjectElement, tile);
@@ -147,6 +175,11 @@ namespace Game
         {
             element.SetAttributeValue("x", Position.X);
             element.SetAttributeValue("y", Position.Z);
+
+            if (IsRootForObject)
+                element.SetAttributeValue("rootForObject", true);
+            if (IsRootForFloor)
+                element.SetAttributeValue("rootForFloor", true);
 
             if (InstalledObject != null)
             {
@@ -173,11 +206,11 @@ namespace Game
         {
             bool passable = true;
 
-            if (InstalledObject != null)
-                passable = passable && InstalledObject.CanGoIntoFrom(direction);
+            if (InstalledObject != null) 
+                passable = passable && InstalledObject.CanGoIntoFrom(Position, direction);
 
             if (InstalledFloor != null)
-                passable = passable && InstalledFloor.CanGoIntoFrom(direction);
+                passable = passable && InstalledFloor.CanGoIntoFrom(Position,direction);
 
             return passable;
         }
@@ -193,10 +226,10 @@ namespace Game
             bool passable = true;
 
             if (InstalledObject != null)
-                passable = passable && InstalledObject.CanComeOutOfTowards(direction);
+                passable = passable && InstalledObject.CanComeOutOfTowards(Position, direction);
 
             if (InstalledFloor != null)
-                passable = passable && InstalledFloor.CanComeOutOfTowards(direction);
+                passable = passable && InstalledFloor.CanComeOutOfTowards(Position, direction);
 
             return passable;
         }
