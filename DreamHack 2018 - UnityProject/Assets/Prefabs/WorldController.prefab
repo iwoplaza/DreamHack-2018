@@ -41,7 +41,6 @@ GameObject:
   - component: {fileID: 114497296106415012}
   - component: {fileID: 114798171406571202}
   - component: {fileID: 114624667914288664}
-  - component: {fileID: 114438074963943238}
   m_Layer: 0
   m_Name: ResourceFractal
   m_TagString: Untagged
@@ -94,6 +93,7 @@ GameObject:
   - component: {fileID: 4645973435742988}
   - component: {fileID: 114991175600298730}
   - component: {fileID: 114875316782996832}
+  - component: {fileID: 114494252897242536}
   m_Layer: 0
   m_Name: WorldFractal
   m_TagString: Untagged
@@ -352,6 +352,8 @@ MonoBehaviour:
   m_drawType: 3
   m_filterHeight: 0.323
   m_segmentCount: 6
+  m_circleRadius: 0
+  m_circlePower: 0
 --- !u!114 &114035455154460846
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -390,6 +392,8 @@ MonoBehaviour:
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 7
+  m_circleRadius: 0
+  m_circlePower: 0
 --- !u!114 &114357539436573696
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -409,25 +413,29 @@ MonoBehaviour:
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 6
---- !u!114 &114438074963943238
+  m_circleRadius: 0
+  m_circlePower: 0
+--- !u!114 &114494252897242536
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1014974642887750}
+  m_GameObject: {fileID: 1357665033571714}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 13.1
-  m_noiseOctave: 3
-  m_noiseAmplifier: 1.33
+  m_textureRes: {x: 1024, y: 1024}
+  m_noiseFrequency: 21.9
+  m_noiseOctave: 9
+  m_noiseAmplifier: 1.42
   m_noiseSeed: seed
-  m_drawType: 2
-  m_filterHeight: 0.323
+  m_drawType: 4
+  m_filterHeight: 0.346
   m_segmentCount: 0
+  m_circleRadius: 0.962
+  m_circlePower: 2.28
 --- !u!114 &114497296106415012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -444,8 +452,6 @@ MonoBehaviour:
   - m_generator: {fileID: 114798171406571202}
     m_operation: 0
   - m_generator: {fileID: 114624667914288664}
-    m_operation: 1
-  - m_generator: {fileID: 114438074963943238}
     m_operation: 1
 --- !u!114 &114533313627262188
 MonoBehaviour:
@@ -466,6 +472,8 @@ MonoBehaviour:
   m_drawType: 3
   m_filterHeight: 0.323
   m_segmentCount: 10
+  m_circleRadius: 0
+  m_circlePower: 0
 --- !u!114 &114595829478396146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -504,6 +512,8 @@ MonoBehaviour:
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 8
+  m_circleRadius: 0
+  m_circlePower: 0
 --- !u!114 &114750575273532464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -539,6 +549,8 @@ MonoBehaviour:
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 6
+  m_circleRadius: 0
+  m_circlePower: 0
 --- !u!114 &114813845523277354
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -558,6 +570,8 @@ MonoBehaviour:
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 6
+  m_circleRadius: 0
+  m_circlePower: 0
 --- !u!114 &114832161913479426
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -577,6 +591,8 @@ MonoBehaviour:
   m_drawType: 3
   m_filterHeight: 0
   m_segmentCount: 7
+  m_circleRadius: 0
+  m_circlePower: 0
 --- !u!114 &114875316782996832
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -588,7 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_textureRes: {x: 512, y: 512}
+  m_textureRes: {x: 1024, y: 1024}
   m_noiseFrequency: 21.9
   m_noiseOctave: 9
   m_noiseAmplifier: 1.42
@@ -596,6 +612,8 @@ MonoBehaviour:
   m_drawType: 2
   m_filterHeight: 0.346
   m_segmentCount: 0
+  m_circleRadius: 0
+  m_circlePower: 0
 --- !u!114 &114934049841417054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -694,3 +712,5 @@ MonoBehaviour:
   m_chain:
   - m_generator: {fileID: 114875316782996832}
     m_operation: 0
+  - m_generator: {fileID: 114494252897242536}
+    m_operation: 1
