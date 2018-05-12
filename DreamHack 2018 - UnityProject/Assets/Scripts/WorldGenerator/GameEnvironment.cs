@@ -86,15 +86,22 @@ namespace Game.Environment
 				{
 					if(m_baseMap.CurrentNoise[x,y] <= CliffThreshold)
 					{
-						if(Random.Range(0.00f,1.00f) < m_vegetationMap.CurrentNoise[x,y])
+						if(Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) > EmptyRadius)
 						{
-							if(Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) < EmptyRadius)
+							if(m_metalMap.CurrentNoise[x,y] < 0.2f){
+								if(Random.Range(0.00f,1.00f) < m_vegetationMap.CurrentNoise[x,y])
+								{						
+									m_tileMap.InstallAt(new GreenVegetation(), new TilePosition(x,y));
+								}
+							}else
 							{
-								
-							}
-							else
-								m_tileMap.InstallAt(new DesertVegetation(), new TilePosition(x,y));
+								if(Random.Range(0.00f,1.00f) < m_vegetationMap.CurrentNoise[x,y])
+								{						
+									m_tileMap.InstallAt(new DesertVegetation(), new TilePosition(x,y));
+								}
+							}		
 						}
+						
 					}
 
 					if(m_baseMap.CurrentNoise[x,y] <= CliffThreshold)
