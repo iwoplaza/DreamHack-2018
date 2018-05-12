@@ -434,7 +434,7 @@ MonoBehaviour:
   m_textureRes: {x: 512, y: 512}
   m_noiseFrequency: 26.1
   m_noiseOctave: 4
-  m_noiseAmplifier: 1.29
+  m_noiseAmplifier: 3.5
   m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0

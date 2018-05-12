@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.17895773, g: 0.22408265, b: 0.30591902, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -326,32 +326,6 @@ Transform:
   m_Father: {fileID: 1449240802}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &492253171 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1357665033571714, guid: ed3f662100abeaf49a1c076c27de8d39,
-    type: 2}
-  m_PrefabInternal: {fileID: 1935097926}
---- !u!114 &492253172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 492253171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14f1d268a63f6224dbab964e56b24bb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 21.9
-  m_noiseOctave: 9
-  m_noiseAmplifier: 1.42
-  m_noiseSeed: seed
-  m_drawType: 4
-  m_filterHeight: 0.346
-  m_segmentCount: 0
-  m_circleRadius: 1
-  m_circlePower: 0
 --- !u!1001 &622092793
 Prefab:
   m_ObjectHideFlags: 0
@@ -462,6 +436,11 @@ Prefab:
     - target: {fileID: 1111882864099050, guid: d35cb86640a2a294cb847d3bb13dbfea, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224695744506019696, guid: d35cb86640a2a294cb847d3bb13dbfea,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -6.440512
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d35cb86640a2a294cb847d3bb13dbfea, type: 2}
@@ -786,11 +765,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114497296106415012, guid: ed3f662100abeaf49a1c076c27de8d39,
-        type: 2}
-      propertyPath: m_chain.Array.size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4629295418056858, guid: ed3f662100abeaf49a1c076c27de8d39, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -823,18 +797,7 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114497296106415012, guid: ed3f662100abeaf49a1c076c27de8d39,
-        type: 2}
-      propertyPath: m_chain.Array.data[2].m_generator
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114497296106415012, guid: ed3f662100abeaf49a1c076c27de8d39,
-        type: 2}
-      propertyPath: m_chain.Array.data[2].m_operation
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114438074963943238, guid: ed3f662100abeaf49a1c076c27de8d39, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed3f662100abeaf49a1c076c27de8d39, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1993537252
