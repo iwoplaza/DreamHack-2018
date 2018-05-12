@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace Game
 {
@@ -23,8 +24,8 @@ namespace Game
         /// <param name="entryDirection">The direction it's coming from.
         ///                              (relative to the passer, not the object)</param>
         /// <returns>Whether or not the passer can pass.</returns>
-        public abstract bool CanGoIntoFrom(TilePosition position, Pathfinding.MovementDirection entryDirection);
-        public abstract bool CanComeOutOfTowards(TilePosition position, Pathfinding.MovementDirection entryDirection);
+        public abstract bool CanGoIntoFrom(TilePosition globalPosition, Pathfinding.MovementDirection entryDirection);
+        public abstract bool CanComeOutOfTowards(TilePosition globalPosition, Pathfinding.MovementDirection entryDirection);
         /// <summary>
         /// Determines if something can go to an adjecent tile touching the edge of this tile.
         /// </summary>
@@ -44,6 +45,12 @@ namespace Game
         public virtual bool IsStatic { get { return false; } }
         public virtual int Width { get { return 1; } }
         public virtual int Length { get { return 1; } }
+        public Vector2Int OrientedDimensions {
+            get
+            {
+                return DirectionUtils.IsAlignedWith(Orientation, Axis.Z) ? new Vector2Int(Width, Length) : new Vector2Int(Length, Width);
+            }
+        }
 
         public TileProp()
         {
@@ -133,6 +140,12 @@ namespace Game
         public virtual void RotateRight()
         {
             Rotate(DirectionUtils.RotateCW(Orientation));
+        }
+
+        public TilePosition GlobalToLocal(TilePosition global)
+        {
+            TilePosition local = global - InstalledAt.Position;
+            return TilePosition.RotateInBlock(local, Width, Length, Orientation);
         }
     }
 }
