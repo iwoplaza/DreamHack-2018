@@ -13,6 +13,8 @@ namespace Game.TileObjects
         public override bool IsImpenetrable { get { return false; } }
         public override bool CanSkimThrough { get { return false; } }
 
+        public override int MetalCost { get { return 10; } }
+
         public WallTileObject()
         {
         }

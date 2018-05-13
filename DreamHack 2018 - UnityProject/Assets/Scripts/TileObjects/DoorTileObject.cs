@@ -14,6 +14,7 @@ namespace Game.TileObjects
         public override bool CanSkimThrough { get { return false; } }
         public override int Width { get { return 2; } }
         public override int Length { get { return 1; } }
+        public override int MetalCost { get { return 50; } }
 
         public DoorTileObject()
         {

@@ -206,6 +206,12 @@ Transform:
   m_Father: {fileID: 1449240802}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &523011874 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114821220631639230, guid: d35cb86640a2a294cb847d3bb13dbfea,
+    type: 2}
+  m_PrefabInternal: {fileID: 622092793}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &616661495
 Prefab:
   m_ObjectHideFlags: 0
@@ -365,6 +371,15 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 224695744506019696, guid: d35cb86640a2a294cb847d3bb13dbfea,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -6.4404907
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181253246489340, guid: d35cb86640a2a294cb847d3bb13dbfea, type: 2}
+      propertyPath: m_Name
+      value: ItemStoragePanel
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d35cb86640a2a294cb847d3bb13dbfea, type: 2}
   m_IsPrefabParent: 0
@@ -518,6 +533,23 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1935097926}
   m_Script: {fileID: 11500000, guid: 7eccb1ba921635342aa5159572846391, type: 3}
+--- !u!1 &1416296020 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1181253246489340, guid: d35cb86640a2a294cb847d3bb13dbfea,
+    type: 2}
+  m_PrefabInternal: {fileID: 622092793}
+--- !u!114 &1416296021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1416296020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e908663641610d44a8fd977bc8416e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_metalAmountText: {fileID: 523011874}
 --- !u!1 &1449240801
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ namespace Game.TileObjects
     {
         public override string DisplayName { get { return "Wall Corner"; } }
         public override bool IsImpenetrable { get { return true; } }
+        public override int MetalCost { get { return 10; } }
 
         public override bool CanGoIntoFrom(TilePosition position, Pathfinding.MovementDirection entryDirection)
         {

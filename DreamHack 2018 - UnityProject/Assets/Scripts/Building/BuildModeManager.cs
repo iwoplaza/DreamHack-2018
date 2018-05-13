@@ -1,4 +1,5 @@
-﻿using Game.TileObjects;
+﻿using Game.Items;
+using Game.TileObjects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -82,6 +83,7 @@ namespace Game.Building
             {
                 tileProp.Variant = PropVariant;
                 TemporaryProp = tileProp;
+                TemporaryProp.Rotate(PropOrientation);
                 TemporaryDisplayObject = tileProp.CreateTemporaryDisplay();
                 foreach (Collider collider in TemporaryDisplayObject.GetComponentsInChildren<Collider>())
                 {
@@ -92,6 +94,8 @@ namespace Game.Building
                 if (m_onHoldHandlers != null)
                     m_onHoldHandlers(tileObjectType);
             }
+
+            UpdateView();
         }
 
         void CreateTileDisplayObjects()
@@ -116,12 +120,15 @@ namespace Game.Building
                 Tile tile = m_gameState.TileMap.TileAt(Cursor);
                 if (tile != null && tile.CanInstall(HeldObjectType))
                 {
-                    TileProp tileProp = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileProp;
-                    if (tileProp != null)
+                    if (m_gameState.ItemStorage.Consume(TemporaryProp.MetalCost, Item.METAL))
                     {
-                        tileProp.Variant = PropVariant;
-                        tileProp.Rotate(PropOrientation);
-                        tile.InstallAsRoot(tileProp);
+                        TileProp tileProp = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileProp;
+                        if (tileProp != null)
+                        {
+                            tileProp.Variant = PropVariant;
+                            tileProp.Rotate(PropOrientation);
+                            tile.InstallAsRoot(tileProp);
+                        }
                     }
                 }
             }

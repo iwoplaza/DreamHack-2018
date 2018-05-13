@@ -17,8 +17,9 @@ namespace Game.Items
             IconName = iconName;
         }
 
+        public static Item METAL = new Item(0, "Metal", "Metal");
         public static Item[] Items = {
-            new Item(0, "Metal", "Metal")
+            METAL
         };
 
         public static Item Get(int identifier)

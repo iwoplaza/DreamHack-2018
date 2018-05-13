@@ -66,6 +66,8 @@ namespace Game
             worker2.FirstName = "Hugo";
             worker2.LastName = "Ivanovicz";
 
+            ItemStorage.ItemStacks.Add(new ItemStack(Item.METAL, 500));
+
             TilePosition center = new TilePosition(TileMap.Width / 2, TileMap.Width / 2);
             TileMap.InstallAt(new MainGeneratorTileObject(), center.GetOffset(-1, -1));
         }

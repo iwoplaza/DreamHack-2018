@@ -72,6 +72,8 @@ namespace Game
         public GameObject GameObject { get { return InstalledGameObject; } }
         public Vector3 Position { get { return Installed ? InstalledAt.Position.Vector3 : Vector3.zero; } }
 
+        public virtual int MetalCost { get { return 0; } }
+
         public TileProp()
         {
             InstalledAt = null;

@@ -1,5 +1,6 @@
 ﻿using Game.UI;
 using Game.UI.MainMenu;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -66,6 +67,11 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
+        }
+
+        public void Quit()
+        {
+            Application.Quit();
         }
 
         void OnApplicationQuit()

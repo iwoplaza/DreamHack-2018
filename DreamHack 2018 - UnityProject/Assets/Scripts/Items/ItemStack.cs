@@ -13,7 +13,7 @@ namespace Game.Items
             {
                 return m_amount;
             }
-            private set
+            set
             {
                 m_amount = value;
             }

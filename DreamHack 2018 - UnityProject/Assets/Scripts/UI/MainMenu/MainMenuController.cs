@@ -40,6 +40,11 @@ namespace Game.UI.MainMenu
             OpenPanel(Panel.LOAD_GAME);
         }
 
+        public void Quit()
+        {
+            ApplicationState.Instance.Quit();
+        }
+
         public void GoBack()
         {
             switch (CurrentPanel)
