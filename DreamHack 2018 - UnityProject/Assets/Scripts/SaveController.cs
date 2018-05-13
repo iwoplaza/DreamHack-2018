@@ -169,16 +169,13 @@ namespace Game
         {
             int freeSaveIndex = 0;
 
-            string fileDirectoryPath = Path.Combine(Application.persistentDataPath, SAVES_DIRECTORY);
-            string[] fileNames = Directory.GetFiles(fileDirectoryPath, "save*.xml");
-
             bool free = false;
             while (!free)
             {
                 free = true;
-                foreach (string fileName in fileNames)
+                foreach (SavedGame savedGame in SavedGames)
                 {
-                    if (fileName == CreateFileNameForIdentifier(freeSaveIndex))
+                    if (savedGame.WorldIdentifier == freeSaveIndex)
                     {
                         free = false;
                         freeSaveIndex++;
