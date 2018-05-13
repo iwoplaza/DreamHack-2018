@@ -31,6 +31,9 @@ namespace Game
         [SerializeField] protected float m_defaultFocusDistance = 9F;
         [SerializeField] protected float m_scrollSpeed = 2.0F;
         [SerializeField] protected float m_scrollAccellerationFactor = 0.5F;
+        [Header("Edge Movement")]
+        [SerializeField] protected int m_edgeMargin = 20;
+        [SerializeField] protected float m_edgeMoveSpeed = 1.0F;
 
         protected float m_lastDistance = 0.0F;
         protected float m_targetDistance = 9F;
@@ -192,6 +195,8 @@ namespace Game
                 {
                     m_targetDistance = Mathf.Clamp(m_targetDistance - scrollWheel * m_scrollSpeed * (1 + m_targetDistance * m_scrollAccellerationFactor), m_minDistance, m_maxDistance);
                 }
+
+                HandleScreenEdgeMovement();
             }
 
             m_distance += (m_targetDistance - m_distance) * 0.3F;
@@ -234,11 +239,6 @@ namespace Game
                 if (subject != null)
                 {
                     UI.PopUp.ActionSelectPopUp.Create(m_gameHud, subject, actor).Open();
-                    /*List<ActionBase> actions = subject.GetActionsFor(actor);
-                    if (actions.Count > 0)
-                    {
-                        actor.PerformAction(actions[0], subject);
-                    }*/
                     return true;
                 }
             }
@@ -283,6 +283,46 @@ namespace Game
                     }
                 }
             }
+        }
+
+        void HandleScreenEdgeMovement()
+        {
+            float width = Screen.width;
+            float height = Screen.height;
+            Vector3 mousePosition = Input.mousePosition;
+            mousePosition.x = Mathf.Clamp(mousePosition.x, 0, width);
+            mousePosition.y = Mathf.Clamp(mousePosition.y, 0, height);
+            int margin = m_edgeMargin;
+            float speed = m_edgeMoveSpeed;
+
+            Vector3 forward = transform.forward;
+            forward.y = 0;
+            forward.Normalize();
+            Vector3 right = transform.right;
+            right.y = 0;
+            right.Normalize();
+
+            float horizontal = 0.0F;
+            float vertical = 0.0F;
+
+            if (mousePosition.x <= margin)
+                horizontal = mousePosition.x / margin - 1;
+            if (mousePosition.x >= width - margin)
+                horizontal = (mousePosition.x - width + margin) / margin;
+            if (mousePosition.y <= margin)
+                vertical = mousePosition.y / margin - 1;
+            if (mousePosition.y >= height - margin)
+                vertical = (mousePosition.y - height + margin) / margin;
+
+            MoveBy(right * horizontal * speed * 1.0F * (1 + m_distance * m_moveSpeedZoomInfluence) +
+                   forward * vertical * speed * 0.8F * (1 + m_distance * m_moveSpeedZoomInfluence));
+        }
+
+        void MoveBy(Vector3 vector)
+        {
+            Vector3 position = transform.position;
+            position += vector;
+            transform.position = position;
         }
 
         void UpdateCameraPosition()
