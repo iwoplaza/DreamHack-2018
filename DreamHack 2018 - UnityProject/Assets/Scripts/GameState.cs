@@ -1,5 +1,6 @@
 ﻿using Game.Building;
 using Game.Environment;
+using Game.Items;
 using Game.TileObjects;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Game
         public TimeSystem TimeSystem { get; private set; }
         public BuildCatalogue BuildCatalogue { get; private set; }
         public BuildModeManager BuildModeManager { get; private set; }
+        public ItemStorage ItemStorage { get; private set; }
         public GameEnvironment GameEnvironment { get; private set; }
 
         public GameState(GameEnvironment gameEnvironment)
@@ -28,6 +30,7 @@ namespace Game
             TimeSystem = new TimeSystem();
             BuildCatalogue = new BuildCatalogue();
             BuildModeManager = new BuildModeManager(this);
+            ItemStorage = new ItemStorage();
         }
 
         public void Start()
@@ -91,6 +94,9 @@ namespace Game
 
             XElement timeElement = element.Element("TimeSystem");
             TimeSystem.Parse(timeElement);
+
+            XElement itemStorageElement = element.Element("ItemStorage");
+            ItemStorage.Parse(itemStorageElement);
         }
 
         public void Populate(XElement element)
@@ -102,6 +108,10 @@ namespace Game
             XElement timeElement = new XElement("TimeSystem");
             element.Add(timeElement);
             TimeSystem.Populate(timeElement);
+
+            XElement itemStorageElement = new XElement("ItemStorage");
+            element.Add(itemStorageElement);
+            ItemStorage.Populate(itemStorageElement);
         }
     }
 }
