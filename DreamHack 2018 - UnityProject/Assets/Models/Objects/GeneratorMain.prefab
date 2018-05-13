@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23389873148081636}
   - component: {fileID: 114040183854087040}
   m_Layer: 0
-  m_Name: GeneratorMain 1
+  m_Name: GeneratorMain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animatedComponents:
-  - {fileID: 0}
+  - {fileID: 114799653443175384}
   m_activatedByDefault: 1
 --- !u!114 &114799653443175384
 MonoBehaviour:
