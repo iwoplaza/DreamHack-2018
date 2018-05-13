@@ -14,6 +14,7 @@ namespace Game.UI
 
         public FocusPanel FocusPanel { get; private set; }
         public TimePanel TimePanel { get; private set; }
+        public WorkerList WorkerList { get; private set; }
 
         public List<PopUpWindow> OpenedPopUps { get; private set; }
         public bool HasInputFocus { get { return OpenedPopUps.Count > 0; } }
@@ -22,8 +23,14 @@ namespace Game.UI
         {
             FocusPanel = GetComponentInChildren<FocusPanel>();
             TimePanel = GetComponentInChildren<TimePanel>();
+            WorkerList = GetComponentInChildren<WorkerList>();
 
             OpenedPopUps = new List<PopUpWindow>();
+        }
+
+        void Start()
+        {
+            WorkerList.Setup(WorldController.Instance.MainState);
         }
 
         public bool DoesPopUpOfTypeExist(Type type)

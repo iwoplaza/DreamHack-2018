@@ -10,11 +10,10 @@ namespace Game
     [RequireComponent(typeof(CharacterController))]
     public class Worker : Living, IFocusTarget, IActor
     {
-        [Header("Worker")]
-        [SerializeField] protected string m_name;
         public int Age { get; set; }
-
-        override public string DisplayName { get { return m_name; } }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        override public string DisplayName { get { return FirstName + " " + LastName; } }
         override public int MaxHealth { get { return 100; } }
         Transform IFocusTarget.PortraitPivot { get { return transform; } }
 
@@ -36,6 +35,7 @@ namespace Game
             }
         }
 
+        [Header("Worker")]
         [SerializeField] private float m_walkSpeed;
         [SerializeField] private float m_runSpeed;
         [SerializeField] private float m_stickToGroundForce;

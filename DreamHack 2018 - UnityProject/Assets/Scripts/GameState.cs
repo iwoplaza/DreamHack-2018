@@ -55,10 +55,15 @@ namespace Game
             GameEnvironment.GenerateMap();
             //GameEnvironment.PopulateMap();
 
-            Worker worker1 = SpawnWorker();
+            Worker worker1 = SpawnWorker(new Vector3(TileMap.Width / 2 + 1, 0, TileMap.Height / 2 + 1));
+            worker1.FirstName = "James";
+            worker1.LastName = "Marz";
+            Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 1, 0, TileMap.Height / 2 - 1));
+            worker2.FirstName = "Hugo";
+            worker2.LastName = "Ivanovicz";
         }
 
-        public Worker SpawnWorker()
+        public Worker SpawnWorker(Vector3 position)
         {
             GameObject workerPrefab = Resources.WorkerPrefab;
             if(workerPrefab == null)
@@ -76,7 +81,8 @@ namespace Game
                     worker = workerObject.AddComponent<Worker>();
                 }
                 worker.Setup(TileMap);
-                worker.Position = new Vector3(TileMap.Width/2, 0, TileMap.Height/2);
+                worker.Position = position;
+                Workers.Add(worker);
 
                 return worker;
             }

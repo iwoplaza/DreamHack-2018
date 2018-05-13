@@ -124,7 +124,7 @@ namespace Game.Tasks
 
         public void NotifyTaskEvent(TaskEvent taskEvent, TaskBase task)
         {
-            if(m_taskEventHandlers.ContainsKey(taskEvent))
+            if(m_taskEventHandlers.ContainsKey(taskEvent) && m_taskEventHandlers[taskEvent] != null)
             {
                 m_taskEventHandlers[taskEvent](task);
             }

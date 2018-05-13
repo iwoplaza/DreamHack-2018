@@ -305,17 +305,34 @@ namespace Game
             float horizontal = 0.0F;
             float vertical = 0.0F;
 
-            if (mousePosition.x <= margin)
-                horizontal = mousePosition.x / margin - 1;
-            if (mousePosition.x >= width - margin)
-                horizontal = (mousePosition.x - width + margin) / margin;
-            if (mousePosition.y <= margin)
-                vertical = mousePosition.y / margin - 1;
-            if (mousePosition.y >= height - margin)
-                vertical = (mousePosition.y - height + margin) / margin;
+            bool moved = false;
 
-            MoveBy(right * horizontal * speed * 1.0F * (1 + m_distance * m_moveSpeedZoomInfluence) +
-                   forward * vertical * speed * 0.8F * (1 + m_distance * m_moveSpeedZoomInfluence));
+            if (mousePosition.x <= margin)
+            {
+                horizontal = mousePosition.x / margin - 1;
+                moved = true;
+            }
+            if (mousePosition.x >= width - margin)
+            {
+                horizontal = (mousePosition.x - width + margin) / margin;
+                moved = true;
+            }
+            if (mousePosition.y <= margin)
+            {
+                vertical = mousePosition.y / margin - 1;
+                moved = true;
+            }
+            if (mousePosition.y >= height - margin)
+            {
+                vertical = (mousePosition.y - height + margin) / margin;
+                moved = true;
+            }
+
+            if (moved)
+            {
+                MoveBy(right * horizontal * speed * 1.0F * (1 + m_distance * m_moveSpeedZoomInfluence) +
+                       forward * vertical * speed * 0.8F * (1 + m_distance * m_moveSpeedZoomInfluence));
+            }
         }
 
         void MoveBy(Vector3 vector)
@@ -323,6 +340,7 @@ namespace Game
             Vector3 position = transform.position;
             position += vector;
             transform.position = position;
+            m_focusTarget = null;
         }
 
         void UpdateCameraPosition()
