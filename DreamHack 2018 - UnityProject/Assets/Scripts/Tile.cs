@@ -179,7 +179,10 @@ namespace Game
             {
                 if(prop != null && prop == tilePropToUninstall)
                 {
-
+                    if (tilePropToUninstall is TileObjectBase)
+                        Uninstall(PropType.OBJECT);
+                    else if (tilePropToUninstall is TileFloorBase)
+                        Uninstall(PropType.FLOOR);
                 }
             }
         }

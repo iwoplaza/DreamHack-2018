@@ -20,9 +20,6 @@ namespace Game
             Initialised = false;
 
             Instance = this;
-            Resources.LoadAll();
-
-
         }
 
         /// <summary>

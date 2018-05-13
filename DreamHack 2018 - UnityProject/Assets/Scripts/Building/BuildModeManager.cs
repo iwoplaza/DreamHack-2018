@@ -21,10 +21,15 @@ namespace Game.Building
         OnHoldHandler m_onHoldHandlers;
         GameState m_gameState;
 
+        AudioSource AudioSource { get; set; }
+
         public BuildModeManager(GameState gameState)
         {
             m_gameState = gameState;
             WorldController.Instance.RegisterModeChangeHandler(OnPlayModeChange);
+
+            GameObject gameObject = new GameObject("BuildModeManagerAudioPlayer");
+            AudioSource = gameObject.AddComponent<AudioSource>();
         }
 
         public void OnPlayModeChange(PlayMode playMode)
@@ -128,9 +133,29 @@ namespace Game.Building
                             tileProp.Variant = PropVariant;
                             tileProp.Rotate(PropOrientation);
                             tile.InstallAsRoot(tileProp);
+
+                            PlayPlaceSound();
                         }
                     }
                 }
+            }
+        }
+
+        public void Remove()
+        {
+            Tile tile = m_gameState.TileMap.TileAt(Cursor);
+            if (tile != null && !tile.Empty && !tile.HasCliff)
+            {
+                for (int i = tile.InstalledProps.Length - 1; i >= 0; --i)
+                {
+                    TileProp prop = tile.InstalledProps[i];
+                    if (prop != null)
+                    {
+                        m_gameState.ItemStorage.Add(prop.MetalCost, Item.METAL);
+                        tile.Uninstall(prop);
+                    }
+                }
+                PlayRemoveSound();
             }
         }
 
@@ -190,6 +215,20 @@ namespace Game.Building
         public void SetVariant(int variant)
         {
             PropVariant = variant;
+        }
+
+        void PlayPlaceSound()
+        {
+            AudioClip placeClip = Resources.Sounds.Find("Place");
+            if (placeClip != null)
+                AudioSource.PlayOneShot(placeClip);
+        }
+
+        void PlayRemoveSound()
+        {
+            AudioClip placeClip = Resources.Sounds.Find("Remove");
+            if (placeClip != null)
+                AudioSource.PlayOneShot(placeClip);
         }
     }
 }

@@ -11,6 +11,7 @@ using Game.Scene;
 using Game.Building;
 using Game.Utility;
 using Game.UI;
+using Game.UI.PopUp;
 
 namespace Game
 {
@@ -213,6 +214,11 @@ namespace Game
                 {
                     HandleScreenEdgeMovement();
                 }
+
+                if(Input.GetKeyDown(KeyCode.Escape))
+                {
+                    PauseMenuPopUp.Create(m_gameHud).Open();
+                }
             }
 
             m_distance += (m_targetDistance - m_distance) * 0.3F;
@@ -290,12 +296,7 @@ namespace Game
 
                     if(Input.GetMouseButton(1))
                     {
-                        Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
-                        if (targetTile != null)
-                        {
-                            targetTile.Uninstall(PropType.OBJECT);
-                            targetTile.Uninstall(PropType.FLOOR);
-                        }
+                        buildModeManager.Remove();
                     }
                 }
             }

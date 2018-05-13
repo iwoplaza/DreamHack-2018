@@ -23,7 +23,8 @@ namespace Game.Building
         {
             FoundationCategory = new BuildCategory("Foundation", "Foundation")
                 .Add(new BuildEntry("Wall", typeof(TileObjects.WallTileObject)))
-                .Add(new BuildEntry("Wall Corner", typeof(TileObjects.WallCornerTileObject)))
+                .Add(new BuildEntry("Wall Convex Corner", typeof(TileObjects.WallConvexCornerTileObject)))
+                .Add(new BuildEntry("Wall Concave Corner", typeof(TileObjects.WallConcaveCornerTileObject)))
                 .Add(new BuildEntry("Door", typeof(TileObjects.DoorTileObject)))
                 .Add(new BuildEntry("Floor", typeof(TileFloors.DefaultTileFloor)))
             ;

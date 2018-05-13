@@ -33,12 +33,17 @@ namespace Game.UI
         /// <summary>
         /// Called by <see cref="ApplicationState"/>
         /// </summary>
-        public void Setup()
+        public void Setup(bool newWorld)
         {
             WorkerList.Setup(WorldController.Instance.MainState);
             FocusPanel.Setup();
             TimePanel.Setup();
             ItemStoragePanel.Setup();
+
+            if(newWorld)
+            {
+                ControlsPopUp.Create(this).Open();
+            }
         }
 
         public bool DoesPopUpOfTypeExist(Type type)

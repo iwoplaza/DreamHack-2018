@@ -29,6 +29,7 @@ namespace Game
                 return;
             }
             Instance = this;
+
             if (SceneManager.GetActiveScene().buildIndex == Globals.MAIN_MENU_SCENE)
             {
                 CurrentScene = SceneType.MAIN_MENU;
@@ -42,6 +43,9 @@ namespace Game
                 Debug.LogError("Unknown scene loaded");
                 Application.Quit();
             }
+
+            Resources.LoadAll();
+            gameObject.AddComponent<MusicPlayer>();
         }
 
         // Use this for initialization
@@ -57,10 +61,15 @@ namespace Game
             if (CurrentScene == SceneType.GAME)
             {
                 if (SaveController.SavedGames.Count <= 0)
+                {
                     SetupGame();
+                    SetupGameHudAndCamera(true);
+                }
                 else
+                {
                     SetupGame(SaveController.SavedGames[SaveController.SavedGames.Count - 1]);
-                SetupGameHudAndCamera();
+                    SetupGameHudAndCamera(false);
+                }
             }
         }
 
@@ -132,7 +141,7 @@ namespace Game
             worldController.SetupFromState(savedGame);
         }
 
-        void SetupGameHudAndCamera()
+        void SetupGameHudAndCamera(bool newWorld)
         {
             GameObject gameHudObject = GameObject.FindGameObjectWithTag("GameHUD");
             if (gameHudObject == null)
@@ -140,7 +149,7 @@ namespace Game
                 Debug.LogError("Couldn't find the GameHUD object in the scene. Setup aborted");
                 return;
             }
-            gameHudObject.GetComponent<GameHUD>().Setup();
+            gameHudObject.GetComponent<GameHUD>().Setup(newWorld);
 
             GameObject cameraObject = GameObject.FindGameObjectWithTag("CameraRig");
             if (cameraObject == null)
@@ -180,10 +189,15 @@ namespace Game
             yield return null; // Wait one frame for the scene to load.
             CurrentScene = SceneType.GAME;
             if (savedGame != null)
+            {
                 SetupGame(savedGame);
+                SetupGameHudAndCamera(false);
+            }
             else
+            {
                 SetupGame();
-            SetupGameHudAndCamera();
+                SetupGameHudAndCamera(true);
+            }
         }
     }
 }

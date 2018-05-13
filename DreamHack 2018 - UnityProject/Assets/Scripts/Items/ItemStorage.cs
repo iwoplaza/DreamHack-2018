@@ -75,6 +75,17 @@ namespace Game.Items
             return false;
         }
 
+        public void Add(int amount, Item item)
+        {
+            ItemStack itemStack = StackOf(item);
+            if (itemStack != null)
+            {
+                itemStack.Amount += amount;
+                if (m_onChangedHandlers != null)
+                    m_onChangedHandlers(this, itemStack);
+            }
+        }
+
         public void RegisterOnChangedHandler(OnChangedHandler handler)
         {
             m_onChangedHandlers += handler;
