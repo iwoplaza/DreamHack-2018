@@ -22,8 +22,9 @@ namespace Game.Tasks
             Target = target;
         }
 
-        public override string Description { get { return ""; } }
+        public override string ActionQuickie { get { return "Attack"; } }
         public override string DisplayName { get { return "Attack " + Target.DisplayName; } }
+        public override string Description { get { return ""; } }
 
         public override void OnUpdate()
         {

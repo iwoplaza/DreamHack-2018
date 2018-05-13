@@ -9,6 +9,9 @@ namespace Game.UI
 {
     public class GameHUD : MonoBehaviour
     {
+        [SerializeField] CameraController m_cameraController;
+        public CameraController CameraController { get { return m_cameraController; } }
+
         public FocusPanel FocusPanel { get; private set; }
         public TimePanel TimePanel { get; private set; }
 
@@ -62,11 +65,14 @@ namespace Game.UI
             {
                 if (Input.GetMouseButton(0))
                 {
-                    foreach (PopUpWindow window in OpenedPopUps)
+                    for(int i = OpenedPopUps.Count -1; i >= 0 ; --i)
                     {
-                        if (window.IsMouseOver && window.ShouldCloseOnFocusLost)
+                        PopUpWindow window = OpenedPopUps[i];
+                        if (!window.IsMouseOver && window.ShouldCloseOnFocusLost)
                         {
                             window.CloseWindow();
+                            if(!window.IsOpen)
+                                OpenedPopUps.Remove(window);
                         }
                     }
                 }

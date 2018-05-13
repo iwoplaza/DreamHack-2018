@@ -16,7 +16,7 @@ namespace Game
 {
     public class CameraController : MonoBehaviour
     {
-        protected Camera m_camera;
+        public Camera Camera { get; private set; }
 
         [SerializeField] protected GameHUD m_gameHud;
         [SerializeField] protected float m_moveSpeedFactor = 1.0F;
@@ -43,8 +43,8 @@ namespace Game
 
         void Awake()
         {
-            m_camera = GetComponentInChildren<Camera>();
-            if(m_camera == null)
+            Camera = GetComponentInChildren<Camera>();
+            if(Camera == null)
             {
                 Debug.LogError("No camera was found as a part of the CameraController.");
                 Destroy(gameObject);
@@ -227,9 +227,7 @@ namespace Game
                 ISubject subject = hitInfo.collider.GetComponent<ISubject>();
                 if (subject != null)
                 {
-                    UI.PopUp.ActionSelectPopUp popUp = UI.PopUp.ActionSelectPopUp.Create(m_gameHud);
-                    popUp.Populate(subject);
-                    popUp.Open();
+                    UI.PopUp.ActionSelectPopUp.Create(m_gameHud, subject, actor).Open();
                     /*List<ActionBase> actions = subject.GetActionsFor(actor);
                     if (actions.Count > 0)
                     {
@@ -284,7 +282,7 @@ namespace Game
         void UpdateCameraPosition()
         {
             Vector3 direction = new Vector3(0, 1, -1).normalized;
-            m_camera.transform.localPosition = direction * m_distance;
+            Camera.transform.localPosition = direction * m_distance;
         }
 
         void RotateBy(float amount)

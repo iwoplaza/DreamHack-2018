@@ -8,6 +8,7 @@ namespace Game.Tasks
     {
         public TilePosition TargetPosition { get; private set; }
 
+        public override string ActionQuickie { get { return "Walk to"; } }
         public override string DisplayName { get { return "Walk"; } }
         public override string Description { get { return ""; } }
 

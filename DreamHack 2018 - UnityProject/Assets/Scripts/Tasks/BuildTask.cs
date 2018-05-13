@@ -18,6 +18,8 @@ namespace Game.Tasks
             TargetY = targetY;
         }
 
+        public override string ActionQuickie { get { return "Build"; } }
+
         public override string DisplayName
         {
             get

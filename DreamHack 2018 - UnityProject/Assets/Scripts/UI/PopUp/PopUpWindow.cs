@@ -16,6 +16,7 @@ namespace Game.UI.PopUp
         public abstract bool ShouldCloseOnFocusLost { get; }
 
         public bool IsMouseOver { get; set; }
+        public bool IsOpen { get; private set; }
 
         public virtual PopUpWindow Open()
         {
@@ -33,12 +34,16 @@ namespace Game.UI.PopUp
                 return null;
             }
 
+            IsOpen = true;
             return this;
         }
+
+        protected virtual void Update() {}
 
         public virtual void CloseWindow() {
             m_gameHud.OnPopUpClosed(this);
             Destroy(gameObject);
+            IsOpen = false;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
