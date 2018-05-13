@@ -59,12 +59,15 @@ namespace Game
             GameEnvironment.PopulateMapForNewWorld();
             GameEnvironment.AfterSetup();
 
-            Worker worker1 = SpawnWorker(new Vector3(TileMap.Width / 2 + 1, 0, TileMap.Height / 2 + 1));
+            Worker worker1 = SpawnWorker(new Vector3(TileMap.Width / 2 + 2, 0, TileMap.Height / 2 + 1));
             worker1.FirstName = "James";
             worker1.LastName = "Marz";
-            Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 1, 0, TileMap.Height / 2 - 1));
+            Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 2, 0, TileMap.Height / 2 - 1));
             worker2.FirstName = "Hugo";
             worker2.LastName = "Ivanovicz";
+
+            TilePosition center = new TilePosition(TileMap.Width / 2, TileMap.Width / 2);
+            TileMap.InstallAt(new MainGeneratorTileObject(), center.GetOffset(-1, -1));
         }
 
         public Worker SpawnWorker(Vector3 position)

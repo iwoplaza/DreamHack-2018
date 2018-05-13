@@ -89,10 +89,27 @@ namespace Game
             }
         }
 
-        public void Offset(ushort x, ushort z)
+        public void Offset(int x, int z)
         {
-            X += x;
-            Z += z;
+            if (x < 0)
+            {
+                if (-x > X)
+                    X = 0;
+                else
+                    X -= (ushort)(-x);
+            }
+            else
+                X += (ushort)x;
+
+            if (z < 0)
+            {
+                if (-z > Z)
+                    Z = 0;
+                else
+                    Z -= (ushort)(-z);
+            }
+            else
+                Z += (ushort)x;
         }
 
         public TilePosition GetOffset(MovementDirection direction)
@@ -102,7 +119,7 @@ namespace Game
             return position;
         }
 
-        public TilePosition GetOffset(ushort x, ushort z)
+        public TilePosition GetOffset(int x, int z)
         {
             TilePosition position = new TilePosition(this);
             position.Offset(x, z);

@@ -30,7 +30,7 @@ namespace Game.Building
 
             InteriorCategory = new BuildCategory("Interior", "Interior");
             TechnologyCategory = new BuildCategory("Technology", "Technology")
-                .Add(new BuildEntry("Main Generator", typeof(TileObjects.MainGeneratorTileObject)))
+                .Add(new BuildEntry("Miner", typeof(TileObjects.MinerTileObject)))
            ;
             TrapsCategory = new BuildCategory("Traps", "Traps");
         }
