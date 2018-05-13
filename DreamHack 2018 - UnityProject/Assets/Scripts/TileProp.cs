@@ -74,6 +74,7 @@ namespace Game
         protected virtual void OnInstalled()
         {
             ConstructGameObject();
+            BindToChunk();
         }
 
         public virtual void OnUninstalled()
@@ -110,6 +111,11 @@ namespace Game
             element.SetAttributeValue("type", typeName);
             element.SetAttributeValue("orientation", (int)Orientation);
             element.SetAttributeValue("variant", Variant);
+        }
+
+        private void BindToChunk()
+        {
+            WorldController.Instance.MainState.GameEnvironment.AddGameobjectToChunk(InstalledGameObject, InstalledAt.Position);
         }
 
         public abstract void ConstructGameObject();
