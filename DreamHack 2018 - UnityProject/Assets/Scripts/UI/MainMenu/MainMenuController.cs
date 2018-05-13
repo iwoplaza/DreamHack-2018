@@ -37,7 +37,7 @@ namespace Game.UI.MainMenu
 
         public void Continue()
         {
-
+            OpenPanel(Panel.LOAD_GAME);
         }
 
         public void GoBack()

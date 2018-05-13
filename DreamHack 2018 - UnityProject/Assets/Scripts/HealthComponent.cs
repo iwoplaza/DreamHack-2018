@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace Game
@@ -32,6 +33,24 @@ namespace Game
         {
             m_maxHealth = maxHealth;
             m_healthPoints = maxHealth;
+        }
+
+        public void Parse(XElement element)
+        {
+            XAttribute maxHealthAttrib = element.Attribute("maxHealth");
+            XAttribute healthPointsAttrib = element.Attribute("healthPoints");
+
+            if(maxHealthAttrib != null && healthPointsAttrib != null)
+            {
+                m_maxHealth = int.Parse(maxHealthAttrib.Value);
+                m_healthPoints = int.Parse(healthPointsAttrib.Value);
+            }
+        }
+
+        public void Populate(XElement element)
+        {
+            element.SetAttributeValue("maxHealth", m_maxHealth);
+            element.SetAttributeValue("healthPoints", m_healthPoints);
         }
 
         public void RegisterChangeHandler(ChangeHandler handler)

@@ -4,15 +4,16 @@ using Game.Pathfinding;
 using Game.Animation;
 using Game.Acting;
 using Game.Acting.Actions;
+using System.Xml.Linq;
 
 namespace Game
 {
     [RequireComponent(typeof(CharacterController))]
     public class Worker : Living, IFocusTarget, IActor
     {
-        public int Age { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int Age { get; set; }
         override public string DisplayName { get { return FirstName + " " + LastName; } }
         override public int MaxHealth { get { return 100; } }
         Transform IFocusTarget.PortraitPivot { get { return transform; } }
@@ -43,7 +44,6 @@ namespace Game
 
         private TileMap m_tileMap;
         private CharacterController m_characterController;
-        private float m_yRotation;
         private Vector3 m_moveDir = Vector3.zero;
         private CollisionFlags m_collisionFlags;
         private bool m_previouslyGrounded;
@@ -52,6 +52,12 @@ namespace Game
         public void Setup(TileMap tileMap)
         {
             m_tileMap = tileMap;
+
+            if (m_tileMap != null)
+            {
+                PathfindingAgent = new PathfindingAgent(new Pathfinding.Rules.BasicRule(), m_tileMap);
+                PathfindingAgent.RegisterStatusChangeHandler(OnPathfindingStatusChanged);
+            }
         }
 
         protected override void Awake()
@@ -61,20 +67,64 @@ namespace Game
             IsWeaponOut = false;
             TaskQueue = new TaskQueue();
             TaskQueue.RegisterHandler(TaskQueue.TaskEvent.CANCEL_TASK, OnTaskCancel);
-        }
 
-        override protected void Start()
-        {
-            base.Start();
-
-            if (m_tileMap != null)
-            {
-                PathfindingAgent = new PathfindingAgent(new Pathfinding.Rules.BasicRule(), m_tileMap);
-                PathfindingAgent.RegisterStatusChangeHandler(OnPathfindingStatusChanged);
-            }
             m_characterController = GetComponent<CharacterController>();
             Visual = GetComponent<WorkerVisual>();
             AttackBehaviour = GetComponent<WorkerAttackBehaviour>();
+        }
+
+        public override void Parse(XElement element)
+        {
+            base.Parse(element);
+
+            XAttribute firstNameAttrib = element.Attribute("firstName");
+            XAttribute lastNamettrib = element.Attribute("lastName");
+            XAttribute ageAttrib = element.Attribute("age");
+            XAttribute isWeaponOutAttrib = element.Attribute("isWeaponOut");
+
+            if (firstNameAttrib != null)
+                FirstName = firstNameAttrib.Value;
+            if (lastNamettrib != null)
+                LastName = lastNamettrib.Value;
+            if (ageAttrib != null)
+                Age = int.Parse(ageAttrib.Value);
+            if (isWeaponOutAttrib != null)
+                IsWeaponOut = true;
+
+            XElement taskQueueElement = element.Element("TaskQueue");
+            if(taskQueueElement != null)
+                TaskQueue.Parse(taskQueueElement);
+
+            XElement workerAttackBehaviourElement = element.Element("WorkerAttackBehaviour");
+            if (workerAttackBehaviourElement != null)
+                AttackBehaviour.Parse(workerAttackBehaviourElement);
+
+            XElement visualElement = element.Element("Visual");
+            if (visualElement != null)
+                Visual.Parse(visualElement);
+        }
+
+        public override void Populate(XElement element)
+        {
+            base.Populate(element);
+
+            element.SetAttributeValue("firstName", FirstName);
+            element.SetAttributeValue("lastName", LastName);
+            element.SetAttributeValue("age", Age);
+            if(IsWeaponOut)
+                element.SetAttributeValue("isWeaponOut", true);
+
+            XElement taskQueueElement = new XElement("TaskQueue");
+            element.Add(taskQueueElement);
+            TaskQueue.Populate(taskQueueElement);
+
+            XElement workerAttackBehaviourElement = new XElement("WorkerAttackBehaviour");
+            element.Add(workerAttackBehaviourElement);
+            AttackBehaviour.Populate(workerAttackBehaviourElement);
+
+            XElement visualElement = new XElement("Visual");
+            element.Add(visualElement);
+            Visual.Populate(visualElement);
         }
 
         override protected void Update()

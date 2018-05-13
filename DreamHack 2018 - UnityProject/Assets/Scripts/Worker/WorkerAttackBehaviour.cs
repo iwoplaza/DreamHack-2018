@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace Game
@@ -22,6 +23,19 @@ namespace Game
             Worker = GetComponent<Worker>();
 
             IsActive = false;
+        }
+
+        public void Parse(XElement element)
+        {
+            XAttribute isActiveAttrib = element.Attribute("active");
+            if (isActiveAttrib != null)
+                IsActive = true;
+        }
+
+        public void Populate(XElement element)
+        {
+            if (IsActive)
+                element.SetAttributeValue("active", true);
         }
 
         public void Activate(Tasks.AttackTask task)

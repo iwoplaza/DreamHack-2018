@@ -40,6 +40,8 @@ namespace Game
 
         public void Start()
         {
+            Debug.Log("Starting GameState: " + WorldName);
+
             WorldMeshResource.UpdateMeshDictionary();
             WorldPopulationResource.UpdatePopulationDirectory();
             GameEnvironment.CliffThreshold = 0.5f;
@@ -98,7 +100,7 @@ namespace Game
 
             XAttribute seed = element.Attribute("seed");
             if(seed != null)
-                GameEnvironment.WorldSeed = seed.Value;
+                Seed = seed.Value;
 
             XElement tileMapElement = element.Element("TileMap");
             TileMap.Parse(tileMapElement);
@@ -112,14 +114,19 @@ namespace Game
             GameEnvironment.WorldSeed = Seed;
             GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
             GameEnvironment.GenerateMap();
-            GameEnvironment.PopulateMap();
+
+            XElement workersElement = element.Element("Workers");
+            IEnumerable workerElements = workersElement.Elements("Worker");
+            foreach (XElement workerElement in workerElements)
+            {
+                Worker worker = SpawnWorker(Vector3.zero);
+                worker.Parse(workerElement);
+            }
         }
 
         public void Populate(XElement element)
         {
-            XElement tileMapElement = new XElement("TileMap");
-            element.Add(tileMapElement);
-            TileMap.Populate(tileMapElement);
+            element.SetAttributeValue("seed", Seed);
 
             XElement timeElement = new XElement("TimeSystem");
             element.Add(timeElement);
@@ -128,6 +135,19 @@ namespace Game
             XElement itemStorageElement = new XElement("ItemStorage");
             element.Add(itemStorageElement);
             ItemStorage.Populate(itemStorageElement);
+
+            XElement workersElement = new XElement("Workers");
+            element.Add(workersElement);
+            foreach (Worker worker in Workers)
+            {
+                XElement workerElement = new XElement("Worker");
+                workersElement.Add(workerElement);
+                worker.Populate(workerElement);
+            }
+
+            XElement tileMapElement = new XElement("TileMap");
+            element.Add(tileMapElement);
+            TileMap.Populate(tileMapElement);
         }
 
         public void Update()

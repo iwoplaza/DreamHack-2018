@@ -1,6 +1,7 @@
 ﻿using Game.Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace Game
@@ -9,10 +10,10 @@ namespace Game
     public class TilePosition
     {
         [SerializeField] protected ushort m_x;
-        [SerializeField] protected ushort m_y;
+        [SerializeField] protected ushort m_z;
 
         public ushort X { get { return m_x; } set { m_x = value; } }
-        public ushort Z { get { return m_y; } set { m_y = value; } }
+        public ushort Z { get { return m_z; } set { m_z = value; } }
 
         public Vector3 Vector3
         {
@@ -106,6 +107,28 @@ namespace Game
             TilePosition position = new TilePosition(this);
             position.Offset(x, z);
             return position;
+        }
+
+        public void Parse(XElement element)
+        {
+            XAttribute xAttrib = element.Attribute("x");
+            XAttribute zAttrib = element.Attribute("z");
+
+            ushort x = 0, z = 0;
+
+            if (xAttrib != null)
+                ushort.TryParse(xAttrib.Value, out x);
+            if (zAttrib != null)
+                ushort.TryParse(zAttrib.Value, out z);
+
+            m_x = x;
+            m_z = z;
+        }
+
+        public void Populate(XElement element)
+        {
+            element.SetAttributeValue("x", m_x);
+            element.SetAttributeValue("z", m_z);
         }
 
         public static bool operator ==(TilePosition a, TilePosition b)

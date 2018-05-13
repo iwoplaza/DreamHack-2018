@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace Game.Tasks
@@ -35,5 +37,31 @@ namespace Game.Tasks
         public virtual void OnUpdate() { }
         public virtual void OnComplete() { }
         public virtual void OnCancel() { }
+
+        public virtual void Parse(XElement element) { }
+
+        public virtual void Populate(XElement element)
+        {
+            String typeName = GetType().FullName;
+            element.SetAttributeValue("type", typeName);
+        }
+
+        public static TaskBase CreateAndParse(XElement element)
+        {
+            XAttribute typeAttrib = element.Attribute("type");
+            if (typeAttrib == null)
+                return null;
+
+            Type classType = typeof(TaskBase).Assembly.GetType(typeAttrib.Value);
+            if (classType != null)
+            {
+                TaskBase task = classType.Assembly.CreateInstance(classType.FullName) as TaskBase;
+                task.Parse(element);
+
+                return task;
+            }
+
+            return null;
+        }
     }
 }

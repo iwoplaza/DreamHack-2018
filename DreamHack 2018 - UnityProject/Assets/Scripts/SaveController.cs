@@ -9,10 +9,10 @@ namespace Game
 {
     public class SaveController : MonoBehaviour
     {
-        private const string SAVE_DIRECTORY = "Saves/";
+        private const string SAVES_DIRECTORY = "Saves/";
 
         public static List<SavedGame> SavedGames { get; private set; }
-        public static string SaveDirectoryPath { get { return Path.Combine(Application.persistentDataPath, SAVE_DIRECTORY); } }
+        public static string SaveDirectoryPath { get { return Path.Combine(Application.persistentDataPath, SAVES_DIRECTORY); } }
 
         /// <summary>
         /// Called by the <see cref="ApplicationState"/>
@@ -27,13 +27,15 @@ namespace Game
             }
             else
             {
-                string[] fileNames = Directory.GetFiles(SaveDirectoryPath, "save_*.xml");
-                foreach (string fileName in fileNames)
+                Debug.Log("Looking for save files...");
+                string[] filePaths = Directory.GetFiles(SaveDirectoryPath, "save*.xml");
+                foreach (string filePath in filePaths)
                 {
-                    SavedGame savedGame = GetMetadata(fileName);
+                    SavedGame savedGame = GetMetadata(filePath);
                     if (savedGame != null)
                     {
                         SavedGames.Add(savedGame);
+                        Debug.Log("Saved game found:" + savedGame);
                     }
                 }
             }
@@ -42,13 +44,19 @@ namespace Game
         public static void Save(GameState gameStateToSave)
         {
             XElement document = new XElement("root");
+
+            document.SetAttributeValue("worldIdentifier", gameStateToSave.WorldIdentifier);
+            document.SetAttributeValue("worldName", gameStateToSave.WorldName);
+
             XElement gameStateElement = new XElement("GameState");
             document.Add(gameStateElement);
-
             gameStateToSave.Populate(gameStateElement);
 
-            /*string filePath = Path.Combine(Application.persistentDataPath, SAVE_FILE_NAME);
-            File.WriteAllText(filePath, document.ToString());*/
+            string fileName = CreateFileNameForIdentifier(gameStateToSave.WorldIdentifier);
+            string filePath = Path.Combine(SaveDirectoryPath, fileName);
+            File.WriteAllText(filePath, document.ToString());
+
+            Debug.Log("Saved game: " + gameStateToSave.WorldName);
         }
 
         public static bool Load(GameState gameStateToLoad)
@@ -99,7 +107,7 @@ namespace Game
 
         public static XElement GetSaveData(SavedGame savedGame)
         {
-            string fileName = GetFileNameForIndex(savedGame.WorldIdentifier);
+            string fileName = CreateFileNameForIdentifier(savedGame.WorldIdentifier);
             string filePath = Path.Combine(SaveDirectoryPath, fileName);
 
             if (File.Exists(filePath))
@@ -110,10 +118,8 @@ namespace Game
             return null;
         }
 
-        public static SavedGame GetMetadata(string fileName)
+        public static SavedGame GetMetadata(string filePath)
         {
-            string filePath = Path.Combine(SaveDirectoryPath, fileName);
-
             if (File.Exists(filePath))
             {
                 XElement document = XElement.Parse(File.ReadAllText(filePath));
@@ -137,7 +143,7 @@ namespace Game
 
         public static bool IsPotentialSaveFile(string fileName)
         {
-            string filePath = Path.Combine(Path.Combine(Application.persistentDataPath, SAVE_DIRECTORY), fileName);
+            string filePath = Path.Combine(Path.Combine(Application.persistentDataPath, SAVES_DIRECTORY), fileName);
 
             if (File.Exists(filePath))
             {
@@ -154,7 +160,7 @@ namespace Game
             return false;
         }
 
-        public static string GetFileNameForIndex(int index)
+        public static string CreateFileNameForIdentifier(int index)
         {
             return "save" + index + ".xml";
         }
@@ -163,7 +169,7 @@ namespace Game
         {
             int freeSaveIndex = 0;
 
-            string fileDirectoryPath = Path.Combine(Application.persistentDataPath, SAVE_DIRECTORY);
+            string fileDirectoryPath = Path.Combine(Application.persistentDataPath, SAVES_DIRECTORY);
             string[] fileNames = Directory.GetFiles(fileDirectoryPath, "save*.xml");
 
             bool free = false;
@@ -172,7 +178,7 @@ namespace Game
                 free = true;
                 foreach (string fileName in fileNames)
                 {
-                    if (fileName == GetFileNameForIndex(freeSaveIndex))
+                    if (fileName == CreateFileNameForIdentifier(freeSaveIndex))
                     {
                         free = false;
                         freeSaveIndex++;
@@ -189,7 +195,7 @@ namespace Game
 
         public static string FindFreeSaveName()
         {
-            return GetFileNameForIndex(FindFreeWorldIdentifier());
+            return CreateFileNameForIdentifier(FindFreeWorldIdentifier());
         }
     }
 }
