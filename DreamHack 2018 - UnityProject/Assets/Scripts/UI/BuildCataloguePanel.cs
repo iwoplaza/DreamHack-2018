@@ -74,7 +74,7 @@ namespace Game.UI
             BuildModeManager buildModeManager = WorldController.Instance.MainState.BuildModeManager;
             if (buildModeManager != null)
             {
-                buildModeManager.Hold(entry.PropType, entry.PropVariation);
+                buildModeManager.Hold(entry.PropType, 0);
             }
 
             foreach (BuildEntryButton button in m_entryButtonObjects)

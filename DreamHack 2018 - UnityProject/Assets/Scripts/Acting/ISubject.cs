@@ -10,6 +10,8 @@ namespace Game.Acting
     /// </summary>
     public interface ISubject
     {
+        Vector3 Position { get; }
+
         List<ActionBase> GetActionsFor(IActor actor);
     }
 }

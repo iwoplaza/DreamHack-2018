@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace Game
 {
@@ -23,8 +24,8 @@ namespace Game
         /// <param name="entryDirection">The direction it's coming from.
         ///                              (relative to the passer, not the object)</param>
         /// <returns>Whether or not the passer can pass.</returns>
-        public abstract bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection);
-        public abstract bool CanComeOutOfTowards(Pathfinding.MovementDirection entryDirection);
+        public abstract bool CanGoIntoFrom(TilePosition globalPosition, Pathfinding.MovementDirection entryDirection);
+        public abstract bool CanComeOutOfTowards(TilePosition globalPosition, Pathfinding.MovementDirection entryDirection);
         /// <summary>
         /// Determines if something can go to an adjecent tile touching the edge of this tile.
         /// </summary>
@@ -42,6 +43,14 @@ namespace Game
         /// by the player or the environment.
         /// </summary>
         public virtual bool IsStatic { get { return false; } }
+        public virtual int Width { get { return 1; } }
+        public virtual int Length { get { return 1; } }
+        public Vector2Int OrientedDimensions {
+            get
+            {
+                return DirectionUtils.IsAlignedWith(Orientation, Axis.Z) ? new Vector2Int(Width, Length) : new Vector2Int(Length, Width);
+            }
+        }
 
         public TileProp()
         {
@@ -69,13 +78,17 @@ namespace Game
 
         public virtual void OnUninstalled()
         {
+            InstalledAt = null;
             RemoveGameObject();
         }
 
-        public virtual void Parse(XElement element, Tile optionalTile = null)
+        public virtual void Parse(XElement element, Tile optionalRootTile = null)
         {
-            XAttribute orientationAttrib = element.Attribute("orientation");
             XAttribute variantAttrib = element.Attribute("variant");
+            XAttribute orientationAttrib = element.Attribute("orientation");
+
+            if (variantAttrib != null)
+                Variant = int.Parse(variantAttrib.Value);
 
             if (orientationAttrib != null)
             {
@@ -83,12 +96,10 @@ namespace Game
                 if (Orientation == Direction.NONE)
                     Orientation = Direction.POSITIVE_Z;
             }
-            if (variantAttrib != null)
-                Variant = int.Parse(variantAttrib.Value);
 
-            if (optionalTile != null)
+            if (optionalRootTile != null)
             {
-                InstalledAt = optionalTile;
+                InstalledAt = optionalRootTile;
                 ConstructGameObject();
             }
         }
@@ -110,12 +121,15 @@ namespace Game
 
         public virtual void Rotate(Direction direction)
         {
-            if (direction != Direction.NONE)
+            if (!Installed)
             {
-                Orientation = direction;
-                if (InstalledGameObject != null)
+                if (direction != Direction.NONE)
                 {
-                    InstalledGameObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F);
+                    Orientation = direction;
+                    if (InstalledGameObject != null)
+                    {
+                        InstalledGameObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F);
+                    }
                 }
             }
         }
@@ -128,6 +142,12 @@ namespace Game
         public virtual void RotateRight()
         {
             Rotate(DirectionUtils.RotateCW(Orientation));
+        }
+
+        public TilePosition GlobalToLocal(TilePosition global)
+        {
+            TilePosition local = global - InstalledAt.Position;
+            return TilePosition.RotateInBlock(local, Width, Length, Orientation);
         }
     }
 }

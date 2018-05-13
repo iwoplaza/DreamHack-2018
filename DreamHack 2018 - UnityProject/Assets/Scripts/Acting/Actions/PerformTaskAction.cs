@@ -10,7 +10,7 @@ namespace Game.Acting.Actions
     {
         public TaskBase TaskToPerform { get; private set; }
 
-        public override string DisplayName { get { return "Perform Task: " + TaskToPerform.DisplayName; } }
+        public override string DisplayName { get { return TaskToPerform.ActionQuickie; } }
 
         public PerformTaskAction(TaskBase taskToPerform)
         {

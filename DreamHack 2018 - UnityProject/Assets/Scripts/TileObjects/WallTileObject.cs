@@ -17,14 +17,11 @@ namespace Game.TileObjects
         {
         }
 
-        public override bool CanGoIntoFrom(MovementDirection entryDirection)
+        public override bool CanGoIntoFrom(TilePosition position, MovementDirection entryDirection)
         {
             MovementDirection localEntryDirection = MovementDirectionUtils.OrientTowardsInverse(
                 entryDirection, MovementDirectionUtils.NewFrom(Orientation)
             );
-
-            Debug.Log(entryDirection + " -> " + localEntryDirection);
-            Debug.Log("-8 % 8 == " + MathUtils.Mod(-8, 8));
 
             if (localEntryDirection == MovementDirection.POSITIVE_X || //Side
                 localEntryDirection == MovementDirection.NEGATIVE_X || //Side
@@ -38,7 +35,7 @@ namespace Game.TileObjects
             return false;
         }
 
-        public override bool CanComeOutOfTowards(MovementDirection direction)
+        public override bool CanComeOutOfTowards(TilePosition position, MovementDirection direction)
         {
             MovementDirection localDirection = MovementDirectionUtils.OrientTowardsInverse(
                 direction, MovementDirectionUtils.NewFrom(Orientation)
@@ -51,13 +48,12 @@ namespace Game.TileObjects
                 return false;
             }
 
-            Debug.Log("Returned true for " + localDirection);
             return true;
         }
 
         public GameObject GetPrefab()
         {
-            return Resources.FindTileObjectPrefab(Variant == 0 ? "Wall_Straight" : "Wall_Windowed");
+            return Resources.TileObjectPrefabs.Find(Variant == 0 ? "Wall_Straight" : "Wall_Windowed");
         }
 
         public override void ConstructGameObject()

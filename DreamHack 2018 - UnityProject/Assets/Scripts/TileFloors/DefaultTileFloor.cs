@@ -9,19 +9,19 @@ namespace Game.TileFloors
         public override string DisplayName { get { return "Default Floor"; } }
         public override bool IsImpenetrable { get { return false; } }
 
-        public override bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection)
+        public override bool CanGoIntoFrom(TilePosition position, Pathfinding.MovementDirection entryDirection)
         {
             return true;
         }
 
-        public override bool CanComeOutOfTowards(Pathfinding.MovementDirection direction)
+        public override bool CanComeOutOfTowards(TilePosition position, Pathfinding.MovementDirection direction)
         {
             return true;
         }
 
         public GameObject GetPrefab()
         {
-            return Resources.FindTileFloorPrefab("Floor_" + (Variant + 1));
+            return Resources.TileFloorPrefabs.Find("Floor_" + (Variant + 1));
         }
 
         public override void ConstructGameObject()

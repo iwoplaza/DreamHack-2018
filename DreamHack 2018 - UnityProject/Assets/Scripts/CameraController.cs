@@ -9,26 +9,34 @@ using Game.Acting;
 using Game.Acting.Actions;
 using Game.Scene;
 using Game.Building;
+using Game.Utility;
+using Game.UI;
 
 namespace Game
 {
     public class CameraController : MonoBehaviour
     {
-        protected Camera m_camera;
+        public Camera Camera { get; private set; }
 
+        [SerializeField] protected GameHUD m_gameHud;
         [SerializeField] protected float m_moveSpeedFactor = 1.0F;
         [SerializeField] protected float m_moveSpeedZoomInfluence = 2.0F;
         [SerializeField] protected float m_rotationSpeedFactor = 1.0F;
         [SerializeField] protected float m_cameraTurnIncrement = 45.0F;
         [SerializeField] protected float m_focusFollowSpeed = 0.7F;
         [Header("Distance")]
-        [SerializeField] protected float m_distance = 7.8F;
+        [SerializeField] protected float m_distance = 9F;
         [SerializeField] protected float m_minDistance = 5.0F;
         [SerializeField] protected float m_maxDistance = 16.0F;
+        [SerializeField] protected float m_defaultFocusDistance = 9F;
         [SerializeField] protected float m_scrollSpeed = 2.0F;
         [SerializeField] protected float m_scrollAccellerationFactor = 0.5F;
+        [Header("Edge Movement")]
+        [SerializeField] protected int m_edgeMargin = 20;
+        [SerializeField] protected float m_edgeMoveSpeed = 1.0F;
 
         protected float m_lastDistance = 0.0F;
+        protected float m_targetDistance = 9F;
         protected Plane m_groundPlane = new Plane(Vector3.up, Vector3.zero);
         protected IFocusTarget m_focusTarget = null;
 
@@ -38,12 +46,14 @@ namespace Game
 
         void Awake()
         {
-            m_camera = GetComponentInChildren<Camera>();
-            if(m_camera == null)
+            Camera = GetComponentInChildren<Camera>();
+            if(Camera == null)
             {
                 Debug.LogError("No camera was found as a part of the CameraController.");
                 Destroy(gameObject);
             }
+
+            m_targetDistance = m_distance;
         }
 
         void Start()
@@ -53,12 +63,13 @@ namespace Game
             if (WorldController.Instance != null)
             {
                 WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_GAIN, OnFocusGained);
+                WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_REGAIN, OnFocusRegained);
                 WorldController.Instance.MainState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_LOSS, OnFocusLost);
 
                 if(WorldController.Instance.MainState.TileMap != null)
                 {
                     TileMap tileMap = WorldController.Instance.MainState.TileMap;
-                    //transform.position = new Vector3(tileMap.Width / 2, 0, tileMap.Height / 2);
+                    transform.position = new Vector3(tileMap.Width / 2, 0, tileMap.Height / 2);
                 }
             }
         }
@@ -91,90 +102,110 @@ namespace Game
             tileMapComponent.UpdateViewpoint(transform.position);
 
             TilePosition tilePositionAtMouse = GetTilePositionAtMouse();
-            if (tilePositionAtMouse != null && !EventSystem.current.IsPointerOverGameObject())
-                tileMapComponent.HoverOver(tilePositionAtMouse);
-            else
-                tileMapComponent.HoverOver(null);
 
-            if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
+
+            if (m_gameHud.HandleInput())
             {
-                HandleBuildModeControls();
+                tileMapComponent.HoverOver(null);
             }
             else
             {
-                if (!EventSystem.current.IsPointerOverGameObject())
-                {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                        RaycastHit hitInfo;
+                if (tilePositionAtMouse != null && !EventSystem.current.IsPointerOverGameObject())
+                    tileMapComponent.HoverOver(tilePositionAtMouse);
+                else
+                    tileMapComponent.HoverOver(null);
 
-                        if (Physics.Raycast(ray, out hitInfo))
+                if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
+                {
+                    HandleBuildModeControls();
+                }
+                else
+                {
+                    if (!EventSystem.current.IsPointerOverGameObject())
+                    {
+                        if (Input.GetMouseButtonDown(0))
                         {
-                            if (hitInfo.collider != null)
+                            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                            RaycastHit hitInfo;
+
+                            if (Physics.Raycast(ray, out hitInfo))
                             {
-                                IFocusTarget focusTarget = hitInfo.collider.GetComponent<IFocusTarget>();
-                                WorldController.Instance.MainState.Focus.On(focusTarget);
+                                if (hitInfo.collider != null)
+                                {
+                                    IFocusTarget focusTarget = hitInfo.collider.GetComponent<IFocusTarget>();
+                                    WorldController.Instance.MainState.Focus.On(focusTarget);
+                                }
                             }
                         }
-                    }
 
-                    if (Input.GetMouseButtonDown(1))
-                    {
-                        if(!HandleSubjectClick())
+                        if (Input.GetMouseButtonDown(1))
                         {
-                            if (tilePositionAtMouse != null)
+                            if (!HandleSubjectClick())
                             {
-                                Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
-                                if (targetTile != null)
+                                if (tilePositionAtMouse != null)
                                 {
-                                    Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
-                                    if (selectedWorker != null)
+                                    Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
+                                    if (targetTile != null)
                                     {
-                                        selectedWorker.TaskQueue.AddTask(new GoToTask(tilePositionAtMouse));
+                                        Worker selectedWorker = WorldController.Instance.MainState.Focus.Current as Worker;
+                                        if (selectedWorker != null)
+                                        {
+                                            selectedWorker.TaskQueue.AddTask(new GoToTask(tilePositionAtMouse));
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+
+                if (Input.GetMouseButton(2))
+                {
+                    Vector3 forward = transform.forward;
+                    forward.y = 0;
+                    forward.Normalize();
+                    Vector3 right = transform.right;
+                    right.y = 0;
+                    right.Normalize();
+
+                    Vector3 position = transform.position;
+                    position += -right * horizontal * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
+                    position += -forward * vertical * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
+                    transform.position = position;
+
+                    m_focusTarget = null;
+                }
+
+                if (CrossPlatformInputManager.GetButtonDown("Turn Camera Left"))
+                {
+                    RotateBy(m_cameraTurnIncrement);
+                }
+
+                if (CrossPlatformInputManager.GetButtonDown("Turn Camera Right"))
+                {
+                    RotateBy(-m_cameraTurnIncrement);
+                }
+
+                if (CrossPlatformInputManager.GetButtonDown("Build Mode Toggle"))
+                {
+                    WorldController.Instance.ToggleBuildMode();
+                }
+
+                if (scrollWheel != 0)
+                {
+                    m_targetDistance = Mathf.Clamp(m_targetDistance - scrollWheel * m_scrollSpeed * (1 + m_targetDistance * m_scrollAccellerationFactor), m_minDistance, m_maxDistance);
+                }
+
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    HandleScreenEdgeMovement();
+                }
             }
 
-            if (Input.GetMouseButton(2))
+            m_distance += (m_targetDistance - m_distance) * 0.3F;
+
+            if (m_lastDistance != m_distance)
             {
-                Vector3 forward = transform.forward;
-                forward.y = 0;
-                forward.Normalize();
-                Vector3 right = transform.right;
-                right.y = 0;
-                right.Normalize();
-
-                Vector3 position = transform.position;
-                position += -right * horizontal * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
-                position += -forward * vertical * m_moveSpeedFactor * (1 + m_distance * m_moveSpeedZoomInfluence);
-                transform.position = position;
-
-                m_focusTarget = null;
-            }
-
-            if(CrossPlatformInputManager.GetButtonDown("Turn Camera Left"))
-            {
-                RotateBy(m_cameraTurnIncrement);
-            }
-
-            if (CrossPlatformInputManager.GetButtonDown("Turn Camera Right"))
-            {
-                RotateBy(-m_cameraTurnIncrement);
-            }
-
-            if(CrossPlatformInputManager.GetButtonDown("Build Mode Toggle"))
-            {
-                WorldController.Instance.ToggleBuildMode();
-            }
-
-            if (scrollWheel != 0 || m_lastDistance != m_distance)
-            {
-                m_distance = Mathf.Clamp(m_distance - scrollWheel * m_scrollSpeed * (1 + m_distance * m_scrollAccellerationFactor), m_minDistance, m_maxDistance);
                 UpdateCameraPosition();
                 m_lastDistance = m_distance;
             }
@@ -190,9 +221,8 @@ namespace Game
 
             if (m_focusTarget != null)
             {
-                Vector3 difference = m_focusTarget.Position - transform.position;
-                float t = Mathf.Min(Mathf.Pow(m_focusFollowSpeed, Time.deltaTime * 100), 1);
-                transform.position += difference * (t);
+                float t = Mathf.Min(m_focusFollowSpeed, 1);
+                transform.position += (m_focusTarget.Position - transform.position) * t;
             }
         }
 
@@ -211,11 +241,7 @@ namespace Game
                 ISubject subject = hitInfo.collider.GetComponent<ISubject>();
                 if (subject != null)
                 {
-                    List<ActionBase> actions = subject.GetActionsFor(actor);
-                    if (actions.Count > 0)
-                    {
-                        actor.PerformAction(actions[0], subject);
-                    }
+                    UI.PopUp.ActionSelectPopUp.Create(m_gameHud, subject, actor).Open();
                     return true;
                 }
             }
@@ -254,18 +280,76 @@ namespace Game
                         Tile targetTile = WorldController.Instance.MainState.TileMap.TileAt(tilePositionAtMouse);
                         if (targetTile != null)
                         {
-                            targetTile.UninstallObject();
-                            targetTile.UninstallFloor();
+                            targetTile.Uninstall(PropType.OBJECT);
+                            targetTile.Uninstall(PropType.FLOOR);
                         }
                     }
                 }
             }
         }
 
+        void HandleScreenEdgeMovement()
+        {
+            float width = Screen.width;
+            float height = Screen.height;
+            Vector3 mousePosition = Input.mousePosition;
+            mousePosition.x = Mathf.Clamp(mousePosition.x, 0, width);
+            mousePosition.y = Mathf.Clamp(mousePosition.y, 0, height);
+            int margin = m_edgeMargin;
+            float speed = m_edgeMoveSpeed;
+
+            Vector3 forward = transform.forward;
+            forward.y = 0;
+            forward.Normalize();
+            Vector3 right = transform.right;
+            right.y = 0;
+            right.Normalize();
+
+            float horizontal = 0.0F;
+            float vertical = 0.0F;
+
+            bool moved = false;
+
+            if (mousePosition.x <= margin)
+            {
+                horizontal = mousePosition.x / margin - 1;
+                moved = true;
+            }
+            if (mousePosition.x >= width - margin)
+            {
+                horizontal = (mousePosition.x - width + margin) / margin;
+                moved = true;
+            }
+            if (mousePosition.y <= margin)
+            {
+                vertical = mousePosition.y / margin - 1;
+                moved = true;
+            }
+            if (mousePosition.y >= height - margin)
+            {
+                vertical = (mousePosition.y - height + margin) / margin;
+                moved = true;
+            }
+
+            if (moved)
+            {
+                MoveBy(right * horizontal * speed * 1.0F * (1 + m_distance * m_moveSpeedZoomInfluence) +
+                       forward * vertical * speed * 0.8F * (1 + m_distance * m_moveSpeedZoomInfluence));
+            }
+        }
+
+        void MoveBy(Vector3 vector)
+        {
+            Vector3 position = transform.position;
+            position += vector;
+            transform.position = position;
+            m_focusTarget = null;
+        }
+
         void UpdateCameraPosition()
         {
             Vector3 direction = new Vector3(0, 1, -1).normalized;
-            m_camera.transform.localPosition = direction * m_distance;
+            Camera.transform.localPosition = direction * m_distance;
         }
 
         void RotateBy(float amount)
@@ -284,11 +368,18 @@ namespace Game
         void OnFocusGained(IFocusTarget target)
         {
             m_focusTarget = target;
+            m_targetDistance = m_defaultFocusDistance;
         }
 
         void OnFocusLost(IFocusTarget target)
         {
             m_focusTarget = null;
+        }
+
+        void OnFocusRegained(IFocusTarget target)
+        {
+            m_focusTarget = target;
+            m_targetDistance = m_defaultFocusDistance;
         }
     }
 }

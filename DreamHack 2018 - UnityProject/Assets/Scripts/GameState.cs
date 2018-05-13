@@ -1,5 +1,6 @@
 ﻿using Game.Building;
 using Game.Environment;
+using Game.Items;
 using Game.TileObjects;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Game
         public TimeSystem TimeSystem { get; private set; }
         public BuildCatalogue BuildCatalogue { get; private set; }
         public BuildModeManager BuildModeManager { get; private set; }
+        public ItemStorage ItemStorage { get; private set; }
         public GameEnvironment GameEnvironment { get; private set; }
 
         public GameState(GameEnvironment gameEnvironment)
@@ -28,6 +30,7 @@ namespace Game
             TimeSystem = new TimeSystem();
             BuildCatalogue = new BuildCatalogue();
             BuildModeManager = new BuildModeManager(this);
+            ItemStorage = new ItemStorage();
         }
 
         public void Start()
@@ -45,17 +48,22 @@ namespace Game
             WorldMeshResource.UpdateMeshDictionary();
             WorldPopulationResource.UpdatePopulationDirectory();
             GameEnvironment.CliffThreshold = 0.5f;
-            GameEnvironment.WorldSeed = "seed";
+            GameEnvironment.WorldSeed = "glory";
             GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
             GameEnvironment.ChunkSize = new Vector2Int(15, 15);
             GameEnvironment.EmptyRadius = GameEnvironment.WorldSize.magnitude * 0.075f;
             GameEnvironment.GenerateMap();
             GameEnvironment.PopulateMap();
 
-            Worker worker1 = SpawnWorker();
+            Worker worker1 = SpawnWorker(new Vector3(TileMap.Width / 2 + 1, 0, TileMap.Height / 2 + 1));
+            worker1.FirstName = "James";
+            worker1.LastName = "Marz";
+            Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 1, 0, TileMap.Height / 2 - 1));
+            worker2.FirstName = "Hugo";
+            worker2.LastName = "Ivanovicz";
         }
 
-        public Worker SpawnWorker()
+        public Worker SpawnWorker(Vector3 position)
         {
             GameObject workerPrefab = Resources.WorkerPrefab;
             if(workerPrefab == null)
@@ -73,7 +81,8 @@ namespace Game
                     worker = workerObject.AddComponent<Worker>();
                 }
                 worker.Setup(TileMap);
-                worker.Position = new Vector3(4, 1, 4);
+                worker.Position = position;
+                Workers.Add(worker);
 
                 return worker;
             }
@@ -91,6 +100,9 @@ namespace Game
 
             XElement timeElement = element.Element("TimeSystem");
             TimeSystem.Parse(timeElement);
+
+            XElement itemStorageElement = element.Element("ItemStorage");
+            ItemStorage.Parse(itemStorageElement);
         }
 
         public void Populate(XElement element)
@@ -102,6 +114,10 @@ namespace Game
             XElement timeElement = new XElement("TimeSystem");
             element.Add(timeElement);
             TimeSystem.Populate(timeElement);
+
+            XElement itemStorageElement = new XElement("ItemStorage");
+            element.Add(itemStorageElement);
+            ItemStorage.Populate(itemStorageElement);
         }
     }
 }

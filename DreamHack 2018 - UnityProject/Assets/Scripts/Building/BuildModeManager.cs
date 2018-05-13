@@ -12,6 +12,7 @@ namespace Game.Building
         public Type HeldObjectType { get; private set; }
         public TileProp TemporaryProp { get; private set; }
         public GameObject TemporaryDisplayObject { get; private set; }
+        public GameObject[] TileDisplayObjects { get; private set; }
         public TilePosition Cursor { get; private set; }
         public Direction PropOrientation { get; private set; }
         public int PropVariant { get; private set; }
@@ -47,14 +48,30 @@ namespace Game.Building
             if (TemporaryDisplayObject != null)
                 UnityEngine.Object.Destroy(TemporaryDisplayObject);
 
+            if (TileDisplayObjects != null)
+            {
+                foreach (GameObject obj in TileDisplayObjects)
+                {
+                    UnityEngine.Object.Destroy(obj);
+                }
+                TileDisplayObjects = null;
+            }
+
             HeldObjectType = null;
         }
 
         public void Hold(Type tileObjectType, int variant = 0)
         {
-            if(TemporaryDisplayObject != null)
-            {
+            if (TemporaryDisplayObject != null)
                 UnityEngine.Object.Destroy(TemporaryDisplayObject);
+
+            if (TileDisplayObjects != null)
+            {
+                foreach (GameObject obj in TileDisplayObjects)
+                {
+                    UnityEngine.Object.Destroy(obj);
+                }
+                TileDisplayObjects = null;
             }
 
             SetVariant(variant);
@@ -70,9 +87,25 @@ namespace Game.Building
                 {
                     collider.isTrigger = true;
                 }
+                CreateTileDisplayObjects();
 
                 if (m_onHoldHandlers != null)
                     m_onHoldHandlers(tileObjectType);
+            }
+        }
+
+        void CreateTileDisplayObjects()
+        {
+            int width = TemporaryProp.Width;
+            int length = TemporaryProp.Length;
+
+            TileDisplayObjects = new GameObject[TemporaryProp.Width * TemporaryProp.Length];
+            for (int x = 0; x < width; ++x)
+            {
+                for (int z = 0; z < length; ++z)
+                {
+                    TileDisplayObjects[z * length + x] = UnityEngine.Object.Instantiate(Resources.TileDisplayHoverPrefab);
+                }
             }
         }
 
@@ -81,14 +114,14 @@ namespace Game.Building
             if (HeldObjectType != null)
             {
                 Tile tile = m_gameState.TileMap.TileAt(Cursor);
-                if (tile != null && tile.CanInstallObject)
+                if (tile != null && tile.CanInstall(HeldObjectType))
                 {
                     TileProp tileProp = HeldObjectType.Assembly.CreateInstance(HeldObjectType.FullName) as TileProp;
                     if (tileProp != null)
                     {
                         tileProp.Variant = PropVariant;
                         tileProp.Rotate(PropOrientation);
-                        tile.Install(tileProp);
+                        tile.InstallAsRoot(tileProp);
                     }
                 }
             }
@@ -103,21 +136,42 @@ namespace Game.Building
         public void RotatePropLeft()
         {
             PropOrientation = DirectionUtils.RotateCCW(PropOrientation);
-            UpdateView();
+            if (TemporaryProp != null)
+            {
+                TemporaryProp.Rotate(PropOrientation);
+                UpdateView();
+            }
         }
 
         public void RotatePropRight()
         {
             PropOrientation = DirectionUtils.RotateCW(PropOrientation);
-            UpdateView();
+            if (TemporaryProp != null)
+            {
+                TemporaryProp.Rotate(PropOrientation);
+                UpdateView();
+            }
         }
 
         void UpdateView()
         {
             if(TemporaryDisplayObject != null)
             {
-                TemporaryDisplayObject.transform.position = Cursor.Vector3 + new Vector3(0.5F, 0.001F, 0.5F);
+                int width = TemporaryProp.Width;
+                int length = TemporaryProp.Length;
+
+                Vector2Int dimensions = TemporaryProp.OrientedDimensions;
+                TemporaryDisplayObject.transform.position = Cursor.Vector3 + new Vector3(dimensions.x / 2.0F, 0.001F, dimensions.y / 2.0F);
                 TemporaryDisplayObject.transform.rotation = Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(PropOrientation), 0.0F);
+
+                for(int x = 0; x < width; ++x)
+                {
+                    for (int z = 0; z < length; ++z)
+                    {
+                        TilePosition position = TilePosition.RotateInBlock(new TilePosition(x, z), width, length, PropOrientation);
+                        TileDisplayObjects[z * length + x].transform.position = Cursor.Vector3 + position.Vector3 + new Vector3(0.5F, 0, 0.5F);
+                    }
+                }
             }
         }
 

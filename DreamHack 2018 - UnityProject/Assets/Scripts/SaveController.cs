@@ -9,16 +9,27 @@ namespace Game
 {
     public class SaveController : MonoBehaviour
     {
-        public static SaveController Instance { get; private set; }
+        private const string SAVE_FILE_NAME = "save0.xml";
+        private const string SAVE_DIRECTORY = "Saves/";
 
-        private const string SAVE_FILE_NAME = "save0.json";
+        public static List<SavedGame> SavesGames { get; private set; }
 
-        void Awake()
+        /// <summary>
+        /// Called by the <see cref=">ApplicationState"/>
+        /// </summary>
+        public static void Setup()
         {
-            Instance = this;
+            SavesGames = new List<SavedGame>();
+            string fileDirectoryPath = Path.Combine(Application.persistentDataPath, SAVE_DIRECTORY);
+
+            string[] fileNames = Directory.GetFiles(fileDirectoryPath, "save_*.xml");
+            foreach (string fileName in fileNames)
+            {
+                
+            }
         }
 
-        public void Save(GameState gameStateToSave)
+        public static void Save(GameState gameStateToSave)
         {
             XElement document = new XElement("root");
             XElement gameStateElement = new XElement("GameState");
@@ -30,7 +41,7 @@ namespace Game
             File.WriteAllText(filePath, document.ToString());
         }
 
-        public bool Load(GameState gameStateToLoad)
+        public static bool Load(GameState gameStateToLoad)
         {
             string filePath = Path.Combine(Application.persistentDataPath, SAVE_FILE_NAME);
 
@@ -57,6 +68,40 @@ namespace Game
             }
 
             return false;
+        }
+
+        public static string GetFileNameForIndex(int index)
+        {
+            return "save" + index + ".xml";
+        }
+
+        public static string FindFreeSaveName()
+        {
+            int freeSaveIndex = 0;
+
+            string fileDirectoryPath = Path.Combine(Application.persistentDataPath, SAVE_DIRECTORY);
+            string[] fileNames = Directory.GetFiles(fileDirectoryPath, "save*.xml");
+            int index = 0;
+
+            bool free = false;
+            while (!free)
+            {
+                free = true;
+                foreach(string fileName in fileNames)
+                {
+                    if(fileName == GetFileNameForIndex(freeSaveIndex))
+                    {
+                        free = false;
+                        freeSaveIndex++;
+                        continue;
+                    }
+                }
+
+                if (free)
+                    break;
+            }
+
+            return GetFileNameForIndex(freeSaveIndex);
         }
     }
 }

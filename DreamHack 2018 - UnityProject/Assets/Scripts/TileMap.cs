@@ -47,6 +47,20 @@ namespace Game
             XAttribute widthAttrib = element.Attribute("width");
             XAttribute heightAttrib = element.Attribute("height");
 
+            if (widthAttrib != null)
+                Width = Int32.Parse(widthAttrib.Value);
+            if (heightAttrib != null)
+                Height = Int32.Parse(heightAttrib.Value);
+
+            m_tiles = new Tile[Width, Height];
+            for (int x = 0; x < Width; ++x)
+            {
+                for (int y = 0; y < Height; ++y)
+                {
+                    m_tiles[x, y] = new Tile(this, x, y);
+                }
+            }
+
             IEnumerable<XElement> tileElements = element.Elements("Tile");
             foreach(XElement tileElement in tileElements)
             {
@@ -55,10 +69,14 @@ namespace Game
                     m_tiles[tile.Position.X, tile.Position.Z] = tile;
             }
 
-            if(widthAttrib != null)
-                Width = Int32.Parse(widthAttrib.Value);
-            if (heightAttrib != null)
-                Height = Int32.Parse(heightAttrib.Value);
+            for (int x = 0; x < Width; ++x)
+            {
+                for (int y = 0; y < Height; ++y)
+                {
+                    if (m_tiles[x, y] != null)
+                        m_tiles[x, y].AfterParse();
+                }
+            }
         }
 
         public void Populate(XElement element)
@@ -110,7 +128,22 @@ namespace Game
             if (targetTile == null)
                 return false;
 
-            targetTile.Install(objectToInstall);
+            targetTile.InstallAsRoot(objectToInstall);
+            return true;
+        }
+
+        public bool CanInstallPropAtArea(PropType type, TilePosition origin, Vector2Int dimensions)
+        {
+            for (ushort x = 0; x < dimensions.x; ++x)
+            {
+                for (ushort z = 0; z < dimensions.y; ++z)
+                {
+                    TilePosition position = origin.GetOffset(x, z);
+                    Tile tile = TileAt(position);
+                    if (tile == null || !tile.CanInstall(type))
+                        return false;
+                }
+            }
             return true;
         }
 

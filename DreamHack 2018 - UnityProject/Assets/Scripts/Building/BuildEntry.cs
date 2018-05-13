@@ -9,13 +9,11 @@ namespace Game.Building
     {
         public string DisplayName { get; private set; }
         public Type PropType { get; private set; }
-        public int PropVariation { get; private set; }
 
-        public BuildEntry(string displayName, Type propType, int propVariation)
+        public BuildEntry(string displayName, Type propType)
         {
             DisplayName = displayName;
             PropType = propType;
-            PropVariation = propVariation;
         }
     }
 }

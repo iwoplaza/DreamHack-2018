@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace Game
 {
@@ -90,6 +91,17 @@ namespace Game
             }
 
             return input;
+        }
+
+        public static bool IsAlignedWith(Direction d, Axis axis)
+        {
+            if (axis == Axis.X)
+                return d == Direction.NEGATIVE_X || d == Direction.POSITIVE_X;
+            if (axis == Axis.Y)
+                return d == Direction.NEGATIVE_Y || d == Direction.POSITIVE_Y;
+            if (axis == Axis.Z)
+                return d == Direction.NEGATIVE_Z || d == Direction.POSITIVE_Z;
+            return false;
         }
     }
 }

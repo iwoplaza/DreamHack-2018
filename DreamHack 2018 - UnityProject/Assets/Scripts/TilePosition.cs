@@ -88,10 +88,23 @@ namespace Game
             }
         }
 
+        public void Offset(ushort x, ushort z)
+        {
+            X += x;
+            Z += z;
+        }
+
         public TilePosition GetOffset(MovementDirection direction)
         {
             TilePosition position = new TilePosition(this);
             position.Offset(direction);
+            return position;
+        }
+
+        public TilePosition GetOffset(ushort x, ushort z)
+        {
+            TilePosition position = new TilePosition(this);
+            position.Offset(x, z);
             return position;
         }
 
@@ -124,6 +137,11 @@ namespace Game
             return new TilePosition(a.X + b.X, a.Z + b.Z);
         }
 
+        public static TilePosition operator -(TilePosition a, TilePosition b)
+        {
+            return new TilePosition(a.X - b.X, a.Z - b.Z);
+        }
+
         public override string ToString()
         {
             return "(" + X.ToString() + ", " + Z.ToString() + ")";
@@ -132,6 +150,21 @@ namespace Game
         public static TilePosition FromWorldPosition(Vector3 worldPos)
         {
             return new TilePosition((short)Mathf.FloorToInt(worldPos.x), (short)Mathf.FloorToInt(worldPos.z));
+        }
+
+        public static TilePosition RotateInBlock(TilePosition local, int width, int length, Direction direction)
+        {
+            switch(direction)
+            {
+                case Direction.POSITIVE_X:
+                    return new TilePosition(local.Z, width - 1 - local.X);
+                case Direction.NEGATIVE_Z:
+                    return new TilePosition(width - 1 - local.X, length - 1 - local.Z);
+                case Direction.NEGATIVE_X:
+                    return new TilePosition(length - 1 - local.Z, local.X);
+                default:
+                    return local;
+            }
         }
     }
 }

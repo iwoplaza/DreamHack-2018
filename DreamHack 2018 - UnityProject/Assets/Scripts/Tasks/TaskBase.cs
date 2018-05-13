@@ -14,6 +14,11 @@ namespace Game.Tasks
     public abstract class TaskBase
     {
         /// <summary>
+        /// This is used as a super short text representation of the task in UI.
+        /// </summary>
+        public abstract string ActionQuickie { get; }
+
+        /// <summary>
         /// This is used as a short text representation of the task in UI.
         /// </summary>
         public abstract string DisplayName { get; }

@@ -13,6 +13,7 @@ namespace Game
 
         private FocusHandler m_focusGainHandlers;
         private FocusHandler m_focusLossHandlers;
+        private FocusHandler m_focusRegainHandlers;
 
         public Focus()
         {
@@ -49,6 +50,12 @@ namespace Game
             }
         }
 
+        public void Refocus()
+        {
+            if (m_focusRegainHandlers != null)
+                m_focusRegainHandlers(Current);
+        }
+
         public void RegisterEventHandler(EventType type, FocusHandler handler)
         {
             switch (type)
@@ -59,12 +66,15 @@ namespace Game
                 case EventType.FOCUS_LOSS:
                     m_focusLossHandlers += handler;
                     break;
+                case EventType.FOCUS_REGAIN:
+                    m_focusRegainHandlers += handler;
+                    break;
             }
         }
 
         public enum EventType
         {
-            FOCUS_GAIN, FOCUS_LOSS
+            FOCUS_GAIN, FOCUS_LOSS, FOCUS_REGAIN
         }
     }
 }

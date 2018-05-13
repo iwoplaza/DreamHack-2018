@@ -9,7 +9,7 @@ namespace Game.Pathfinding.Rules
     {
         public bool CanGoIntoFrom(Tile tile, MovementDirection dir)
         {
-            return tile != null && tile.CanGoIntoFrom(dir);
+            return tile != null && tile.CanGoIntoFrom(dir) && !tile.HasCliff;
         }
 
         public bool CanComeOutOfTowards(Tile tile, MovementDirection dir)
@@ -19,12 +19,12 @@ namespace Game.Pathfinding.Rules
 
         public bool CanSkimThrough(Tile tile)
         {
-            return tile != null && tile.CanSkimThrough();
+            return tile != null && tile.CanSkimThrough()  && !tile.HasCliff;
         }
 
         public bool IsProperEndGoal(Tile tile)
         {
-            return tile != null && !tile.IsImpenetrable;
+            return tile != null && !tile.IsImpenetrable  && !tile.HasCliff;
         }
     }
 }

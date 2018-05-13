@@ -13,7 +13,8 @@ namespace Game.Building
 
         public BuildCategory[] Categories
         {
-            get {
+            get
+            {
                 return new BuildCategory[] { FoundationCategory, InteriorCategory, TechnologyCategory, TrapsCategory};
             }
         }
@@ -21,18 +22,13 @@ namespace Game.Building
         public BuildCatalogue()
         {
             FoundationCategory = new BuildCategory("Foundation", "Foundation")
-                .Add(new BuildEntry("Wall", typeof(TileObjects.WallTileObject), 0))
-                .Add(new BuildEntry("Windowed Wall", typeof(TileObjects.WallTileObject), 1))
-                .Add(new BuildEntry("Wall Corner", typeof(TileObjects.WallCornerTileObject), 0))
-                .Add(new BuildEntry("Floor 1", typeof(TileFloors.DefaultTileFloor), 0))
-                .Add(new BuildEntry("Floor 2", typeof(TileFloors.DefaultTileFloor), 1))
-                .Add(new BuildEntry("Floor 3", typeof(TileFloors.DefaultTileFloor), 2))
+                .Add(new BuildEntry("Wall", typeof(TileObjects.WallTileObject)))
+                .Add(new BuildEntry("Wall Corner", typeof(TileObjects.WallCornerTileObject)))
+                .Add(new BuildEntry("Door", typeof(TileObjects.DoorTileObject)))
+                .Add(new BuildEntry("Floor", typeof(TileFloors.DefaultTileFloor)))
             ;
 
-            InteriorCategory = new BuildCategory("Interior", "Interior")
-                .Add(new BuildEntry("Plant", typeof(TileObjects.CliffObject), 0))
-            ;
-
+            InteriorCategory = new BuildCategory("Interior", "Interior");
             TechnologyCategory = new BuildCategory("Technology", "Technology");
             TrapsCategory = new BuildCategory("Traps", "Traps");
         }

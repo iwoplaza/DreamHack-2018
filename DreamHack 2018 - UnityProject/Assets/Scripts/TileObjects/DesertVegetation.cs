@@ -10,14 +10,14 @@ namespace Game.TileObjects
 
         public override bool IsStatic { get { return true; } }
         public override string DisplayName { get { return "Desert type vegetation"; } }
-        public override bool IsImpenetrable { get { return true; } }
+        public override bool IsImpenetrable { get { return false; } }
 
-        public override bool CanGoIntoFrom(Pathfinding.MovementDirection entryDirection)
+        public override bool CanGoIntoFrom(TilePosition position, Pathfinding.MovementDirection entryDirection)
         {
             return true;
         }
 
-        public override bool CanComeOutOfTowards(Pathfinding.MovementDirection direction)
+        public override bool CanComeOutOfTowards(TilePosition position, Pathfinding.MovementDirection direction)
         {
             return true;
         }
@@ -43,7 +43,7 @@ namespace Game.TileObjects
 
         public override GameObject CreateTemporaryDisplay()
         {
-            GameObject prefab = Resources.FindEnvironmentObjectPrefab("Cliff");
+            GameObject prefab = WorldPopulationResource.GetResources(WorldPopulationResource.PopulationType.VEGETATION_DESERT);
             if (prefab != null)
             {
                 return Object.Instantiate(prefab);
