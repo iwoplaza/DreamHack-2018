@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class SavedGame : MonoBehaviour
+    public class SavedGame
     {
         public int WorldIdentifier { get; private set; }
         public string WorldName { get; private set; }
@@ -13,6 +13,11 @@ namespace Game
         {
             WorldIdentifier = worldIdentifier;
             WorldName = worldName;
+        }
+
+        public override string ToString()
+        {
+            return "("+ WorldIdentifier + ") " + WorldName;
         }
     }
 }

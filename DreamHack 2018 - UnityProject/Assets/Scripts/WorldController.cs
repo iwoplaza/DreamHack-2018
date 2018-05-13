@@ -86,12 +86,6 @@ namespace Game
             }
         }
 
-        void OnApplicationQuit()
-        {
-            Debug.Log("Shutting down...");
-            SaveController.Save(MainState);
-        }
-
         public delegate void ModeChangeHandler(PlayMode mode);
         ModeChangeHandler m_modeChangeHandlers;
 

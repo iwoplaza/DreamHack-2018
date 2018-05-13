@@ -5,6 +5,7 @@ using Game;
 using System.Threading;
 using Game.Pathfinding.Internal;
 using Game.Utility;
+using System.Xml.Linq;
 
 namespace Game.Pathfinding
 {

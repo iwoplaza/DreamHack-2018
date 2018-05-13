@@ -1,6 +1,7 @@
 ﻿using Game.Utility;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace Game
@@ -44,6 +45,31 @@ namespace Game
         protected virtual void Start()
         {
 
+        }
+
+        public virtual void Parse(XElement element)
+        {
+            XElement positionElement = element.Element("Position");
+            if (positionElement != null)
+            {
+                Position = SerialUtils.Parse(positionElement);
+                Debug.Log("Parsed living position: " + Position);
+            }
+            
+            XElement healthElement = element.Element("Health");
+            if (healthElement != null)
+                Health.Parse(healthElement);
+        }
+
+        public virtual void Populate(XElement element)
+        {
+            XElement positionElement = new XElement("Position");
+            element.Add(positionElement);
+            SerialUtils.Populate(Position, positionElement);
+
+            XElement healthElement = new XElement("Health");
+            element.Add(healthElement);
+            Health.Populate(healthElement);
         }
 
         // Update is called once per frame

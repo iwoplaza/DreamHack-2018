@@ -1,6 +1,7 @@
 ﻿using Game.Utility;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace Game.Animation
@@ -43,6 +44,14 @@ namespace Game.Animation
             {
                 PutWeaponAtHip();
             }
+        }
+
+        public void Parse(XElement element)
+        {
+        }
+
+        public void Populate(XElement element)
+        {
         }
 
         // Update is called once per frame

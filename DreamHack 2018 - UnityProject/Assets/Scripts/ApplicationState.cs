@@ -55,7 +55,10 @@ namespace Game
 
             if (CurrentScene == SceneType.GAME)
             {
-                SetupGame();
+                if (SaveController.SavedGames.Count <= 0)
+                    SetupGame();
+                else
+                    SetupGame(SaveController.SavedGames[SaveController.SavedGames.Count - 1]);
                 SetupGameHudAndCamera();
             }
         }
@@ -63,6 +66,24 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
+        }
+
+        void OnApplicationQuit()
+        {
+            GameObject worldControllerObject = GameObject.FindGameObjectWithTag("WorldController");
+            if (worldControllerObject == null)
+            {
+                Debug.LogError("Couldn't find the WorldController object in the scene. Saving aborted");
+                return;
+            }
+
+            WorldController worldController = worldControllerObject.GetComponent<WorldController>();
+            if(worldController.MainState != null)
+            {
+                SaveController.Save(worldController.MainState);
+            }
+
+            Debug.Log("Shutting down...");
         }
 
         void SetupMainMenu()

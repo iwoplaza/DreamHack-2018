@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace Game.Tasks
@@ -27,6 +28,33 @@ namespace Game.Tasks
             Status = QueueStatus.WAITING;
             Tasks = new List<TaskBase>();
             m_taskEventHandlers = new Dictionary<TaskEvent, TaskEventHandler>();
+        }
+
+        public void Parse(XElement element)
+        {
+            XAttribute statusAttrib = element.Attribute("status");
+            if (statusAttrib != null)
+                Status = (QueueStatus)int.Parse(statusAttrib.Value);
+
+            IEnumerable taskElements = element.Elements("Task");
+            foreach (XElement taskElement in taskElements)
+            {
+                TaskBase task = TaskBase.CreateAndParse(taskElement);
+                if (task != null)
+                    Tasks.Add(task);
+            }
+        }
+
+        public void Populate(XElement element)
+        {
+            element.SetAttributeValue("status", (int) Status);
+
+            foreach (TaskBase task in Tasks)
+            {
+                XElement taskElement = new XElement("Task");
+                element.Add(taskElement);
+                task.Populate(taskElement);
+            }
         }
 
         /// <summary>
@@ -130,6 +158,10 @@ namespace Game.Tasks
             }
         }
 
+        /// <summary>
+        /// This is populated and parsed,
+        /// don't change the order of this
+        /// </summary>
         public enum QueueStatus
         {
             WAITING,
