@@ -7,7 +7,7 @@ using UnityEngine.Animations;
 
 namespace Game
 {
-    public abstract class TileProp
+    public abstract class TileProp : IAttackable
     {
         public Tile InstalledAt { get; private set; }
         public bool Installed { get { return InstalledAt != null; } }
@@ -32,7 +32,6 @@ namespace Game
         public virtual bool CanSkimThrough { get { return true; } }
 
         public abstract bool IsImpenetrable { get; }
-        public virtual HealthComponent Health { get; private set; }
 
         /// <summary>
         /// Used for determining how passable compared to others this object is.
@@ -52,6 +51,26 @@ namespace Game
                 return DirectionUtils.IsAlignedWith(Orientation, Axis.Z) ? new Vector2Int(Width, Length) : new Vector2Int(Length, Width);
             }
         }
+
+        HealthComponent m_health;
+        public HealthComponent Health
+        {
+            get { return m_health; }
+
+            private set
+            {
+                if (m_health != null)
+                    m_health.UnregisterChangeHandler(OnHealthChanged);
+
+                m_health = value;
+
+                if(m_health != null)
+                    m_health.RegisterChangeHandler(OnHealthChanged);
+            }
+        }
+        public bool IsDestroyed { get { return !Installed; } }
+        public GameObject GameObject { get { return InstalledGameObject; } }
+        public Vector3 Position { get { return Installed ? InstalledAt.Position.Vector3 : Vector3.zero; } }
 
         public TileProp()
         {
@@ -82,6 +101,11 @@ namespace Game
         {
             InstalledAt = null;
             RemoveGameObject();
+        }
+
+        public void Damage(int damage, GameObject attacker)
+        {
+
         }
 
         public virtual void Parse(XElement element)
@@ -133,6 +157,24 @@ namespace Game
             UnityEngine.Object.Destroy(InstalledGameObject);
         }
         public abstract GameObject CreateTemporaryDisplay();
+
+        public virtual void OnHealthChanged(int previousPoints, int currentPoints) {
+            if (Health != null)
+            {
+                if (previousPoints > 0 && currentPoints <= 0)
+                {
+                    OnHealthDepleted();
+                    Health.SetHealthPointsNoNotify(0);
+                }
+            }
+        }
+        public virtual void OnHealthDepleted()
+        {
+            if(Health != null)
+            {
+                InstalledAt.Uninstall(this);
+            }
+        }
 
         public virtual void Rotate(Direction direction)
         {

@@ -173,6 +173,17 @@ namespace Game
             }
         }
 
+        public void Uninstall(TileProp tilePropToUninstall)
+        {
+            foreach (TileProp prop in InstalledProps)
+            {
+                if(prop != null && prop == tilePropToUninstall)
+                {
+
+                }
+            }
+        }
+
         public void SetHasCliff(bool flag)
         {
             HasCliff = flag;
