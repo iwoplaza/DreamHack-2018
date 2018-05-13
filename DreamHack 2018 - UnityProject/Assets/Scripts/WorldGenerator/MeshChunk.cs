@@ -1042,6 +1042,7 @@ namespace Game.Environment
 			}
 			MeshFilter myFilter = GetComponent<MeshFilter>();
 			myFilter.mesh.CombineMeshes(combineInstance,true,true);
+			myFilter.mesh.RecalculateBounds();
 			GetComponent<MeshRenderer>().sharedMaterial = MeshMaterial;
 		}
 

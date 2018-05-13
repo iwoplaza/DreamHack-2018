@@ -4,6 +4,7 @@ using UnityEngine;
 using Utility.Noise;
 using Game;
 using Game.TileObjects;
+using System.Threading;
 
 namespace Game.Environment
 {
@@ -27,7 +28,81 @@ namespace Game.Environment
 
 		[SerializeField] Material m_mapMaterial;
 
+		struct GameObjectToAdd
+		{
+			public GameObject ToAdd { get; private set; }
+			public TilePosition AddPosition { get; private set; }
+
+			public GameObjectToAdd(GameObject _ToAdd, TilePosition _AddPosition)
+			{
+				ToAdd = _ToAdd;
+				AddPosition = _AddPosition;
+			}
+		}
+
+		private Queue<GameObjectToAdd> m_setTransformToChunkQueue;
+
+		public struct CullingStream
+		{
+			public GameObject ToCull { get; private set; }
+			public bool DisableObject { get; private set; }
+
+			public CullingStream(GameObject _ToCull, bool _DisableObject)
+			{
+				ToCull = _ToCull;
+				DisableObject = _DisableObject;
+			}
+		}		
+
+		private Queue<CullingStream> m_cullQueue;
+
+		private bool m_startCulling;
+
 		TileMap m_tileMap;
+
+		public void AddGameobjectToChunk(GameObject toAdd, TilePosition position)
+		{
+			if(m_setTransformToChunkQueue == null)
+			{
+				m_setTransformToChunkQueue = new Queue<GameObjectToAdd>();
+			}
+			m_setTransformToChunkQueue.Enqueue(new GameObjectToAdd(toAdd,position));
+		}
+
+		public void Update()
+		{
+			if(Chunks == null)
+				return;
+			if(m_setTransformToChunkQueue != null){
+				while(m_setTransformToChunkQueue.Count > 0)
+				{
+					GameObjectToAdd newObj = m_setTransformToChunkQueue.Dequeue();
+					newObj.ToAdd.transform.parent = Chunks[Mathf.FloorToInt((float)newObj.AddPosition.X/ChunkSize.x),
+													Mathf.FloorToInt((float)newObj.AddPosition.Z/ChunkSize.y)].gameObject.transform;
+				}
+			}
+
+			if(m_startCulling)
+			{
+				while(m_cullQueue.Count > 0)
+				{
+					CullingStream toCull = m_cullQueue.Dequeue();
+					if(toCull.DisableObject)
+					{
+						toCull.ToCull.SetActive(false);
+					}
+					else
+					{
+						toCull.ToCull.SetActive(true);
+					}
+				}
+			}
+		}
+
+		public void AddCullQueue(GameObject _object, bool _disable)
+		{
+			m_cullQueue.Enqueue(new CullingStream(_object, _disable));
+		}
 
 		public void GenerateMap()
 		{
@@ -76,6 +151,8 @@ namespace Game.Environment
 					Chunks[x, y].CombineMeshes();
 				}
 			}
+			m_cullQueue = new Queue<CullingStream>();
+			m_startCulling = true;
 		}
 
 		public void PopulateMap()
