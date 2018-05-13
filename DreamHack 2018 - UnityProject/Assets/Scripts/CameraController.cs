@@ -99,14 +99,19 @@ namespace Game
             tileMapComponent.UpdateViewpoint(transform.position);
 
             TilePosition tilePositionAtMouse = GetTilePositionAtMouse();
-            if (tilePositionAtMouse != null && !EventSystem.current.IsPointerOverGameObject())
-                tileMapComponent.HoverOver(tilePositionAtMouse);
-            else
-                tileMapComponent.HoverOver(null);
 
 
-            if (!m_gameHud.HandleInput())
+            if (m_gameHud.HandleInput())
             {
+                tileMapComponent.HoverOver(null);
+            }
+            else
+            {
+                if (tilePositionAtMouse != null && !EventSystem.current.IsPointerOverGameObject())
+                    tileMapComponent.HoverOver(tilePositionAtMouse);
+                else
+                    tileMapComponent.HoverOver(null);
+
                 if (WorldController.Instance.Mode == PlayMode.BUILD_MODE)
                 {
                     HandleBuildModeControls();
@@ -182,12 +187,13 @@ namespace Game
                 {
                     WorldController.Instance.ToggleBuildMode();
                 }
+
+                if (scrollWheel != 0)
+                {
+                    m_targetDistance = Mathf.Clamp(m_targetDistance - scrollWheel * m_scrollSpeed * (1 + m_targetDistance * m_scrollAccellerationFactor), m_minDistance, m_maxDistance);
+                }
             }
 
-            if(scrollWheel != 0)
-            {
-                m_targetDistance = Mathf.Clamp(m_targetDistance - scrollWheel * m_scrollSpeed * (1 + m_targetDistance * m_scrollAccellerationFactor), m_minDistance, m_maxDistance);
-            }
             m_distance += (m_targetDistance - m_distance) * 0.3F;
 
             if (m_lastDistance != m_distance)

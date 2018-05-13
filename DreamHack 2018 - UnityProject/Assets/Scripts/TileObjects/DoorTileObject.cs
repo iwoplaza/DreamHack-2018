@@ -25,16 +25,25 @@ namespace Game.TileObjects
                 entryDirection, MovementDirectionUtils.NewFrom(Orientation)
             );
 
-            if (localEntryDirection == MovementDirection.POSITIVE_X || //Side
-                localEntryDirection == MovementDirection.NEGATIVE_X || //Side
-                localEntryDirection == MovementDirection.POSITIVE_Z || //Front
-                localEntryDirection == MovementDirection.POSITIVE_Z_POSITIVE_X || //FrontSideDiagonal
-                localEntryDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X)    //FrontSideDiagonal
+            TilePosition localPosition = GlobalToLocal(globalPosition);
+
+            if (localPosition.X == 1) // Wall Part
+            {
+                if (localEntryDirection == MovementDirection.POSITIVE_X || //Side
+                    localEntryDirection == MovementDirection.NEGATIVE_X || //Side
+                    localEntryDirection == MovementDirection.POSITIVE_Z || //Front
+                    localEntryDirection == MovementDirection.POSITIVE_Z_POSITIVE_X || //FrontSideDiagonal
+                    localEntryDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X)    //FrontSideDiagonal
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            else // Door Part
             {
                 return true;
             }
-
-            return false;
         }
 
         public override bool CanComeOutOfTowards(TilePosition globalPosition, MovementDirection direction)
@@ -43,14 +52,25 @@ namespace Game.TileObjects
                 direction, MovementDirectionUtils.NewFrom(Orientation)
             );
 
-            if (localDirection == MovementDirection.POSITIVE_Z ||
-                localDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X ||
-                localDirection == MovementDirection.POSITIVE_Z_POSITIVE_X)
-            {
-                return false;
-            }
+            TilePosition localPosition = GlobalToLocal(globalPosition);
 
-            return true;
+            if (localPosition.X == 1) // Wall Part
+            {
+                if (localDirection == MovementDirection.POSITIVE_Z ||
+                    localDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X ||
+                    localDirection == MovementDirection.POSITIVE_Z_POSITIVE_X)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else // Door Part
+            {
+                return true;
+            }
         }
 
         public GameObject GetPrefab()
