@@ -22,6 +22,8 @@ public class ChunkCulling : EnvironmentControlComponent {
 
 	Bounds[,] m_chunkBounds;
 
+	[SerializeField]Vector3 rotationPlane;
+
 	public override void InitializeComponent()
 	{
 		m_environment = WorldController.Instance.MainState.GameEnvironment;
@@ -38,7 +40,8 @@ public class ChunkCulling : EnvironmentControlComponent {
 			Matrix4x4 projectionMatrix = m_camera.projectionMatrix;
 			Matrix4x4 worldToLocalMatrix = m_camera.transform.worldToLocalMatrix;
 			float clippingDistance = m_camera.farClipPlane;
-			camPlane.distance = camPlane.GetDistanceToPoint(m_camera.transform.position);
+			camPlane.distance = -camPlane.GetDistanceToPoint(m_camera.transform.position);
+			rotationPlane = Quaternion.LookRotation(camPlane.normal).eulerAngles;
 			m_cullingThread = new Thread(() => CullingThread(projectionMatrix,worldToLocalMatrix,camPlane,clippingDistance));			
 			
 			m_cullingThread.Start();
@@ -139,7 +142,11 @@ public class ChunkCulling : EnvironmentControlComponent {
         ViewportPoint.y = 0.5f + ViewportPoint.y/2f;
         ViewportPoint.x = 0.5f + ViewportPoint.x/2f;
         ViewportPoint.w = v.z;
-		ViewportPoint.z = _camPlane.GetDistanceToPoint(_position)/_clippingDistance;
+		Vector3 CamRotation = Quaternion.LookRotation(_camPlane.normal).eulerAngles;
+		if(CamRotation.y > 137.5f && CamRotation.y < 313.5f){
+			ViewportPoint.z = _camPlane.GetDistanceToPoint(_position)/_clippingDistance;
+		}else
+			ViewportPoint.z = _camPlane.GetDistanceToPoint(_position)/_clippingDistance;
         return ViewportPoint;
     }
 }
