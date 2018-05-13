@@ -103,9 +103,9 @@ namespace Game
             RemoveGameObject();
         }
 
-        public void Damage(int damage, GameObject attacker)
+        public virtual void Damage(int damage, GameObject attacker)
         {
-
+            Health.HealthPoints -= damage;
         }
 
         public virtual void Parse(XElement element)

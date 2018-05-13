@@ -8,9 +8,9 @@ namespace Utility.Noise
 {
 	public class FractalChain : MonoBehaviour {		
 		
-		[SerializeField]Vector2Int m_currentRes;
+		[SerializeField] Vector2Int m_currentRes;
 		public Vector2Int CurrentRes { get { return m_currentRes; } set { m_currentRes = value; } }
-		[SerializeField]List<FractalGeneratorChain> m_chain;
+		[SerializeField] List<FractalGeneratorChain> m_chain;
 
 		float[,] m_currentNoise;
 		public float[,] CurrentNoise { get{ return m_currentNoise; } }
@@ -18,10 +18,10 @@ namespace Utility.Noise
 		Texture2D m_currentTexture;
 		public Texture2D CurrentTexture { get{ return m_currentTexture; } }
 
-		public void Reset()
-		{
-			m_currentRes = new Vector2Int(512,512);
-		}		
+        public void Reset()
+        {
+            m_currentRes = new Vector2Int(512, 512);
+        }
 
 		public void GenerateMap(Vector2Int resolution, string seed)
 		{
@@ -85,12 +85,18 @@ namespace Utility.Noise
 							currentValue = m_chain[0].CurrentGenerator.CurrentNoise[x,y];
 						}
 					}
-					m_currentNoise[x,y] = Mathf.Clamp01(currentValue);
-					m_currentTexture.SetPixel(x,y,new Color(m_currentNoise[x,y],m_currentNoise[x,y],m_currentNoise[x,y],1));
+					m_currentNoise[x, y] = Mathf.Clamp01(currentValue);
+					m_currentTexture.SetPixel(x,y,new Color(m_currentNoise[x, y], m_currentNoise[x, y], m_currentNoise[x, y], 1));
 				}
 			}
 
 			m_currentTexture.Apply();
 		}
+
+        public void SetValue(int x, int y, float value)
+        {
+            m_currentNoise[x, y] = Mathf.Clamp01(value);
+            m_currentTexture.SetPixel(x, y, new Color(m_currentNoise[x, y], m_currentNoise[x, y], m_currentNoise[x, y], 1));
+        }
 	}
 }

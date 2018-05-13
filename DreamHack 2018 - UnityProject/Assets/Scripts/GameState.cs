@@ -56,7 +56,8 @@ namespace Game
             GameEnvironment.WorldSeed = Seed;
             GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
             GameEnvironment.GenerateMap();
-            GameEnvironment.PopulateMap();
+            GameEnvironment.PopulateMapForNewWorld();
+            GameEnvironment.AfterSetup();
 
             Worker worker1 = SpawnWorker(new Vector3(TileMap.Width / 2 + 1, 0, TileMap.Height / 2 + 1));
             worker1.FirstName = "James";
@@ -114,6 +115,10 @@ namespace Game
             GameEnvironment.WorldSeed = Seed;
             GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
             GameEnvironment.GenerateMap();
+            XElement gameEnvironmentElement = element.Element("GameEnvironment");
+            if(gameEnvironmentElement != null)
+                GameEnvironment.Parse(gameEnvironmentElement);
+            GameEnvironment.AfterSetup();
 
             XElement workersElement = element.Element("Workers");
             IEnumerable workerElements = workersElement.Elements("Worker");
@@ -148,6 +153,11 @@ namespace Game
             XElement tileMapElement = new XElement("TileMap");
             element.Add(tileMapElement);
             TileMap.Populate(tileMapElement);
+
+            XElement gameEnvironmentElement = element.Element("GameEnvironment");
+            element.Add(gameEnvironmentElement);
+            if (gameEnvironmentElement != null)
+                GameEnvironment.Populate(gameEnvironmentElement);
         }
 
         public void Update()

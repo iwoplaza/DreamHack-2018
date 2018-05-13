@@ -21,6 +21,8 @@ namespace Game
 
             Instance = this;
             Resources.LoadAll();
+
+
         }
 
         /// <summary>

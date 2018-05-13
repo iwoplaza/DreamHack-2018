@@ -829,6 +829,16 @@ Prefab:
       propertyPath: m_metalFractal
       value: 
       objectReference: {fileID: 1246508280}
+    - target: {fileID: 114750575273532464, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_metalMap.m_metalFractalChain
+      value: 
+      objectReference: {fileID: 1246508280}
+    - target: {fileID: 114750575273532464, guid: ed3f662100abeaf49a1c076c27de8d39,
+        type: 2}
+      propertyPath: m_metalMap.m_maximumMetalValue
+      value: 16
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed3f662100abeaf49a1c076c27de8d39, type: 2}
   m_IsPrefabParent: 0

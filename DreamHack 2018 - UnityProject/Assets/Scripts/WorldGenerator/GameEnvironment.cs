@@ -6,6 +6,7 @@ using Game;
 using Game.TileObjects;
 using System.Threading;
 using Game.Utility;
+using System.Xml.Linq;
 
 namespace Game.Environment
 {
@@ -22,11 +23,15 @@ namespace Game.Environment
 		public Vector2Int ChunkCount { get; private set; }
 		public Vector2Int ChunkSize { get; set; }
 
-		[SerializeField] FractalChain m_baseMap;
-		[SerializeField] FractalChain m_metalFractal;
+        [SerializeField]
+        MetalMap m_metalMap;
+
+        [SerializeField] FractalChain m_baseMap;
 		[SerializeField] FractalChain m_vegetationMap;
 		[SerializeField] FractalChain m_rockMap;
 		[SerializeField] Material m_mapMaterial;
+
+        public MetalMap MetalMap { get { return m_metalMap; } }
 
 		struct GameObjectToAdd
 		{
@@ -73,7 +78,9 @@ namespace Game.Environment
 		{
 			if(Chunks == null)
 				return;
-			if(m_setTransformToChunkQueue != null){
+
+			if(m_setTransformToChunkQueue != null)
+            {
 				while(m_setTransformToChunkQueue.Count > 0)
 				{
 					GameObjectToAdd newObj = m_setTransformToChunkQueue.Dequeue();
@@ -112,7 +119,7 @@ namespace Game.Environment
 		{
 			m_tileMap = WorldController.Instance.MainState.TileMap;
 			m_baseMap.GenerateMap(WorldSize, WorldSeed);
-			m_metalFractal.GenerateMap(WorldSize, WorldSeed);
+            MetalMap.GenerateMap(WorldSize, WorldSeed);
 			m_vegetationMap.GenerateMap(WorldSize, WorldSeed);
 			m_rockMap.GenerateMap(WorldSize, WorldSeed);
 
@@ -159,24 +166,24 @@ namespace Game.Environment
 			m_startCulling = true;
 		}
 
-		public void PopulateMap()
+		public void PopulateMapForNewWorld()
 		{
 			for(int x = 0; x < WorldSize.x; x++)
 			{
 				for(int y = 0; y < WorldSize.y; y++)
 				{
-					if(m_baseMap.CurrentNoise[x,y] <= CliffThreshold)
+					if(m_baseMap.CurrentNoise[x, y] <= CliffThreshold)
 					{
 						if(Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) > EmptyRadius)
 						{
-							if(m_metalFractal.CurrentNoise[x,y] < 0.2f){
-								if(Random.Range(0.00f,1.00f) < m_vegetationMap.CurrentNoise[x,y])
+							if(MetalMap.MetalFractalChain.CurrentNoise[x,y] < 0.2F){
+								if(Random.Range(0.00f, 1.00f) < m_vegetationMap.CurrentNoise[x,y])
 								{						
 									m_tileMap.InstallAt(new GreenVegetation(), new TilePosition(x,y));
 								}
 							}else
 							{
-								if(Random.Range(0.00f,1.00f) < m_vegetationMap.CurrentNoise[x,y])
+								if(Random.Range(0.00f, 1.00f) < m_vegetationMap.CurrentNoise[x,y])
 								{						
 									m_tileMap.InstallAt(new DesertVegetation(), new TilePosition(x,y));
 								}
@@ -185,11 +192,11 @@ namespace Game.Environment
 						
 					}
 
-					if(m_baseMap.CurrentNoise[x,y] <= CliffThreshold)
+					if(m_baseMap.CurrentNoise[x, y] <= CliffThreshold)
 					{
-						if(Random.Range(0.00f,1.00f) < m_rockMap.CurrentNoise[x,y])
+						if(Random.Range(0.00f,1.00f) < m_rockMap.CurrentNoise[x, y])
 						{
-							if(Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) < EmptyRadius)
+							if(Vector2.Distance(new Vector2((float)WorldSize.x / 2, (float)WorldSize.y / 2), new Vector2(x, y)) < EmptyRadius)
 							{
 								
 							}
@@ -208,14 +215,37 @@ namespace Game.Environment
 					}
 				}
 			}
-			m_mapMaterial.SetFloat("_ResolutionX", WorldSize.x);
-			m_mapMaterial.SetFloat("_ResolutionY", WorldSize.y);
-			m_mapMaterial.SetTexture("_ResourceMap", m_metalFractal.CurrentTexture);
+
+            MetalMap.PopulateMapForNewWorld();
 		}
+
+        /// <summary>
+        /// Called after either PopulateMapForNewWorld or Parse
+        /// </summary>
+        public void AfterSetup()
+        {
+            m_mapMaterial.SetFloat("_ResolutionX", WorldSize.x);
+            m_mapMaterial.SetFloat("_ResolutionY", WorldSize.y);
+            m_mapMaterial.SetTexture("_ResourceMap", MetalMap.MetalFractalChain.CurrentTexture);
+        }
+
+        public void Parse(XElement element)
+        {
+            XElement metalMapElement = element.Element("MetalMap");
+            if (metalMapElement != null)
+                MetalMap.Parse(metalMapElement);
+        }
+
+        public void Populate(XElement element)
+        {
+            XElement metalMapElement = new XElement("MetalMap");
+            element.Add(metalMapElement);
+            MetalMap.Populate(metalMapElement);
+        }
 
 		public float GetMetalAvailability(TilePosition position)
 		{
-			return m_metalFractal.CurrentNoise[position.X, position.Z];
+			return MetalMap.MetalFractalChain.CurrentNoise[position.X, position.Z];
 		}
 	}
 }
