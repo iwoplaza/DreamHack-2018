@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Game;
 using Game.Environment;
 
@@ -70,6 +71,7 @@ namespace Game.Environment
 			MeshMaterial = _material;
 			gameObject.AddComponent<MeshFilter>();
 			gameObject.AddComponent<MeshRenderer>();
+			gameObject.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.TwoSided;
 			gameObject.name = "Chunk " + ChunkPosition.ToString();
 		}
 

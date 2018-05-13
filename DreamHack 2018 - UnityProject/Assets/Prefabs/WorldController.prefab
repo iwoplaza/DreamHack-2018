@@ -390,9 +390,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 59.3
+  m_noiseFrequency: 85.1
   m_noiseOctave: 4
-  m_noiseAmplifier: 3.38
+  m_noiseAmplifier: 4.4
   m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0
@@ -411,12 +411,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 67.8
+  m_noiseFrequency: 100
   m_noiseOctave: 1
-  m_noiseAmplifier: 2.5
+  m_noiseAmplifier: 3.19
   m_noiseSeed: glory
   m_drawType: 2
-  m_filterHeight: 0.259
+  m_filterHeight: 0.437
   m_segmentCount: 10
   m_circleRadius: 0
   m_circlePower: 0
@@ -432,9 +432,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 26.1
+  m_noiseFrequency: 82
   m_noiseOctave: 4
-  m_noiseAmplifier: 3.5
+  m_noiseAmplifier: 2.06
   m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0
@@ -495,7 +495,7 @@ MonoBehaviour:
   m_textureRes: {x: 512, y: 512}
   m_noiseFrequency: 16.4
   m_noiseOctave: 3
-  m_noiseAmplifier: 2.16
+  m_noiseAmplifier: 1.51
   m_noiseSeed: glory
   m_drawType: 4
   m_filterHeight: 0.323
@@ -595,7 +595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 76.4
+  m_noiseFrequency: 100
   m_noiseOctave: 4
   m_noiseAmplifier: 0.29
   m_noiseSeed: glory
@@ -616,9 +616,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textureRes: {x: 512, y: 512}
-  m_noiseFrequency: 85.6
+  m_noiseFrequency: 100
   m_noiseOctave: 4
-  m_noiseAmplifier: 3.03
+  m_noiseAmplifier: 5.16
   m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0
@@ -660,7 +660,7 @@ MonoBehaviour:
   m_textureRes: {x: 512, y: 512}
   m_noiseFrequency: 42.2
   m_noiseOctave: 4
-  m_noiseAmplifier: 2.51
+  m_noiseAmplifier: 1.9
   m_noiseSeed: glory
   m_drawType: 3
   m_filterHeight: 0
@@ -785,7 +785,7 @@ MonoBehaviour:
   m_textureRes: {x: 512, y: 512}
   m_noiseFrequency: 26.1
   m_noiseOctave: 4
-  m_noiseAmplifier: 1.29
+  m_noiseAmplifier: 2.27
   m_noiseSeed: glory
   m_drawType: 5
   m_filterHeight: 0
@@ -827,7 +827,7 @@ MonoBehaviour:
   m_textureRes: {x: 512, y: 512}
   m_noiseFrequency: 26.1
   m_noiseOctave: 4
-  m_noiseAmplifier: 2.04
+  m_noiseAmplifier: 3.08
   m_noiseSeed: glory
   m_drawType: 4
   m_filterHeight: 0.038
