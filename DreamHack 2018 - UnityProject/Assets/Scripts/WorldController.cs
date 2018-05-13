@@ -12,50 +12,84 @@ namespace Game
         public GameState MainState { get; private set; }
         public PlayMode Mode { get; private set; }
 
-        private Queue<EnvironmentControlComponent> EnvControlToInitialize = new Queue<EnvironmentControlComponent>();
+        public bool Initialised { get; private set; }
 
         void Awake()
         {
+            ApplicationState.CreateIfDoesntExist();
+            Initialised = false;
+
             Instance = this;
             Resources.LoadAll();
+        }
 
+        /// <summary>
+        /// Called by <see cref="ApplicationState"/>
+        /// </summary>
+        public void SetupNewGame(int worldIdentifier, string worldName)
+        {
             GameEnvironment gameEnvironment = GetComponentInChildren<GameEnvironment>();
+
             if (gameEnvironment != null)
-            {
-                MainState = new GameState(gameEnvironment);
-            }
+                MainState = new GameState(worldIdentifier, worldName, gameEnvironment);
             else
             {
                 Debug.LogError("The GameEnvironment child GameObject is missing from the WorldController");
+                return;
             }
+            MainState.Start();
+            MainState.GenerateNew();
+            MainState.TileMap.CreateMapComponent();
+
+            AfterSetup();
         }
 
-        // Use this for initialization
-        void Start()
+        /// <summary>
+        /// Called by <see cref="ApplicationState"/>
+        /// </summary>
+        public void SetupFromState(SavedGame savedGame)
         {
+            GameEnvironment gameEnvironment = GetComponentInChildren<GameEnvironment>();
+
+            if (gameEnvironment != null)
+                MainState = new GameState(savedGame.WorldIdentifier, savedGame.WorldName, gameEnvironment);
+            else
+            {
+                Debug.LogError("The GameEnvironment child GameObject is missing from the WorldController");
+                return;
+            }
             MainState.Start();
             SaveController.Load(MainState);
             MainState.TileMap.CreateMapComponent();
+
+            AfterSetup();
+        }
+
+        void AfterSetup()
+        {
+            EnvironmentControlComponent[] environmentControls = GetComponentsInChildren<EnvironmentControlComponent>();
+            foreach (EnvironmentControlComponent component in environmentControls)
+            {
+                component.Initialize();
+            }
+
+            Initialised = true;
+            Debug.Log("WorldController initialised.");
         }
 
         // Update is called once per frame
         void Update()
         {
-            while(EnvControlToInitialize.Count > 0){
-                EnvControlToInitialize.Dequeue().Initialize();
+            if (Initialised)
+            {
+                MainState.Update();
             }
-            MainState.Update();
         }
 
         void OnApplicationQuit()
         {
             Debug.Log("Shutting down...");
             SaveController.Save(MainState);
-        }
-
-        public void AddEnvironmentControlObject(EnvironmentControlComponent component)
-        {
-            EnvControlToInitialize.Enqueue(component);
         }
 
         public delegate void ModeChangeHandler(PlayMode mode);

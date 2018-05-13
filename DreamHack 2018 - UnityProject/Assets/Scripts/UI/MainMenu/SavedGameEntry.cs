@@ -7,18 +7,22 @@ namespace Game.UI.MainMenu
 {
     public class SavedGameEntry : MonoBehaviour
     {
-       [SerializeField] Text m_worldNameText;
+        [SerializeField] Text m_worldNameText;
 
-        public MainMenuController MainMenuController { get; private set; }
+        public LoadGamePanel LoadGamePanel { get; private set; }
+        public SavedGame SavedGame { get; private set; }
 
-        void Setup(MainMenuController mainMenuController)
+        public void Setup(LoadGamePanel loadGamePanel, SavedGame savedGame)
         {
-            MainMenuController = mainMenuController;
+            LoadGamePanel = loadGamePanel;
+            SavedGame = savedGame;
+
+            m_worldNameText.text = savedGame.WorldName;
         }
 
         public void Load()
         {
-
+            LoadGamePanel.Load(SavedGame);
         }
     }
 }

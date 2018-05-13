@@ -28,9 +28,14 @@ namespace Game.UI
             OpenedPopUps = new List<PopUpWindow>();
         }
 
-        void Start()
+        /// <summary>
+        /// Called by <see cref="ApplicationState"/>
+        /// </summary>
+        public void Setup()
         {
             WorkerList.Setup(WorldController.Instance.MainState);
+            FocusPanel.Setup();
+            TimePanel.Setup();
         }
 
         public bool DoesPopUpOfTypeExist(Type type)

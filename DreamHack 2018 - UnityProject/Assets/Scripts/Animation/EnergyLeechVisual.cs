@@ -31,9 +31,13 @@ namespace Game.Animation
 
         public void UpdateAnimator()
         {
-            TimeSystem timeSystem = WorldController.Instance.MainState.TimeSystem;
-            m_animator.speed = timeSystem.TimeMultiplier;
-            //m_animator.SetBool("Walk", EnergyLeech.IsWalking);
+            WorldController worldController = WorldController.Instance;
+            if (WorldController.Instance.Initialised)
+            {
+                TimeSystem timeSystem = WorldController.Instance.MainState.TimeSystem;
+                m_animator.speed = timeSystem.TimeMultiplier;
+                // m_animator.SetBool("Walk", EnergyLeech.IsWalking);
+            }
         }
     }
 }

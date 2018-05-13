@@ -23,7 +23,12 @@ namespace Game.UI
         [Header("Selected colors")]
         public ColorBlock m_selectedColors;
 
-        void Start()
+        public bool Initialised { get; private set; }
+
+        /// <summary>
+        /// Called by <see cref="GameHUD"/>
+        /// </summary>
+        public void Setup()
         {
             ResetColours();
 
@@ -34,12 +39,17 @@ namespace Game.UI
                 if (button != null)
                     button.colors = m_selectedColors;
             }
+
+            Initialised = true;
         }
 
         void Update()
         {
-            m_timeText.text = WorldController.Instance.MainState.TimeSystem.TimeString;
-            m_dayText.text = "Day " + WorldController.Instance.MainState.TimeSystem.DayCount.ToString();
+            if (Initialised)
+            {
+                m_timeText.text = WorldController.Instance.MainState.TimeSystem.TimeString;
+                m_dayText.text = "Day " + WorldController.Instance.MainState.TimeSystem.DayCount.ToString();
+            }
         }
 
         void ChooseMode(TimeSystem.TimeMode mode)

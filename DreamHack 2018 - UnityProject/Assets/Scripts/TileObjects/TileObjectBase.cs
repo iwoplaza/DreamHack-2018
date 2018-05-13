@@ -12,7 +12,7 @@ namespace Game.TileObjects
         {
         }
 
-        public static TileObjectBase CreateAndParse(XElement element, Tile optionalRootTile = null)
+        public static TileObjectBase CreateAndParse(XElement element)
         {
             XAttribute typeAttrib = element.Attribute("type");
             if (typeAttrib == null)
@@ -22,7 +22,7 @@ namespace Game.TileObjects
             if (classType != null)
             {
                 TileObjectBase tileObject = classType.Assembly.CreateInstance(classType.FullName) as TileObjectBase;
-                tileObject.Parse(element, optionalRootTile);
+                tileObject.Parse(element);
 
                 return tileObject;
             }

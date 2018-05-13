@@ -44,6 +44,8 @@ namespace Game
         protected float m_nextYOrientation = 0.0F;
         protected float m_yRotationProgress = 1.0F;
 
+        public bool Initialised { get; private set; }
+
         void Awake()
         {
             Camera = GetComponentInChildren<Camera>();
@@ -56,7 +58,10 @@ namespace Game
             m_targetDistance = m_distance;
         }
 
-        void Start()
+        /// <summary>
+        /// Called by <see cref="ApplicationState"/>
+        /// </summary>
+        public void Setup()
         {
             UpdateCameraPosition();
 
@@ -72,6 +77,8 @@ namespace Game
                     transform.position = new Vector3(tileMap.Width / 2, 0, tileMap.Height / 2);
                 }
             }
+
+            Initialised = true;
         }
 
         TilePosition GetTilePositionAtMouse()
@@ -94,6 +101,9 @@ namespace Game
 
         void Update()
         {
+            if (!Initialised)
+                return;
+
             float horizontal = CrossPlatformInputManager.GetAxis("Mouse X");
             float vertical = CrossPlatformInputManager.GetAxis("Mouse Y");
             float scrollWheel = CrossPlatformInputManager.GetAxis("Mouse ScrollWheel");
@@ -102,7 +112,6 @@ namespace Game
             tileMapComponent.UpdateViewpoint(transform.position);
 
             TilePosition tilePositionAtMouse = GetTilePositionAtMouse();
-
 
             if (m_gameHud.HandleInput())
             {

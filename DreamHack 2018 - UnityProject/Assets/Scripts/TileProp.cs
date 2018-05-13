@@ -83,7 +83,7 @@ namespace Game
             RemoveGameObject();
         }
 
-        public virtual void Parse(XElement element, Tile optionalRootTile = null)
+        public virtual void Parse(XElement element)
         {
             XAttribute variantAttrib = element.Attribute("variant");
             XAttribute orientationAttrib = element.Attribute("orientation");
@@ -96,12 +96,6 @@ namespace Game
                 Orientation = (Direction)int.Parse(orientationAttrib.Value);
                 if (Orientation == Direction.NONE)
                     Orientation = Direction.POSITIVE_Z;
-            }
-
-            if (optionalRootTile != null)
-            {
-                InstalledAt = optionalRootTile;
-                ConstructGameObject();
             }
         }
 

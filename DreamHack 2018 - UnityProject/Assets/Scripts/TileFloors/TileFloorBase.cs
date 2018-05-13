@@ -13,7 +13,7 @@ namespace Game.TileFloors
 
         }
 
-        public static TileFloorBase CreateAndParse(XElement element, Tile optionalRootTile = null)
+        public static TileFloorBase CreateAndParse(XElement element)
         {
             XAttribute typeAttrib = element.Attribute("type");
             if (typeAttrib == null)
@@ -23,7 +23,7 @@ namespace Game.TileFloors
             if (classType != null)
             {
                 TileFloorBase tileFloor = classType.Assembly.CreateInstance(classType.FullName) as TileFloorBase;
-                tileFloor.Parse(element, optionalRootTile);
+                tileFloor.Parse(element);
 
                 return tileFloor;
             }

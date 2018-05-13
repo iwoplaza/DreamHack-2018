@@ -8,14 +8,10 @@ namespace Game
     {
         bool m_initialized = false;
 
-        void Start()
-        {
-            WorldController.Instance.AddEnvironmentControlObject(this);
-        }
-
         void Update()
         {
-            if(m_initialized){
+            if(m_initialized)
+            {
                 UpdateComponent();
             }
         }

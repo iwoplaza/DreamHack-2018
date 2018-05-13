@@ -11,6 +11,9 @@ namespace Game
 {
     public class GameState
     {
+        public int WorldIdentifier { get; private set; }
+        public string WorldName { get; private set; }
+        public string Seed { get; private set; }
         public TileMap TileMap { get; private set; }
         public List<Worker> Workers { get; private set; }
         public Focus Focus { get; private set; }
@@ -20,8 +23,10 @@ namespace Game
         public ItemStorage ItemStorage { get; private set; }
         public GameEnvironment GameEnvironment { get; private set; }
 
-        public GameState(GameEnvironment gameEnvironment)
+        public GameState(int worldIdentifier, string worldName, GameEnvironment gameEnvironment)
         {
+            WorldIdentifier = worldIdentifier;
+            WorldName = worldName;
             GameEnvironment = gameEnvironment;
 
             TileMap = new TileMap(512, 512);
@@ -35,23 +40,19 @@ namespace Game
 
         public void Start()
         {
-            Generate();
-        }
-
-        public void Update()
-        {
-            TimeSystem.Update();
-        }
-
-        public void Generate()
-        {
             WorldMeshResource.UpdateMeshDictionary();
             WorldPopulationResource.UpdatePopulationDirectory();
             GameEnvironment.CliffThreshold = 0.5f;
-            GameEnvironment.WorldSeed = "glory";
-            GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
             GameEnvironment.ChunkSize = new Vector2Int(15, 15);
             GameEnvironment.EmptyRadius = GameEnvironment.WorldSize.magnitude * 0.075f;
+        }
+
+        public void GenerateNew()
+        {
+            Seed = "glory";
+
+            GameEnvironment.WorldSeed = Seed;
+            GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
             GameEnvironment.GenerateMap();
             GameEnvironment.PopulateMap();
 
@@ -95,6 +96,10 @@ namespace Game
             if (element == null)
                 return;
 
+            XAttribute seed = element.Attribute("seed");
+            if(seed != null)
+                GameEnvironment.WorldSeed = seed.Value;
+
             XElement tileMapElement = element.Element("TileMap");
             TileMap.Parse(tileMapElement);
 
@@ -103,6 +108,11 @@ namespace Game
 
             XElement itemStorageElement = element.Element("ItemStorage");
             ItemStorage.Parse(itemStorageElement);
+
+            GameEnvironment.WorldSeed = Seed;
+            GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
+            GameEnvironment.GenerateMap();
+            GameEnvironment.PopulateMap();
         }
 
         public void Populate(XElement element)
@@ -118,6 +128,11 @@ namespace Game
             XElement itemStorageElement = new XElement("ItemStorage");
             element.Add(itemStorageElement);
             ItemStorage.Populate(itemStorageElement);
+        }
+
+        public void Update()
+        {
+            TimeSystem.Update();
         }
     }
 }

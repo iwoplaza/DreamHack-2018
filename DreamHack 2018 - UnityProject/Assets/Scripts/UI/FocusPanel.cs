@@ -25,8 +25,10 @@ namespace Game.UI
             m_tileQueuePanel = GetComponentInChildren<TaskQueuePanel>();
         }
 
-        // Use this for initialization
-        void Start()
+        /// <summary>
+        /// Called by <see cref="GameHUD"/>
+        /// </summary>
+        public void Setup()
         {
             gameObject.SetActive(false);
             if (WorldController.Instance != null)

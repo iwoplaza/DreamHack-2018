@@ -7,6 +7,11 @@ namespace Game.Items
     {
         public List<ItemStack> ItemStacks { get; private set; }
 
+        public ItemStorage()
+        {
+            ItemStacks = new List<ItemStack>();
+        }
+
         public void Parse(XElement element)
         {
             ItemStacks = new List<ItemStack>();
