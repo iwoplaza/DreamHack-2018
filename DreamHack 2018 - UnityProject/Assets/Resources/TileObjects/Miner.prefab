@@ -295,7 +295,7 @@ MonoBehaviour:
   m_animatedComponents:
   - {fileID: 114119026962035532}
   - {fileID: 114396263033997372}
-  m_activatedByDefault: 0
+  m_activatedByDefault: 1
 --- !u!114 &114119026962035532
 MonoBehaviour:
   m_ObjectHideFlags: 1

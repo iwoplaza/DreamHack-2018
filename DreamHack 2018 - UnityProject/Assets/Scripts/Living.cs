@@ -94,9 +94,10 @@ namespace Game
             Alive = false;
         }
 
-        public void Damage(int damage, GameObject attacker)
+        public virtual void Damage(int damage, GameObject attacker)
         {
             Health.HealthPoints -= damage;
+            NotifyOnDamage(damage, attacker);
         }
 
         public void RegisterOnDamageHandler(OnDamageHandler handler)

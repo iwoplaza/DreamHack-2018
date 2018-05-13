@@ -15,6 +15,7 @@ namespace Game
         public static ResourceCollection<AudioClip> Sounds { get; private set; }
 
         public static GameObject WorkerPrefab { get; private set; }
+        public static GameObject EnergyLeechPrefab { get; private set; }
         public static GameObject ChunkPrefab { get; private set; }
         public static GameObject TileDisplayPrefab { get; private set; }
         public static GameObject TileDisplayHoverPrefab { get; private set; }
@@ -30,6 +31,7 @@ namespace Game
 
             ChunkPrefab = UnityEngine.Resources.Load<GameObject>("ChunkObject");
             WorkerPrefab = UnityEngine.Resources.Load<GameObject>("Worker");
+            EnergyLeechPrefab = UnityEngine.Resources.Load<GameObject>("EnergyLeech");
             TileDisplayPrefab = UnityEngine.Resources.Load<GameObject>("TileDisplay");
             TileDisplayHoverPrefab = UnityEngine.Resources.Load<GameObject>("TileDisplayHover");
         }

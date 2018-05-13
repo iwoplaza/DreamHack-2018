@@ -20,7 +20,6 @@ namespace Game.Enemies
 
         public EnergyLeechVisual Visual { get; private set; }
         public bool IsWalking { get; private set; }
-
         public PathfindingAgent PathfindingAgent { get; private set; }
 
         public TilePosition MainTarget;
@@ -45,10 +44,15 @@ namespace Game.Enemies
         override protected void Awake()
         {
             base.Awake();
-            m_tileMap = WorldController.Instance.MainState.TileMap;
+
+            m_characterController = GetComponent<CharacterController>();
+        }
+
+        public void Setup(TileMap tileMap)
+        {
+            m_tileMap = tileMap;
             Visual = GetComponent<EnergyLeechVisual>();
-            PathfindingAgent = new PathfindingAgent(new BasicRule(),m_tileMap);
-            RegisterOnDamageHandler(DamageHandler);
+            PathfindingAgent = new PathfindingAgent(new BasicRule(), m_tileMap);
         }
 
         List<ActionBase> ISubject.GetActionsFor(IActor actor)
@@ -67,6 +71,8 @@ namespace Game.Enemies
 
             if (PathfindingAgent.CurrentStatus == PathfindingStatus.HAS_PATH && nextPosition != null)
             {
+                Debug.Log("Walking...");
+
                 /// TODO Change this into Path Finding behaviour.
                 Vector3 target = nextPosition.Vector3 + new Vector3(0.5F, 0, 0.5F);
                 Vector3 direction = (target - transform.position);
@@ -111,9 +117,8 @@ namespace Game.Enemies
             {
                 m_moveDir += Physics.gravity * m_gravityMultiplier * timeMultiplier;
             }
-            m_collisionFlags = m_characterController.Move(m_moveDir * timeMultiplier);
 
-            
+            m_collisionFlags = m_characterController.Move(m_moveDir * timeMultiplier);
         }
 
         override protected void Update()
@@ -137,7 +142,7 @@ namespace Game.Enemies
 
         public IEnumerator AttackBehaviour(Living target)
         {
-            PathfindingAgent.GeneratePath(CurrentTile,target.CurrentTile);
+            PathfindingAgent.GeneratePath(CurrentTile, target.CurrentTile);
             while(PathfindingAgent.CurrentStatus == PathfindingStatus.GENERATING_PATH)
             {
                 yield return new WaitForEndOfFrame();
@@ -157,7 +162,8 @@ namespace Game.Enemies
                 Attack(target);
                 yield return new WaitForSeconds(AttackCooldown);
             }
-            if(Alive){
+            if(Alive)
+            {
                 OverrideAttackTarget(MainTarget, true);
             }
         }
@@ -171,9 +177,9 @@ namespace Game.Enemies
                 return false;
         }
 
-        public void DamageHandler(int damage, GameObject attacker)
+        public override void Damage(int damage, GameObject attacker)
         {
-            if(attacker.GetComponent<Living>() != null)
+            if (attacker.GetComponent<Living>() != null)
             {
                 OverrideAttackTarget(attacker.GetComponent<Living>().CurrentTile, attacker);
                 LivingAttackTarget = attacker.GetComponent<Living>();
@@ -235,7 +241,6 @@ namespace Game.Enemies
 
         public void OnEnemyDead()
         {
-
         }
 
         public void OnFocusGained()

@@ -1,4 +1,5 @@
 ﻿using Game.Building;
+using Game.Enemies;
 using Game.Environment;
 using Game.Items;
 using Game.TileFloors;
@@ -18,6 +19,7 @@ namespace Game
         public string Seed { get; private set; }
         public TileMap TileMap { get; private set; }
         public List<Worker> Workers { get; private set; }
+        public List<EnergyLeech> EnergyLeeches { get; private set; }
         public Focus Focus { get; private set; }
         public TimeSystem TimeSystem { get; private set; }
         public BuildCatalogue BuildCatalogue { get; private set; }
@@ -33,6 +35,7 @@ namespace Game
 
             TileMap = new TileMap(512, 512);
             Workers = new List<Worker>();
+            EnergyLeeches = new List<EnergyLeech>();
             Focus = new Focus();
             TimeSystem = new TimeSystem();
             BuildCatalogue = new BuildCatalogue();
@@ -67,6 +70,9 @@ namespace Game
             Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 2, 0, TileMap.Height / 2 - 1));
             worker2.FirstName = "Hugo";
             worker2.LastName = "Ivanovicz";
+
+            EnergyLeech leech = SpawnEnergyLeech(new Vector3(TileMap.Width / 2 - 10, 0, TileMap.Height / 2));
+            Debug.Log("Spawning " + leech);
 
             ItemStorage.ItemStacks.Add(new ItemStack(Item.METAL, 500));
 
@@ -151,6 +157,33 @@ namespace Game
             return null;
         }
 
+        public EnergyLeech SpawnEnergyLeech(Vector3 position)
+        {
+            GameObject energyLeechPrefab = Resources.EnergyLeechPrefab;
+            if (energyLeechPrefab == null)
+            {
+                Debug.LogError("The 'EnergyLeech' prefab is null. Something's wrong with 'Resources'");
+                return null;
+            }
+
+            GameObject enemyObject = Object.Instantiate(energyLeechPrefab, Vector3.zero, Quaternion.identity);
+            if (enemyObject != null)
+            {
+                EnergyLeech enemy = enemyObject.GetComponent<EnergyLeech>();
+                if (enemy == null)
+                {
+                    enemy = enemyObject.AddComponent<EnergyLeech>();
+                }
+                enemy.Setup(TileMap);
+                enemy.Position = position;
+                EnergyLeeches.Add(enemy);
+
+                return enemy;
+            }
+
+            return null;
+        }
+
         public void Parse(XElement element)
         {
             if (element == null)
@@ -182,6 +215,14 @@ namespace Game
                 worker.Parse(workerElement);
             }
 
+            XElement enemiesElement = element.Element("Enemies");
+            IEnumerable energyLeechElements = workersElement.Elements("EnergyLeech");
+            foreach (XElement energyLeechElement in energyLeechElements)
+            {
+                EnergyLeech enemy = SpawnEnergyLeech(Vector3.zero);
+                enemy.Parse(energyLeechElement);
+            }
+
             XElement tileMapElement = element.Element("TileMap");
             TileMap.Parse(tileMapElement);
         }
@@ -205,6 +246,15 @@ namespace Game
                 XElement workerElement = new XElement("Worker");
                 workersElement.Add(workerElement);
                 worker.Populate(workerElement);
+            }
+
+            XElement enemiesElement = new XElement("Enemies");
+            element.Add(enemiesElement);
+            foreach (EnergyLeech enemy in EnergyLeeches)
+            {
+                XElement enemyElement = new XElement("EnergyLeech");
+                enemiesElement.Add(enemyElement);
+                enemy.Populate(enemyElement);
             }
 
             XElement tileMapElement = new XElement("TileMap");

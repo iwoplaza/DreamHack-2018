@@ -1600,7 +1600,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3db3ff80ae1688e418360559bbd95871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_health: 10
+  MainTarget:
+    m_x: 0
+    m_z: 0
+  m_walkSpeed: 4
+  m_runSpeed: 6
+  m_stickToGroundForce: 0
+  m_gravityMultiplier: 1
 --- !u!114 &114835338123696188
 MonoBehaviour:
   m_ObjectHideFlags: 1
