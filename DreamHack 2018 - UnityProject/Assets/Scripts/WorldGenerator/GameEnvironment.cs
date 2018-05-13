@@ -5,6 +5,7 @@ using Utility.Noise;
 using Game;
 using Game.TileObjects;
 using System.Threading;
+using Game.Utility;
 
 namespace Game.Environment
 {
@@ -54,7 +55,7 @@ namespace Game.Environment
 			}
 		}		
 
-		private Queue<CullingStream> m_cullQueue;
+		private ThreadQueue<CullingStream> m_cullQueue;
 
 		private bool m_startCulling;
 
@@ -95,7 +96,7 @@ namespace Game.Environment
 						}
 						else
 						{
-							if(!Chunks[toCull.ToCull.X,toCull.ToCull.Z].gameObject.activeSelf)
+							if(!toCull.DisableObject && !Chunks[toCull.ToCull.X,toCull.ToCull.Z].gameObject.activeSelf)
 								Chunks[toCull.ToCull.X,toCull.ToCull.Z].gameObject.SetActive(true);
 						}
 					}
@@ -155,7 +156,7 @@ namespace Game.Environment
 					Chunks[x, y].CombineMeshes();
 				}
 			}
-			m_cullQueue = new Queue<CullingStream>();
+			m_cullQueue = new ThreadQueue<CullingStream>();
 			m_startCulling = true;
 		}
 
