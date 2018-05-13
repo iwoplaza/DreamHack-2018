@@ -109,7 +109,7 @@ namespace Game
                     Z -= (ushort)(-z);
             }
             else
-                Z += (ushort)x;
+                Z += (ushort)z;
         }
 
         public TilePosition GetOffset(MovementDirection direction)

@@ -58,5 +58,27 @@ namespace Game.TileObjects
 
             return null;
         }
+
+        protected override void OnInstalled()
+        {
+            base.OnInstalled();
+        }
+
+        protected void Mine()
+        {
+            GameState gameState = WorldController.Instance.MainState;
+
+            int radiusX = 10;
+            int radiusZ = 10;
+
+            TilePosition center = InstalledAt.Position;
+            for (int x = -radiusX; x <= radiusX; ++x)
+            {
+                for (int z = -radiusZ; z <= radiusZ; ++z)
+                {
+                    gameState.GameEnvironment.MetalMap.SetMetalAmountAt(center.GetOffset(x, z), 16);
+                }
+            }
+        }
     }
 }

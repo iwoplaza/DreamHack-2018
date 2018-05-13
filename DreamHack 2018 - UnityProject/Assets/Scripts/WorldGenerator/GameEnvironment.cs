@@ -234,6 +234,8 @@ namespace Game.Environment
             XElement metalMapElement = element.Element("MetalMap");
             if (metalMapElement != null)
                 MetalMap.Parse(metalMapElement);
+
+            Debug.Log("Parsing GameEnvironment.");
         }
 
         public void Populate(XElement element)

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utility.Noise;
@@ -93,10 +94,22 @@ namespace Utility.Noise
 			m_currentTexture.Apply();
 		}
 
-        public void SetValue(int x, int y, float value)
+        public void SetValueNoApply(int x, int y, float value)
         {
             m_currentNoise[x, y] = Mathf.Clamp01(value);
             m_currentTexture.SetPixel(x, y, new Color(m_currentNoise[x, y], m_currentNoise[x, y], m_currentNoise[x, y], 1));
         }
-	}
+
+        public void SetValue(int x, int y, float value)
+        {
+            SetValueNoApply(x, y, value);
+            ApplyTexture();
+        }
+
+        public void ApplyTexture()
+        {
+            m_currentTexture.Apply();
+        }
+
+    }
 }

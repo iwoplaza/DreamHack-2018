@@ -106,9 +106,6 @@ namespace Game
             if(seed != null)
                 Seed = seed.Value;
 
-            XElement tileMapElement = element.Element("TileMap");
-            TileMap.Parse(tileMapElement);
-
             XElement timeElement = element.Element("TimeSystem");
             TimeSystem.Parse(timeElement);
 
@@ -130,6 +127,9 @@ namespace Game
                 Worker worker = SpawnWorker(Vector3.zero);
                 worker.Parse(workerElement);
             }
+
+            XElement tileMapElement = element.Element("TileMap");
+            TileMap.Parse(tileMapElement);
         }
 
         public void Populate(XElement element)
@@ -157,10 +157,9 @@ namespace Game
             element.Add(tileMapElement);
             TileMap.Populate(tileMapElement);
 
-            XElement gameEnvironmentElement = element.Element("GameEnvironment");
+            XElement gameEnvironmentElement = new XElement("GameEnvironment");
             element.Add(gameEnvironmentElement);
-            if (gameEnvironmentElement != null)
-                GameEnvironment.Populate(gameEnvironmentElement);
+            GameEnvironment.Populate(gameEnvironmentElement);
         }
 
         public void Update()

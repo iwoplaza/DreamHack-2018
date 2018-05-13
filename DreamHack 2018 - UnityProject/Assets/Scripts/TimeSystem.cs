@@ -44,7 +44,7 @@ namespace Game
             SecondsPerDay = secperday;
         }
 
-        public TimeSystem() : this(0,120) {}
+        public TimeSystem() : this(0,1200) {}
 
         public void Update()
         {

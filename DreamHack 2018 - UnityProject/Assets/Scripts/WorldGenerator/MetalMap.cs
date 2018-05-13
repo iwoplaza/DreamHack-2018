@@ -52,6 +52,15 @@ namespace Game.Environment
                     Array[x, y] = (ushort) metalAmount;
                 }
             }
+
+            for (int x = 0; x < Dimensions.x; ++x)
+            {
+                for (int y = 0; y < Dimensions.y; ++y)
+                {
+                    MetalFractalChain.SetValueNoApply(x, y, Mathf.Clamp01((float)Array[x, y] / m_maximumMetalValue));
+                }
+            }
+            MetalFractalChain.ApplyTexture();
         }
 
         public void Populate(XElement element)
