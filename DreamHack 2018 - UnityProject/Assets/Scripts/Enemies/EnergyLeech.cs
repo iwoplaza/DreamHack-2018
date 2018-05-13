@@ -144,7 +144,7 @@ namespace Game.Enemies
             }
             if(PathfindingAgent.CurrentStatus == PathfindingStatus.PATH_FINISHED)
             {
-                OverrideAttackTarget(MainTarget);
+                OverrideAttackTarget(MainTarget,true);
                 yield break;
             }
             while(!IsNearEnough(target.CurrentTile,1))
@@ -158,7 +158,7 @@ namespace Game.Enemies
                 yield return new WaitForSeconds(AttackCooldown);
             }
             if(Alive){
-                OverrideAttackTarget(MainTarget);
+                OverrideAttackTarget(MainTarget, true);
             }
         }
 
@@ -189,7 +189,7 @@ namespace Game.Enemies
             }
             if(PathfindingAgent.CurrentStatus == PathfindingStatus.PATH_FINISHED)
             {
-                OverrideAttackTarget(MainTarget);
+                OverrideAttackTarget(MainTarget, true);
                 yield break;
             }
             while(!IsNearEnough(MainTarget,1))
@@ -199,7 +199,7 @@ namespace Game.Enemies
             PathfindingAgent.CancelPath();
             while(m_tileMap.TileAt(MainTarget).GetProp(PropType.OBJECT).Health.HealthPoints > 0 && Alive)
             {
-                m_tileMap.TileAt(MainTarget).GetProp(PropType.OBJECT).Damage(AttackPower);
+                m_tileMap.TileAt(MainTarget).GetProp(PropType.OBJECT).Damage(AttackPower, this.gameObject);
                 yield return new WaitForSeconds(AttackCooldown);
             }
             //LOSE??
@@ -224,8 +224,8 @@ namespace Game.Enemies
             if(isMainTarget)
             {
                 MainTarget = targetTile;
-                StartCoroutine(AttackBase());
-            }         
+                StartCoroutine(AttackMainTarget());
+            }
         }
 
         public void Attack(Living target)
