@@ -78,6 +78,10 @@ namespace Game
                 }
             }
 
+            ChunkCulling chunkCulling = GetComponentInChildren<ChunkCulling>();
+            if (chunkCulling != null)
+                chunkCulling.Initialise();
+
             Initialised = true;
         }
 

@@ -6,34 +6,41 @@ using Game;
 using Game.Environment;
 
 [RequireComponent(typeof(Camera))]
-public class ChunkCulling : EnvironmentControlComponent {
-
+public class ChunkCulling : MonoBehaviour
+{
 	private Camera m_camera;
 	private GameEnvironment m_environment;
 	private Vector2Int m_chunkCount;
 
-	[SerializeField]int m_cullingSleepCount = 3;
+	[SerializeField] int m_cullingSleepCount = 3;
 
 	[Range(0.005f,1f)]
-	[SerializeField]float m_boundsExpandSize;
+	[SerializeField] float m_boundsExpandSize;
 	int m_cullingSleep;
 
 	Thread m_cullingThread;
 
 	Bounds[,] m_chunkBounds;
 
-	[SerializeField]Vector3 rotationPlane;
+	[SerializeField] Vector3 rotationPlane;
 
-	public override void InitializeComponent()
+    public bool Initialised { get; private set; }
+
+	public void Initialise()
 	{
 		m_environment = WorldController.Instance.MainState.GameEnvironment;
 		m_chunkCount = m_environment.ChunkCount;
 		UpdateChunkBoundsDictionary();
 		m_camera = GetComponent<Camera>();
-	}
 
-	public override void UpdateComponent()
+        Initialised = true;
+    }
+
+	void Update()
 	{
+        if (!Initialised)
+            return;
+
 		if(m_cullingSleep >= m_cullingSleepCount)
 		{
 			Plane camPlane = new Plane(m_camera.transform.rotation * Vector3.forward,0);
@@ -61,8 +68,8 @@ public class ChunkCulling : EnvironmentControlComponent {
 				MeshChunk current = m_environment.Chunks[x,y];
 				m_chunkBounds[x,y] = new Bounds();
 				m_chunkBounds[x,y].SetMinMax(new Vector3(0.5f,0,0.5f) + current.ChunkBasePosition.Vector3,
-											new Vector3(0.5f,0,0.5f) + current.ChunkBasePosition.Vector3 +
-											new Vector3(current.ChunkSize.x,2,current.ChunkSize.y));			
+											 new Vector3(0.5f,0,0.5f) + current.ChunkBasePosition.Vector3 +
+											 new Vector3(current.ChunkSize.x,2,current.ChunkSize.y));			
 			}
 		}
 	}	
