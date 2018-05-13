@@ -1,7 +1,9 @@
 ﻿using Game.Building;
 using Game.Environment;
 using Game.Items;
+using Game.TileFloors;
 using Game.TileObjects;
+using Game.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
@@ -70,6 +72,56 @@ namespace Game
 
             TilePosition center = new TilePosition(TileMap.Width / 2, TileMap.Width / 2);
             TileMap.InstallAt(new MainGeneratorTileObject(), center.GetOffset(-1, -1));
+
+            int radiusX = 5;
+            int radiusZ = 5;
+
+            for (int x = -radiusX + 1; x < radiusX - 1; ++x)
+            {
+                for (int z = -radiusZ + 1; z < radiusZ - 1; ++z)
+                {
+                    TileMap.InstallAt(new DefaultTileFloor(), center.GetOffset(x, z));
+                }
+            }
+
+            for(int x = -radiusX + 1; x < radiusX - 1; ++x)
+            {
+                TileObjectBase tileObject = null;
+                if (x == 0)
+                    tileObject = new DoorTileObject();
+                else if (x == 1)
+                    tileObject = null;
+                else
+                    tileObject = new WallTileObject();
+
+                if(tileObject != null)
+                    TileMap.InstallAt(tileObject, center.GetOffset(x, -radiusZ));
+            }
+
+            for (int x = -radiusX + 1; x < radiusX - 1; ++x)
+            {
+                TileObjectBase tileObject = new WallTileObject();
+                tileObject.Rotate(Direction.NEGATIVE_Z);
+                TileMap.InstallAt(tileObject, center.GetOffset(x, radiusZ - 1));
+            }
+
+            for (int z = -radiusZ + 1; z < radiusZ - 1; ++z)
+            {
+                TileObjectBase tileObject = new WallTileObject();
+                if (z == -radiusZ + 2 || z == radiusZ - 3)
+                    tileObject.Variant = 1;
+                tileObject.Rotate(Direction.POSITIVE_X);
+                TileMap.InstallAt(tileObject, center.GetOffset(-radiusX, z));
+            }
+
+            for (int z = -radiusZ + 1; z < radiusZ - 1; ++z)
+            {
+                TileObjectBase tileObject = new WallTileObject();
+                if (z == -radiusZ + 2 || z == radiusZ - 3)
+                    tileObject.Variant = 1;
+                tileObject.Rotate(Direction.NEGATIVE_X);
+                TileMap.InstallAt(tileObject, center.GetOffset(radiusX - 1, z));
+            }
         }
 
         public Worker SpawnWorker(Vector3 position)

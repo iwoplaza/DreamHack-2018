@@ -122,13 +122,13 @@ namespace Game
             return m_tiles[position.X, position.Z];
         }
 
-        public bool InstallAt(TileObjectBase objectToInstall, TilePosition targetPosition)
+        public bool InstallAt(TileProp propToInstall, TilePosition targetPosition)
         {
             Tile targetTile = TileAt(targetPosition);
             if (targetTile == null)
                 return false;
 
-            targetTile.InstallAsRoot(objectToInstall);
+            targetTile.InstallAsRoot(propToInstall);
             return true;
         }
 
