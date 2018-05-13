@@ -34,7 +34,7 @@ namespace Game
         void Start()
         {
             MainState.Start();
-            SaveController.Instance.Load(MainState);
+            SaveController.Load(MainState);
             MainState.TileMap.CreateMapComponent();
         }
 
@@ -50,7 +50,7 @@ namespace Game
         void OnApplicationQuit()
         {
             Debug.Log("Shutting down...");
-            SaveController.Instance.Save(MainState);
+            SaveController.Save(MainState);
         }
 
         public void AddEnvironmentControlObject(EnvironmentControlComponent component)

@@ -196,7 +196,10 @@ namespace Game
                     m_targetDistance = Mathf.Clamp(m_targetDistance - scrollWheel * m_scrollSpeed * (1 + m_targetDistance * m_scrollAccellerationFactor), m_minDistance, m_maxDistance);
                 }
 
-                HandleScreenEdgeMovement();
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    HandleScreenEdgeMovement();
+                }
             }
 
             m_distance += (m_targetDistance - m_distance) * 0.3F;

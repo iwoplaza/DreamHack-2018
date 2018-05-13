@@ -497,6 +497,8 @@ GameObject:
   - component: {fileID: 652572516}
   - component: {fileID: 652572515}
   - component: {fileID: 652572517}
+  - component: {fileID: 652572519}
+  - component: {fileID: 652572518}
   m_Layer: 5
   m_Name: WorkerList
   m_TagString: Untagged
@@ -571,6 +573,39 @@ MonoBehaviour:
   m_entryPrefab: {fileID: 1992708640696516, guid: f0e2ba0cb6dc35049866a2ec9fc41219,
     type: 2}
   m_entriesHolder: {fileID: 652572514}
+--- !u!114 &652572518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 652572513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &652572519
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 652572513}
 --- !u!1 &1212958782
 GameObject:
   m_ObjectHideFlags: 0
