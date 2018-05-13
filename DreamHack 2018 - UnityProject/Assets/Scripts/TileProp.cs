@@ -32,7 +32,7 @@ namespace Game
         public virtual bool CanSkimThrough { get { return true; } }
 
         public abstract bool IsImpenetrable { get; }
-        public abstract HealthComponent Health { get; }
+        public virtual HealthComponent Health { get; private set; }
 
         /// <summary>
         /// Used for determining how passable compared to others this object is.
@@ -88,6 +88,7 @@ namespace Game
         {
             XAttribute variantAttrib = element.Attribute("variant");
             XAttribute orientationAttrib = element.Attribute("orientation");
+            XElement healthElement = element.Element("Health");
 
             if (variantAttrib != null)
                 Variant = int.Parse(variantAttrib.Value);
@@ -98,6 +99,12 @@ namespace Game
                 if (Orientation == Direction.NONE)
                     Orientation = Direction.POSITIVE_Z;
             }
+
+            if (healthElement != null)
+            {
+                Health = new HealthComponent(0);
+                Health.Parse(healthElement);
+            }
         }
 
         public virtual void Populate(XElement element)
@@ -106,6 +113,13 @@ namespace Game
             element.SetAttributeValue("type", typeName);
             element.SetAttributeValue("orientation", (int)Orientation);
             element.SetAttributeValue("variant", Variant);
+
+            if(Health != null)
+            {
+                XElement healthElement = new XElement("Health");
+                element.Add(healthElement);
+                Health.Populate(healthElement);
+            }
         }
 
         private void BindToChunk()
