@@ -4,7 +4,8 @@ Shader "Crystal"
 {
 	Properties
 	{
-		_Tint("Tint", Color) = (1,0,0,1)
+		_Base("Base", Color) = (1, 1, 1, 1)
+		_Tint("Tint", Color) = (1, 0, 0, 1)
 		_Multiplier("Multiplier", Float) = 0
 		[HideInInspector] __dirty( "", Int ) = 1
 	}
@@ -22,6 +23,7 @@ Shader "Crystal"
 			float3 worldPos;
 		};
 
+		uniform float4 _Base;
 		uniform float4 _Tint;
 		uniform float _Multiplier;
 
@@ -83,7 +85,10 @@ Shader "Crystal"
 			float3 ase_vertex3Pos = mul( unity_WorldToObject, float4( i.worldPos , 1 ) );
 			float4 appendResult9 = (float4(_Time.y , _Time.y , _Time.y , 0.0));
 			float simplePerlin3D1 = snoise( ( float4( ( ase_vertex3Pos * _Multiplier ) , 0.0 ) + appendResult9 ).xyz );
-			o.Emission = ( _Tint * ( simplePerlin3D1 + 0.3 ) ).rgb;
+			
+			simplePerlin3D1 = pow(1 - simplePerlin3D1, 5) - 1;
+
+			o.Emission = lerp(_Base, _Tint, simplePerlin3D1 + 0.3).rgb;
 			o.Alpha = 1;
 		}
 

@@ -23,10 +23,9 @@ namespace Game.Environment
 		public Vector2Int ChunkSize { get; set; }
 
 		[SerializeField] FractalChain m_baseMap;
-		[SerializeField] FractalChain m_metalMap;
+		[SerializeField] FractalChain m_metalFractal;
 		[SerializeField] FractalChain m_vegetationMap;
 		[SerializeField] FractalChain m_rockMap;
-
 		[SerializeField] Material m_mapMaterial;
 
 		struct GameObjectToAdd
@@ -113,7 +112,7 @@ namespace Game.Environment
 		{
 			m_tileMap = WorldController.Instance.MainState.TileMap;
 			m_baseMap.GenerateMap(WorldSize, WorldSeed);
-			m_metalMap.GenerateMap(WorldSize, WorldSeed);
+			m_metalFractal.GenerateMap(WorldSize, WorldSeed);
 			m_vegetationMap.GenerateMap(WorldSize, WorldSeed);
 			m_rockMap.GenerateMap(WorldSize, WorldSeed);
 
@@ -170,7 +169,7 @@ namespace Game.Environment
 					{
 						if(Vector2.Distance(new Vector2((float)WorldSize.x/2,(float)WorldSize.y/2), new Vector2(x,y)) > EmptyRadius)
 						{
-							if(m_metalMap.CurrentNoise[x,y] < 0.2f){
+							if(m_metalFractal.CurrentNoise[x,y] < 0.2f){
 								if(Random.Range(0.00f,1.00f) < m_vegetationMap.CurrentNoise[x,y])
 								{						
 									m_tileMap.InstallAt(new GreenVegetation(), new TilePosition(x,y));
@@ -211,12 +210,12 @@ namespace Game.Environment
 			}
 			m_mapMaterial.SetFloat("_ResolutionX", WorldSize.x);
 			m_mapMaterial.SetFloat("_ResolutionY", WorldSize.y);
-			m_mapMaterial.SetTexture("_ResourceMap", m_metalMap.CurrentTexture);
+			m_mapMaterial.SetTexture("_ResourceMap", m_metalFractal.CurrentTexture);
 		}
 
 		public float GetMetalAvailability(TilePosition position)
 		{
-			return m_metalMap.CurrentNoise[position.X, position.Z];
+			return m_metalFractal.CurrentNoise[position.X, position.Z];
 		}
 	}
 }

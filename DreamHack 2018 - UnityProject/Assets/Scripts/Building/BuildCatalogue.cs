@@ -29,7 +29,9 @@ namespace Game.Building
             ;
 
             InteriorCategory = new BuildCategory("Interior", "Interior");
-            TechnologyCategory = new BuildCategory("Technology", "Technology");
+            TechnologyCategory = new BuildCategory("Technology", "Technology")
+                .Add(new BuildEntry("Main Generator", typeof(TileObjects.MainGeneratorTileObject)))
+           ;
             TrapsCategory = new BuildCategory("Traps", "Traps");
         }
     }
