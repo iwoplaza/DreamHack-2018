@@ -44,10 +44,10 @@ namespace Game.Environment
 
 		public struct CullingStream
 		{
-			public GameObject ToCull { get; private set; }
+			public TilePosition ToCull { get; private set; }
 			public bool DisableObject { get; private set; }
 
-			public CullingStream(GameObject _ToCull, bool _DisableObject)
+			public CullingStream(TilePosition _ToCull, bool _DisableObject)
 			{
 				ToCull = _ToCull;
 				DisableObject = _DisableObject;
@@ -86,20 +86,24 @@ namespace Game.Environment
 			{
 				while(m_cullQueue.Count > 0)
 				{
+					
 					CullingStream toCull = m_cullQueue.Dequeue();
-					if(toCull.DisableObject)
-					{
-						toCull.ToCull.SetActive(false);
-					}
-					else
-					{
-						toCull.ToCull.SetActive(true);
+					if(toCull.ToCull != null){
+						if(toCull.DisableObject && Chunks[toCull.ToCull.X,toCull.ToCull.Z].gameObject.activeSelf)
+						{
+							Chunks[toCull.ToCull.X,toCull.ToCull.Z].gameObject.SetActive(false);
+						}
+						else
+						{
+							if(!Chunks[toCull.ToCull.X,toCull.ToCull.Z].gameObject.activeSelf)
+								Chunks[toCull.ToCull.X,toCull.ToCull.Z].gameObject.SetActive(true);
+						}
 					}
 				}
 			}
 		}
 
-		public void AddCullQueue(GameObject _object, bool _disable)
+		public void AddCullQueue(TilePosition _object, bool _disable)
 		{
 			m_cullQueue.Enqueue(new CullingStream(_object, _disable));
 		}
