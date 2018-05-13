@@ -32,6 +32,7 @@ namespace Game
         public virtual bool CanSkimThrough { get { return true; } }
 
         public abstract bool IsImpenetrable { get; }
+        public abstract HealthComponent Health { get; }
 
         /// <summary>
         /// Used for determining how passable compared to others this object is.
