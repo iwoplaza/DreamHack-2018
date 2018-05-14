@@ -18,6 +18,11 @@ namespace Game.TileObjects
 
         public MinerTileObject() { }
 
+        protected override void OnInstalled()
+        {
+            ConstructGameObject();
+        }
+
         public override bool CanGoIntoFrom(TilePosition globalPosition, MovementDirection entryDirection)
         {
             return false;
@@ -63,11 +68,6 @@ namespace Game.TileObjects
             }
 
             return null;
-        }
-
-        protected override void OnInstalled()
-        {
-            base.OnInstalled();
         }
 
         protected void Mine()
