@@ -15,12 +15,28 @@ namespace Game.UI
         public void Setup(GameState gameState)
         {
             GameState = gameState;
-            WorkerListEntries = new List<WorkerListEntry>();
+            
 
             GameState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_GAIN, OnFocusGained);
             GameState.Focus.RegisterEventHandler(Focus.EventType.FOCUS_LOSS, OnFocusLost);
+            GameState.RegisterOnWorkersChangeHandler(OnWorkersChange);
 
+            Setup();
+        }
+
+        void Setup()
+        {
             Debug.Log("Setting up Worker List...");
+
+            if (WorkerListEntries != null)
+            {
+                foreach (WorkerListEntry entry in WorkerListEntries)
+                {
+                    Destroy(entry.gameObject);
+                }
+            }
+
+            WorkerListEntries = new List<WorkerListEntry>();
 
             foreach (Worker worker in GameState.Workers)
             {
@@ -65,6 +81,11 @@ namespace Game.UI
             {
                 entry.Deselect();
             }
+        }
+
+        void OnWorkersChange(GameState gameState)
+        {
+            Setup();
         }
     }
 }

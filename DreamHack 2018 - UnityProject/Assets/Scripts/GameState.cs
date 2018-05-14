@@ -17,6 +17,8 @@ namespace Game
     {
         public delegate void OnGameOverHandler(GameState gameState);
         OnGameOverHandler m_onGameOverHandlers;
+        public delegate void OnWorkersChangeHandler(GameState gameState);
+        OnWorkersChangeHandler m_onWorkersChangeHandlers;
 
         public int WorldIdentifier { get; private set; }
         public string WorldName { get; private set; }
@@ -73,12 +75,18 @@ namespace Game
             GameEnvironment.PopulateMapForNewWorld();
             GameEnvironment.AfterSetup();
 
-            Worker worker1 = SpawnWorker(new Vector3(TileMap.Width / 2 + 2, 0, TileMap.Length / 2 + 1));
+            Worker worker1 = SpawnWorker(new Vector3(TileMap.Width / 2 + 2, 0, TileMap.Length / 2 + 2));
             worker1.FirstName = "James";
             worker1.LastName = "Marz";
-            Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 2, 0, TileMap.Length / 2 - 1));
+            Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 2, 0, TileMap.Length / 2 + 2));
             worker2.FirstName = "Hugo";
             worker2.LastName = "Ivanovicz";
+            Worker worker3 = SpawnWorker(new Vector3(TileMap.Width / 2 + 2, 0, TileMap.Length / 2 - 1));
+            worker3.FirstName = "Jeniffer";
+            worker3.LastName = "Miles";
+            Worker worker4 = SpawnWorker(new Vector3(TileMap.Width / 2 - 2, 0, TileMap.Length / 2 - 1));
+            worker4.FirstName = "Justin";
+            worker4.LastName = "Corny";
 
             ItemStorage.ItemStacks.Add(new ItemStack(Item.METAL, 500));
 
@@ -96,6 +104,8 @@ namespace Game
                     TileMap.InstallAt(new DefaultTileFloor(), center.GetOffset(x, z));
                 }
             }
+
+            TileMap.InstallAt(new Plant1(), center.GetOffset(-radiusX + 1, radiusZ - 2));
 
             for(int x = -radiusX + 1; x < radiusX - 1; ++x)
             {
@@ -158,6 +168,9 @@ namespace Game
                 worker.Position = position;
                 Workers.Add(worker);
 
+                if (m_onWorkersChangeHandlers != null)
+                    m_onWorkersChangeHandlers(this);
+
                 return worker;
             }
 
@@ -167,6 +180,9 @@ namespace Game
         public void OnWorkerDeath(Worker worker)
         {
             Workers.Remove(worker);
+
+            if (m_onWorkersChangeHandlers != null)
+                m_onWorkersChangeHandlers(this);
         }
 
         public EnergyLeech SpawnEnergyLeech(Vector3 position)
@@ -321,6 +337,11 @@ namespace Game
         public void RegisterOnGameOverHandler(OnGameOverHandler handler)
         {
             m_onGameOverHandlers += handler;
+        }
+
+        public void RegisterOnWorkersChangeHandler(OnWorkersChangeHandler handler)
+        {
+            m_onWorkersChangeHandlers += handler;
         }
     }
 }

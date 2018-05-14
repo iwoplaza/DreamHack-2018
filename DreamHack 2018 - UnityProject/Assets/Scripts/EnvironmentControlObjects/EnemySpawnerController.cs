@@ -8,7 +8,7 @@ namespace Game
     {
         public float SpawnCooldown { get; private set; }
 
-        public const float MaximumCooldown = 5; // 2 minutes
+        public const float MaximumCooldown = 120; // 2 minutes
 
         public EnemySpawnerController()
         {
@@ -22,7 +22,7 @@ namespace Game
 
         public void UpdateComponent()
         {
-            if(WorldController.Instance.MainState.TimeSystem.DayCount >= 0)
+            if(WorldController.Instance.MainState.TimeSystem.DayCount >= 1)
             {
                 if(SpawnCooldown > 0)
                 {
