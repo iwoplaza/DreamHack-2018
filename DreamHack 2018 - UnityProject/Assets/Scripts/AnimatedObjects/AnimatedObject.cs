@@ -43,12 +43,17 @@ namespace Game
 					else
 					{
 						Debug.LogWarning("List contains an empty object!");
-					}				
+					}
 				}
 			}
 			if(m_activatedByDefault)
 			{
 				Activate();
+			}
+			else
+			{
+				IsActive = true;
+				Deactivate();
 			}
 		}
 		
@@ -81,8 +86,16 @@ namespace Game
 			{
 				case ListenerType.ON_ACTIVATE:
 					m_onActivationListeners += _newDelegate;
+					if(IsActive)
+					{
+						_newDelegate();
+					}
 					break;
 				case ListenerType.ON_DEACTIVATE:
+					if(!IsActive)
+					{
+						_newDelegate();
+					}
 					m_onDeactivationListeners += _newDelegate;
 					break; 
 			}

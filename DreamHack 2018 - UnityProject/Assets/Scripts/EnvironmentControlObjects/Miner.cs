@@ -21,6 +21,11 @@ namespace Game
         {
 			m_metalMap = WorldController.Instance.MainState.GameEnvironment.MetalMap;
 		}
+
+        public void StartMineRoutine()
+        {
+            StartCoroutine(StartMining());
+        }
 		
 		public IEnumerator StartMining()
         {

@@ -45,6 +45,7 @@ namespace Game.TileObjects
             if(prefab.GetComponent<Miner>() != null)
             {
                 prefab.GetComponent<Miner>().MinerTilePosition = InstalledAt.Position;
+                prefab.GetComponent<Miner>().StartMineRoutine();
             }
             if (prefab != null)
             {
