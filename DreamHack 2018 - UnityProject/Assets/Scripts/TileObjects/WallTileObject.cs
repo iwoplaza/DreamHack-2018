@@ -15,6 +15,8 @@ namespace Game.TileObjects
 
         public override int MetalCost { get { return 10; } }
 
+        AudioSource AudioSource { get; set; }
+
         public WallTileObject()
         {
         }
@@ -69,6 +71,7 @@ namespace Game.TileObjects
             {
                 InstalledGameObject = UnityEngine.Object.Instantiate(prefab);
                 InstalledGameObject.transform.SetPositionAndRotation(origin, Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F));
+                AudioSource = InstalledGameObject.AddComponent<AudioSource>();
             }
         }
 
@@ -81,6 +84,24 @@ namespace Game.TileObjects
             }
 
             return null;
+        }
+
+        public override void Damage(int damage, GameObject attacker)
+        {
+            base.Damage(damage, attacker);
+            PlayDamageSound();
+        }
+
+        void PlayDamageSound()
+        {
+            if(AudioSource != null)
+            {
+                AudioClip clip = Resources.Sounds.Find("MetalicPunch");
+                if (clip != null)
+                {
+                    AudioSource.PlayOneShot(clip);
+                }
+            }
         }
     }
 }

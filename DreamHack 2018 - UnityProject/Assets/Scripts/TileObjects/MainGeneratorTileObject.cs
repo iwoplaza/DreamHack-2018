@@ -16,6 +16,8 @@ namespace Game.TileObjects
         public override int Width { get { return 2; } }
         public override int Length { get { return 2; } }
 
+        AudioSource AudioSource { get; set; }
+
         public MainGeneratorTileObject()
         {
             Health = new HealthComponent(200);
@@ -49,6 +51,7 @@ namespace Game.TileObjects
             {
                 InstalledGameObject = UnityEngine.Object.Instantiate(prefab);
                 InstalledGameObject.transform.SetPositionAndRotation(origin, Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F));
+                AudioSource = InstalledGameObject.AddComponent<AudioSource>();
 
                 MainGeneratorComponent component = InstalledGameObject.AddComponent<MainGeneratorComponent>();
                 component.Setup(this);
@@ -71,6 +74,24 @@ namespace Game.TileObjects
             base.OnHealthDepleted();
 
             WorldController.Instance.MainState.GameOver();
+        }
+
+        public override void Damage(int damage, GameObject attacker)
+        {
+            base.Damage(damage, attacker);
+            PlayDamageSound();
+        }
+
+        void PlayDamageSound()
+        {
+            if (AudioSource != null)
+            {
+                AudioClip clip = Resources.Sounds.Find("MetalicPunch");
+                if (clip != null)
+                {
+                    AudioSource.PlayOneShot(clip);
+                }
+            }
         }
     }
 }
