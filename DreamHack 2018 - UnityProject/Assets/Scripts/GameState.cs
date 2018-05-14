@@ -30,6 +30,7 @@ namespace Game
         public BuildModeManager BuildModeManager { get; private set; }
         public ItemStorage ItemStorage { get; private set; }
         public GameEnvironment GameEnvironment { get; private set; }
+        public EnemySpawnerController EnemySpawnerController { get; private set; }
 
         public TilePosition MainGeneratorPosition { get; private set; }
 
@@ -47,6 +48,7 @@ namespace Game
             BuildCatalogue = new BuildCatalogue();
             BuildModeManager = new BuildModeManager(this);
             ItemStorage = new ItemStorage();
+            EnemySpawnerController = new EnemySpawnerController();
         }
 
         public void Start()
@@ -58,6 +60,7 @@ namespace Game
             GameEnvironment.CliffThreshold = 0.5f;
             GameEnvironment.ChunkSize = new Vector2Int(15, 15);
             GameEnvironment.EmptyRadius = GameEnvironment.WorldSize.magnitude * 0.075f;
+            EnemySpawnerController.InitializeComponent();
         }
 
         public void GenerateNew()
@@ -76,9 +79,6 @@ namespace Game
             Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 2, 0, TileMap.Length / 2 - 1));
             worker2.FirstName = "Hugo";
             worker2.LastName = "Ivanovicz";
-
-            EnergyLeech leech = SpawnEnergyLeech(new Vector3(TileMap.Width / 2 - 10, 0, TileMap.Length / 2));
-            Debug.Log("Spawning " + leech);
 
             ItemStorage.ItemStacks.Add(new ItemStack(Item.METAL, 500));
 
@@ -247,6 +247,10 @@ namespace Game
 
             XElement tileMapElement = element.Element("TileMap");
             TileMap.Parse(tileMapElement);
+
+            XElement enemySpawnerElement = element.Element("EnemySpawner");
+            if(enemySpawnerElement != null)
+                EnemySpawnerController.Parse(enemySpawnerElement);
         }
 
         public void Populate(XElement element)
@@ -296,11 +300,16 @@ namespace Game
             XElement gameEnvironmentElement = new XElement("GameEnvironment");
             element.Add(gameEnvironmentElement);
             GameEnvironment.Populate(gameEnvironmentElement);
+
+            XElement enemySpawnerElement = new XElement("EnemySpawner");
+            element.Add(enemySpawnerElement);
+            EnemySpawnerController.Populate(enemySpawnerElement);
         }
 
         public void Update()
         {
             TimeSystem.Update();
+            EnemySpawnerController.UpdateComponent();
         }
 
         public void GameOver()

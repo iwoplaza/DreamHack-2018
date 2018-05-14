@@ -38,6 +38,8 @@ namespace Game
             }
         }
 
+        public float DeltaTime { get { return UnityEngine.Time.deltaTime * TimeMultiplier; } }
+
         public TimeSystem(float time, float secperday)
         {
             Time = time;

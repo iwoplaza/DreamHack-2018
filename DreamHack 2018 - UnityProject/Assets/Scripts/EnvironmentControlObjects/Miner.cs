@@ -36,13 +36,15 @@ namespace Game
             float miningFreq = 0;
             while(m_metalMap.MetalAmountAt(MinerTilePosition) > 0)
             {
-                if(miningFreq <= 0){
-                    int curAmount = (int)m_metalMap.MetalAmountAt(MinerTilePosition);
-                    int newValue = (int)m_metalMap.MetalAmountAt(MinerTilePosition) - AmountGetPerMine;
-                    m_metalMap.SetMetalAmountAt(MinerTilePosition, (ushort)newValue);
-                    newValue = (int)m_metalMap.MetalAmountAt(MinerTilePosition);
+                if(miningFreq <= 0)
+                {
+                    int currAmount = m_metalMap.MetalAmountAt(MinerTilePosition);
+                    int newValue = currAmount - AmountGetPerMine;
+                    if (newValue < 0)
+                        newValue = 0;
+                    m_metalMap.SetMetalAmountAt(MinerTilePosition, (ushort) newValue);
 
-                    WorldController.Instance.MainState.ItemStorage.Add(curAmount - newValue, Items.Item.METAL);
+                    WorldController.Instance.MainState.ItemStorage.Add(currAmount - newValue, Items.Item.METAL);
 
                     miningFreq = m_miningFrequency;
                 }

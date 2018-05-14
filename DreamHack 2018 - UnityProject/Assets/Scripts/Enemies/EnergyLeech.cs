@@ -136,6 +136,7 @@ namespace Game.Enemies
             }
 
             m_collisionFlags = m_characterController.Move(m_moveDir * timeMultiplier);
+            transform.position = new Vector3(transform.position.x, 0, transform.position.y);
         }
 
         override protected void Update()

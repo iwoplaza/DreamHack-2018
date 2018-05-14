@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 4629295418056858}
   - component: {fileID: 114936902961294008}
   - component: {fileID: 114934049841417054}
+  - component: {fileID: 114959781492463804}
   m_Layer: 0
   m_Name: WorldController
   m_TagString: WorldController
@@ -578,8 +579,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a79ffa4e371c446a67d85fcc6284dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_metalMap:
+    m_metalFractalChain: {fileID: 114497296106415012}
+    m_maximumMetalValue: 16
   m_baseMap: {fileID: 114991175600298730}
-  m_metalMap: {fileID: 114497296106415012}
   m_vegetationMap: {fileID: 114595829478396146}
   m_rockMap: {fileID: 114035455154460846}
   m_mapMaterial: {fileID: 2100000, guid: df66146e87ed9ba4b804064509a15031, type: 2}
@@ -769,6 +772,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0f8f4d172358f949b7eaca96cb3a1f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114959781492463804
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1725485953961606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d2489f7910b974e931a14dde642212, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114960649510469236
