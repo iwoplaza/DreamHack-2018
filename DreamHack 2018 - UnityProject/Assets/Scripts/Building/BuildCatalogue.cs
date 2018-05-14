@@ -29,7 +29,12 @@ namespace Game.Building
                 .Add(new BuildEntry("Floor", typeof(TileFloors.DefaultTileFloor)))
             ;
 
-            InteriorCategory = new BuildCategory("Interior", "Interior");
+            InteriorCategory = new BuildCategory("Interior", "Interior")
+                .Add(new BuildEntry("Plant",typeof(TileObjects.Plant1)))
+                .Add(new BuildEntry("Lamp",typeof(TileObjects.Lamp)))
+                .Add(new BuildEntry("Sofa",typeof(TileObjects.Sofa1)))
+                .Add(new BuildEntry("Chair",typeof(TileObjects.Chair)))
+                .Add(new BuildEntry("Table",typeof(TileObjects.Table)));
             TechnologyCategory = new BuildCategory("Technology", "Technology")
                 .Add(new BuildEntry("Miner", typeof(TileObjects.MinerTileObject)))
            ;

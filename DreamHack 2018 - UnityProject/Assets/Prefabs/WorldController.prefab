@@ -581,7 +581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_metalMap:
     m_metalFractalChain: {fileID: 114497296106415012}
-    m_maximumMetalValue: 16
+    m_maximumMetalValue: 600
   m_baseMap: {fileID: 114991175600298730}
   m_vegetationMap: {fileID: 114595829478396146}
   m_rockMap: {fileID: 114035455154460846}

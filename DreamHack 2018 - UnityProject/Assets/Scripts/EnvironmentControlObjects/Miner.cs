@@ -28,11 +28,7 @@ namespace Game
         }
 		
 		public IEnumerator StartMining()
-        {
-            if(GetComponent<AnimatedObject>() != null)
-            {
-                GetComponent<AnimatedObject>().Activate();
-            }
+        {            
             float miningFreq = 0;
             while(m_metalMap.MetalAmountAt(MinerTilePosition) > 0)
             {
@@ -52,7 +48,6 @@ namespace Game
 
                 yield return new WaitForEndOfFrame();
             }
-
             if(GetComponent<AnimatedObject>() != null)
             {
                 GetComponent<AnimatedObject>().Deactivate();

@@ -29,13 +29,13 @@ public class AnimatedRotatingObject : AnimatedComponent {
 
 	void Update()
 	{
-		transform.localRotation *= Quaternion.Euler(m_rotationAxis * m_currentRotationSpeed * Time.deltaTime);
-
 		if(m_currentInterpolateTime <= m_interpolateTime)
 		{
 			m_currentRotationSpeed = AnimatedObjectHelper.CosineInterpolation(m_baseRotationSpeed, m_targetRotationSpeed, m_currentInterpolateTime/m_interpolateTime);
 			m_currentInterpolateTime += Time.deltaTime;
 		}
+
+		transform.localRotation *= Quaternion.Euler(m_rotationAxis * m_currentRotationSpeed * Time.deltaTime);	
 	}
 
 	public override void OnActivate()
