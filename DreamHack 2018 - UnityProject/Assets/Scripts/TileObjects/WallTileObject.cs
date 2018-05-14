@@ -19,6 +19,7 @@ namespace Game.TileObjects
 
         public WallTileObject()
         {
+            Health = new HealthComponent(100);
         }
 
         public override bool CanGoIntoFrom(TilePosition position, MovementDirection entryDirection)

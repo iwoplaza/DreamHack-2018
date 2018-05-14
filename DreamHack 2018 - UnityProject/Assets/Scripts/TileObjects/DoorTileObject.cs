@@ -18,6 +18,7 @@ namespace Game.TileObjects
 
         public DoorTileObject()
         {
+            Health = new HealthComponent(150);
         }
 
         public override bool CanGoIntoFrom(TilePosition globalPosition, MovementDirection entryDirection)

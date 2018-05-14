@@ -5,22 +5,12 @@ namespace Game.Pathfinding.Rules
     {
         public bool CanGoIntoFrom(Tile tile, MovementDirection dir)
         {
-            TileProp installedObject = tile.GetProp(PropType.OBJECT);
-
-            if (!tile.HasCliff && (installedObject is TileObjects.MainGeneratorTileObject || installedObject is TileObjects.DoorTileObject))
-                return true;
-            else
-                return tile != null && tile.CanGoIntoFrom(dir) && !tile.HasCliff;
+            return true;
         }
 
         public bool CanComeOutOfTowards(Tile tile, MovementDirection dir)
         {
-            TileProp installedObject = tile.GetProp(PropType.OBJECT);
-
-            if (!tile.HasCliff && (installedObject is TileObjects.MainGeneratorTileObject || installedObject is TileObjects.DoorTileObject))
-                return true;
-            else
-                return tile != null && tile.CanComeOutOfTowards(dir);
+            return true;
         }
 
         public bool CanSkimThrough(Tile tile)
@@ -32,7 +22,7 @@ namespace Game.Pathfinding.Rules
         {
             TileProp installedObject = tile.GetProp(PropType.OBJECT);
 
-            if (!tile.HasCliff && (installedObject is TileObjects.MainGeneratorTileObject || installedObject is TileObjects.DoorTileObject))
+            if (!tile.HasCliff && (installedObject is TileObjects.MainGeneratorTileObject))
                 return true;
             else
                 return tile != null && !tile.IsImpenetrable && !tile.HasCliff;

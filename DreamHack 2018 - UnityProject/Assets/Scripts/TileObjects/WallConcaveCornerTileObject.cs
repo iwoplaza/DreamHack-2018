@@ -10,6 +10,11 @@ namespace Game.TileObjects
         public override bool IsImpenetrable { get { return true; } }
         public override int MetalCost { get { return 10; } }
 
+        public WallConcaveCornerTileObject()
+        {
+            Health = new HealthComponent(100);
+        }
+
         public override bool CanGoIntoFrom(TilePosition position, Pathfinding.MovementDirection entryDirection)
         {
             return false;

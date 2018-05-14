@@ -9,6 +9,7 @@ using Game;
 using Game.Animation;
 using Game.Pathfinding;
 using Game.Pathfinding.Rules;
+using Game.TileObjects;
 
 namespace Game.Enemies
 {
@@ -83,6 +84,11 @@ namespace Game.Enemies
 
             if (PathfindingAgent.CurrentStatus == PathfindingStatus.HAS_PATH && nextPosition != null)
             {
+                Tile tile = m_tileMap.TileAt(nextPosition);
+                if (tile.Has(PropType.OBJECT) && !(tile.GetProp(PropType.OBJECT) is MainGeneratorTileObject))
+                {
+                    AttackObstacle(nextPosition);
+                }
 
                 /// TODO Change this into Path Finding behaviour.
                 Vector3 target = nextPosition.Vector3 + new Vector3(0.5F, 0, 0.5F);
@@ -225,6 +231,41 @@ namespace Game.Enemies
             Destroy(gameObject);
         }
 
+        /// <summary>
+        /// Responsible for destroying the obstacle on the path to MainTarget.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public IEnumerator DestroyObstacle(TilePosition position)
+        {
+            Tile tile = m_tileMap.TileAt(position);
+            if(tile != null && tile.Has(PropType.OBJECT))
+            {
+                TileProp tileObject = tile.GetProp(PropType.OBJECT);
+                if(tileObject != null)
+                {
+                    if(tileObject.Health != null)
+                    {
+                        while(!tileObject.IsDestroyed && Alive)
+                        {
+                            tileObject.Damage(AttackPower, GameObject);
+                            Visual.OnAttack();
+                            yield return new WaitForSeconds(AttackCooldown);
+                        }
+                    }
+                    else
+                    {
+                        tile.Uninstall(tileObject);
+                    }
+                }
+            }
+
+            if (Alive)
+            {
+                OverrideAttackTarget(MainTarget, true);
+            }
+        }
+
         public IEnumerator AttackMainTarget()
         {
             Debug.Log("Starting to attack...");
@@ -287,6 +328,13 @@ namespace Game.Enemies
                 MainTarget = targetTile;
                 StartCoroutine(AttackMainTarget());
             }
+        }
+
+        public void AttackObstacle(TilePosition targetTile)
+        {
+            StopAllCoroutines();
+            PathfindingAgent.CancelPath();
+            StartCoroutine(DestroyObstacle(targetTile));
         }
 
         public bool CanClawReach(IAttackable target)
