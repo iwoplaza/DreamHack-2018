@@ -47,15 +47,17 @@ namespace Game.TileObjects
             Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(dimensions.x / 2.0F, 0.0F, dimensions.y / 2.0F);
 
             GameObject prefab = GetPrefab();
-            if(prefab.GetComponent<Miner>() != null)
-            {
-                prefab.GetComponent<Miner>().MinerTilePosition = InstalledAt.Position;
-                prefab.GetComponent<Miner>().StartMineRoutine();
-            }
+           
             if (prefab != null)
             {
                 InstalledGameObject = UnityEngine.Object.Instantiate(prefab);
                 InstalledGameObject.transform.SetPositionAndRotation(origin, Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F));
+                if(prefab.GetComponent<Miner>() != null)
+                {
+                    InstalledGameObject.GetComponent<Miner>().MinerTilePosition = InstalledAt.Position;
+                    InstalledGameObject.GetComponent<Miner>().Initialize();
+                    InstalledGameObject.GetComponent<Miner>().StartMineRoutine();
+                }
             }
         }
 
