@@ -70,11 +70,6 @@ namespace Game.TileObjects
             return null;
         }
 
-        protected override void OnInstalled()
-        {
-            base.OnInstalled();
-        }
-
         protected void Mine()
         {
             GameState gameState = WorldController.Instance.MainState;
