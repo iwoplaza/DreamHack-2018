@@ -10,7 +10,8 @@ namespace Game.Pathfinding.Rules
         {
             TileProp installedObject = tile.GetProp(PropType.OBJECT);
 
-            if(!tile.HasCliff && installedObject is TileObjects.DoorTileObject)
+            if(!tile.HasCliff && installedObject is TileObjects.DoorTileObject &&
+                installedObject.GlobalToLocal(tile.Position).X == 0)
                 return true;
             else
                 return tile != null && tile.CanGoIntoFrom(dir) && !tile.HasCliff;
@@ -20,7 +21,8 @@ namespace Game.Pathfinding.Rules
         {
             TileProp installedObject = tile.GetProp(PropType.OBJECT);
 
-            if (!tile.HasCliff && installedObject is TileObjects.DoorTileObject)
+            if (!tile.HasCliff && installedObject is TileObjects.DoorTileObject &&
+                installedObject.GlobalToLocal(tile.Position).X == 0)
                 return true;
             else
                 return tile != null && tile.CanComeOutOfTowards(dir);
