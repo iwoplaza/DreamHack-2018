@@ -20,6 +20,8 @@ namespace Game
 
 		public delegate void EventListener();
 
+		bool m_initialized;
+
 		private EventListener m_onActivationListeners;
 
 		private EventListener m_onDeactivationListeners;
@@ -39,6 +41,7 @@ namespace Game
 					if(component != null)
 					{
 						component.RegisterComponent(this);
+						component.InitializeComponent();
 					}
 					else
 					{
@@ -55,10 +58,12 @@ namespace Game
 				IsActive = true;
 				Deactivate();
 			}
+			m_initialized = true;
 		}
 		
 		// Update is called once per frame
-		void Update () {
+		void Update () 
+		{
 			
 		}
 

@@ -22,7 +22,7 @@ public class AnimatedRotatingObject : AnimatedComponent {
 		m_acceleration = 30;
 	}
 
-	void Start()
+	public override void InitializeComponent()
 	{
 		m_currentInterpolateTime = m_interpolateTime + 1;
 	}

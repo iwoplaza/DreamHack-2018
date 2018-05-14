@@ -8,6 +8,8 @@ namespace Game
 
 		public AnimatedObject Owner { get; private set; }
 
+		public abstract void InitializeComponent();
+		
 		public void RegisterComponent(AnimatedObject newOwner)
 		{
 			Owner = newOwner;
