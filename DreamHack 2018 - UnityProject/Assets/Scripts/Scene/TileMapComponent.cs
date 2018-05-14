@@ -60,7 +60,7 @@ namespace Game.Scene
                 TileMap = tileMap;
                 DisplayOffset = new TilePosition(0, 0);
                 DisplayWidth = Math.Min(TileMap.Width, MAX_DISPLAY_WIDTH);
-                DisplayHeight = Math.Min(TileMap.Height, MAX_DISPLAY_HEIGHT);
+                DisplayHeight = Math.Min(TileMap.Length, MAX_DISPLAY_HEIGHT);
                 m_tileDisplays = new TileDisplayComponent[DisplayWidth, DisplayHeight];
                 m_currentHoveredOverPosition = null;
 
@@ -131,7 +131,7 @@ namespace Game.Scene
             var z = DisplayOffset.Z - DisplayHeight / 2;
 
             x = Math.Min(x, TileMap.Width - DisplayWidth);
-            z = Math.Min(z, TileMap.Height - DisplayHeight);
+            z = Math.Min(z, TileMap.Length - DisplayHeight);
             DisplayOffset = new TilePosition(x, z);
 
             UpdateView();

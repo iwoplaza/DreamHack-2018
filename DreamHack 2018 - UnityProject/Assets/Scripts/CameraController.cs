@@ -75,7 +75,7 @@ namespace Game
                 if(WorldController.Instance.MainState.TileMap != null)
                 {
                     TileMap tileMap = WorldController.Instance.MainState.TileMap;
-                    transform.position = new Vector3(tileMap.Width / 2, 0, tileMap.Height / 2);
+                    transform.position = new Vector3(tileMap.Width / 2, 0, tileMap.Length / 2);
                 }
             }
 
@@ -219,6 +219,8 @@ namespace Game
                 {
                     PauseMenuPopUp.Create(m_gameHud).Open();
                 }
+
+                LimitPosition();
             }
 
             m_distance += (m_targetDistance - m_distance) * 0.3F;
@@ -240,8 +242,15 @@ namespace Game
 
             if (m_focusTarget != null)
             {
-                float t = Mathf.Min(m_focusFollowSpeed, 1);
-                transform.position += (m_focusTarget.Position - transform.position) * t;
+                if (m_focusTarget.IsDestroyed)
+                {
+                    m_focusTarget = null;
+                }
+                else
+                {
+                    float t = Mathf.Min(m_focusFollowSpeed, 1);
+                    transform.position += (m_focusTarget.Position - transform.position) * t;
+                }
             }
         }
 
@@ -364,6 +373,23 @@ namespace Game
         {
             Vector3 direction = new Vector3(0, 1, -1).normalized;
             Camera.transform.localPosition = direction * m_distance;
+        }
+
+        void LimitPosition()
+        {
+            float padding = 55;
+            TileMap tileMap = WorldController.Instance.MainState.TileMap;
+
+            Vector3 pos = transform.position;
+
+            if (pos.x < padding)
+                transform.position = new Vector3(padding, pos.y, pos.z);
+            if (pos.x > tileMap.Width - padding)
+                transform.position = new Vector3(tileMap.Width - padding, pos.y, pos.z);
+            if (pos.z < padding)
+                transform.position = new Vector3(pos.x, pos.y, padding);
+            if (pos.z > tileMap.Length - padding)
+                transform.position = new Vector3(pos.x, pos.y, tileMap.Length - padding);
         }
 
         void RotateBy(float amount)

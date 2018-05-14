@@ -17,6 +17,7 @@ namespace Game.Enemies
         public override string DisplayName { get { return "Energy Leech"; } }
         public override int MaxHealth { get { return 100; } }
         Transform IFocusTarget.PortraitPivot { get { return null; } }
+        public bool IsDestroyed { get { return !Alive; } }
 
         public EnergyLeechVisual Visual { get; private set; }
         public bool IsWalking { get; private set; }
@@ -40,11 +41,15 @@ namespace Game.Enemies
         private CollisionFlags m_collisionFlags;
         private bool m_previouslyGrounded;
         private bool m_running = false;
+        private bool m_recentlyClawed = false;
+        Focus m_focus;
 
         override protected void Awake()
         {
             base.Awake();
 
+            AttackCooldown = 0.5F;
+            AttackPower = 10;
             m_characterController = GetComponent<CharacterController>();
         }
 
@@ -52,7 +57,14 @@ namespace Game.Enemies
         {
             m_tileMap = tileMap;
             Visual = GetComponent<EnergyLeechVisual>();
-            PathfindingAgent = new PathfindingAgent(new BasicRule(), m_tileMap);
+            PathfindingAgent = new PathfindingAgent(new EnergyLeechRule(), m_tileMap);
+
+            OverrideAttackTarget(WorldController.Instance.MainState.MainGeneratorPosition, true);
+        }
+
+        protected override void Start()
+        {
+            OverrideAttackTarget(WorldController.Instance.MainState.MainGeneratorPosition, true);
         }
 
         List<ActionBase> ISubject.GetActionsFor(IActor actor)
@@ -71,7 +83,6 @@ namespace Game.Enemies
 
             if (PathfindingAgent.CurrentStatus == PathfindingStatus.HAS_PATH && nextPosition != null)
             {
-                Debug.Log("Walking...");
 
                 /// TODO Change this into Path Finding behaviour.
                 Vector3 target = nextPosition.Vector3 + new Vector3(0.5F, 0, 0.5F);
@@ -140,6 +151,11 @@ namespace Game.Enemies
                 Visual.UpdateAnimator();
         }
 
+        /// <summary>
+        /// Side track and attack a living target.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
         public IEnumerator AttackBehaviour(Living target)
         {
             PathfindingAgent.GeneratePath(CurrentTile, target.CurrentTile);
@@ -152,15 +168,18 @@ namespace Game.Enemies
                 OverrideAttackTarget(MainTarget,true);
                 yield break;
             }
-            while(!IsNearEnough(target.CurrentTile,1))
+            while(!CanClawReach(target))
             {
                 yield return new WaitForEndOfFrame();
             }
             PathfindingAgent.CancelPath();
             while(target.Alive && Alive)
             {
-                Attack(target);
+                m_recentlyClawed = false;
+                ClawAt(target);
+                m_recentlyClawed = true;
                 yield return new WaitForSeconds(AttackCooldown);
+                m_recentlyClawed = false;
             }
             if(Alive)
             {
@@ -173,12 +192,15 @@ namespace Game.Enemies
             if(Mathf.RoundToInt(new Vector2(targetPosition.X-CurrentTile.X,targetPosition.Z-CurrentTile.Z).magnitude) < distance)
             {
                 return true;
-            }else
+            }
+            else
                 return false;
         }
 
         public override void Damage(int damage, GameObject attacker)
         {
+            base.Damage(damage, attacker);
+
             if (attacker.GetComponent<Living>() != null)
             {
                 OverrideAttackTarget(attacker.GetComponent<Living>().CurrentTile, attacker);
@@ -186,27 +208,57 @@ namespace Game.Enemies
             }
         }
 
+        void OnCollisionEnter(Collision collision)
+        {
+            if (collision.collider.GetComponent<Worker>() != null)
+            {
+                ClawAt(collision.collider.GetComponent<Worker>());
+            }
+        }
+
+        protected override void OnDeath()
+        {
+            base.OnDeath();
+            if (m_focus != null)
+                m_focus.On(null);
+            WorldController.Instance.MainState.OnEnergyLeachDeath(this);
+            Destroy(gameObject);
+        }
+
         public IEnumerator AttackMainTarget()
         {
-            PathfindingAgent.GeneratePath(CurrentTile,MainTarget);
-            while(PathfindingAgent.CurrentStatus == PathfindingStatus.GENERATING_PATH)
+            Debug.Log("Starting to attack...");
+
+            if (CurrentTile != MainTarget)
             {
-                yield return new WaitForEndOfFrame();
+                PathfindingAgent.GeneratePath(CurrentTile, MainTarget);
+                while (PathfindingAgent.CurrentStatus == PathfindingStatus.GENERATING_PATH)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+                if (PathfindingAgent.CurrentStatus == PathfindingStatus.PATH_FINISHED)
+                {
+                    Debug.Log("Found path to main target");
+                    OverrideAttackTarget(MainTarget, true);
+                    yield break;
+                }
+                while (!IsNearEnough(MainTarget, 1))
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+                PathfindingAgent.CancelPath();
             }
-            if(PathfindingAgent.CurrentStatus == PathfindingStatus.PATH_FINISHED)
+            TurnTowards(MainTarget.Vector3 + new Vector3(0.5F, 0, 0.5F));
+
+            Tile targetTile = m_tileMap.TileAt(MainTarget);
+            TileProp targetProp = targetTile.GetProp(PropType.OBJECT);
+            if (targetProp.Health != null)
             {
-                OverrideAttackTarget(MainTarget, true);
-                yield break;
-            }
-            while(!IsNearEnough(MainTarget,1))
-            {
-                yield return new WaitForEndOfFrame();
-            }
-            PathfindingAgent.CancelPath();
-            while(m_tileMap.TileAt(MainTarget).GetProp(PropType.OBJECT).Health.HealthPoints > 0 && Alive)
-            {
-                m_tileMap.TileAt(MainTarget).GetProp(PropType.OBJECT).Damage(AttackPower, this.gameObject);
-                yield return new WaitForSeconds(AttackCooldown);
+                while (!targetProp.IsDestroyed && Alive)
+                {
+                    m_tileMap.TileAt(MainTarget).GetProp(PropType.OBJECT).Damage(AttackPower, this.gameObject);
+                    yield return new WaitForSeconds(AttackCooldown);
+                }
             }
             //LOSE??
         }
@@ -222,6 +274,7 @@ namespace Game.Enemies
                 StartCoroutine(AttackBehaviour(newTarget.GetComponent<Living>()));
             }
         }
+
         public void OverrideAttackTarget(TilePosition targetTile, bool isMainTarget)
         {
             StopAllCoroutines();
@@ -229,26 +282,53 @@ namespace Game.Enemies
             PathfindingAgent.GeneratePath(CurrentTile,targetTile);
             if(isMainTarget)
             {
+                Debug.Log("Trying to start trying to attack the main Target at " + targetTile);
                 MainTarget = targetTile;
                 StartCoroutine(AttackMainTarget());
             }
         }
 
-        public void Attack(Living target)
+        public bool CanClawReach(IAttackable target)
         {
-            target.Damage(AttackPower,this.gameObject);
+            if (target == null)
+                return false;
+
+            Vector3 direction = target.Position - Position;
+            direction.y = 0;
+            float distance = direction.magnitude;
+            if (distance <= 1.5F)
+                return true;
+
+            return false;
+        }
+
+        public void ClawAt(Living target)
+        {
+            if (!m_recentlyClawed)
+            {
+                TurnTowards(target.Position + new Vector3(0.5F, 0, 0.5F));
+                target.Damage(AttackPower, GameObject);
+            }
         }
 
         public void OnEnemyDead()
         {
         }
 
-        public void OnFocusGained()
+        public void TurnTowards(Vector3 position)
         {
+            Vector3 difference = position - transform.position;
+            transform.rotation = Quaternion.Euler(0, Mathf.Atan2(difference.x, difference.z) / Mathf.PI * 180.0F, 0);
         }
 
-        public void OnFocusLost()
+        void IFocusTarget.OnFocusGained(Focus focus)
         {
+            m_focus = focus;
+        }
+
+        void IFocusTarget.OnFocusLost(Focus focus)
+        {
+            m_focus = null;
         }
     }
 }

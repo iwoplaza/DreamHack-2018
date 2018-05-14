@@ -57,7 +57,7 @@ namespace Game
         {
             get { return m_health; }
 
-            private set
+            protected set
             {
                 if (m_health != null)
                     m_health.UnregisterChangeHandler(OnHealthChanged);

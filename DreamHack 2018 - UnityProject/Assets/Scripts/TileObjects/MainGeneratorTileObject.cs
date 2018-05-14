@@ -1,4 +1,5 @@
 ﻿using Game.Pathfinding;
+using Game.Scene;
 using Game.Utility;
 using System;
 using System.Collections;
@@ -15,7 +16,10 @@ namespace Game.TileObjects
         public override int Width { get { return 2; } }
         public override int Length { get { return 2; } }
 
-        public MainGeneratorTileObject() {}
+        public MainGeneratorTileObject()
+        {
+            Health = new HealthComponent(200);
+        }
 
         public override bool CanGoIntoFrom(TilePosition globalPosition, MovementDirection entryDirection)
         {
@@ -45,6 +49,9 @@ namespace Game.TileObjects
             {
                 InstalledGameObject = UnityEngine.Object.Instantiate(prefab);
                 InstalledGameObject.transform.SetPositionAndRotation(origin, Quaternion.Euler(0.0F, DirectionUtils.GetYRotation(Orientation), 0.0F));
+
+                MainGeneratorComponent component = InstalledGameObject.AddComponent<MainGeneratorComponent>();
+                component.Setup(this);
             }
         }
 

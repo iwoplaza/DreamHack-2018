@@ -26,9 +26,14 @@ namespace Game
 
         public void On(IFocusTarget newTarget)
         {
+            if(newTarget != null && newTarget.IsDestroyed)
+            {
+                return;
+            }
+
             if (Current != null)
             {
-                Current.OnFocusLost();
+                Current.OnFocusLost(this);
                 if (m_focusLossHandlers != null)
                     m_focusLossHandlers(Current);
             }
@@ -36,7 +41,7 @@ namespace Game
             Current = newTarget;
             if (newTarget != null)
             {
-                Current.OnFocusGained();
+                Current.OnFocusGained(this);
 
                 if (newTarget.PortraitPivot != null)
                 {
@@ -44,9 +49,17 @@ namespace Game
                     PortraitCamera.transform.localRotation = Quaternion.Euler(0, -150, 0);
                     PortraitCamera.transform.localPosition = new Vector3(0.553F, 0.6F, 0.969F);
                 }
+                else
+                {
+                    PortraitCamera.transform.parent = null;
+                }
 
                 if (m_focusGainHandlers != null)
                     m_focusGainHandlers(Current);
+            }
+            else
+            {
+                PortraitCamera.transform.parent = null;
             }
         }
 

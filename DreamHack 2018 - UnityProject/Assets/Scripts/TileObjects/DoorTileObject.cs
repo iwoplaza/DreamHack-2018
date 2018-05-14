@@ -28,23 +28,16 @@ namespace Game.TileObjects
 
             TilePosition localPosition = GlobalToLocal(globalPosition);
 
-            if (localPosition.X == 1) // Wall Part
-            {
-                if (localEntryDirection == MovementDirection.POSITIVE_X || //Side
-                    localEntryDirection == MovementDirection.NEGATIVE_X || //Side
-                    localEntryDirection == MovementDirection.POSITIVE_Z || //Front
-                    localEntryDirection == MovementDirection.POSITIVE_Z_POSITIVE_X || //FrontSideDiagonal
-                    localEntryDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X)    //FrontSideDiagonal
-                {
-                    return true;
-                }
-
-                return false;
-            }
-            else // Door Part
+            if (localEntryDirection == MovementDirection.POSITIVE_X || //Side
+                localEntryDirection == MovementDirection.NEGATIVE_X || //Side
+                localEntryDirection == MovementDirection.POSITIVE_Z || //Front
+                localEntryDirection == MovementDirection.POSITIVE_Z_POSITIVE_X || //FrontSideDiagonal
+                localEntryDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X)    //FrontSideDiagonal
             {
                 return true;
             }
+
+            return false;
         }
 
         public override bool CanComeOutOfTowards(TilePosition globalPosition, MovementDirection direction)
@@ -55,20 +48,13 @@ namespace Game.TileObjects
 
             TilePosition localPosition = GlobalToLocal(globalPosition);
 
-            if (localPosition.X == 1) // Wall Part
+            if (localDirection == MovementDirection.POSITIVE_Z ||
+                localDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X ||
+                localDirection == MovementDirection.POSITIVE_Z_POSITIVE_X)
             {
-                if (localDirection == MovementDirection.POSITIVE_Z ||
-                    localDirection == MovementDirection.POSITIVE_Z_NEGATIVE_X ||
-                    localDirection == MovementDirection.POSITIVE_Z_POSITIVE_X)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return false;
             }
-            else // Door Part
+            else
             {
                 return true;
             }

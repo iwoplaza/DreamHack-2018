@@ -10,8 +10,9 @@ namespace Game
         Vector3 Position { get; }
         Transform PortraitPivot { get; }
         HealthComponent Health { get; }
+        bool IsDestroyed { get; }
 
-        void OnFocusGained();
-        void OnFocusLost();
+        void OnFocusGained(Focus focus);
+        void OnFocusLost(Focus focus);
     }
 }

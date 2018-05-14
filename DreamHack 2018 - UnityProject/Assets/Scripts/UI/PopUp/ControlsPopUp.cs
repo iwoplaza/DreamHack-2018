@@ -10,6 +10,7 @@ namespace Game.UI.PopUp
     {
         public override bool IsSingluar { get { return true; } }
         public override bool ShouldCloseOnFocusLost { get { return false; } }
+        public override bool PausesGame { get { return true; } }
 
         public static ControlsPopUp Create(GameHUD gameHud)
         {

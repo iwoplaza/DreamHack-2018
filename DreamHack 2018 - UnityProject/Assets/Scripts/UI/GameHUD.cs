@@ -18,6 +18,8 @@ namespace Game.UI
         public ItemStoragePanel ItemStoragePanel { get; private set; }
 
         public List<PopUpWindow> OpenedPopUps { get; private set; }
+        public int OpenedPausingCount { get; private set; }
+        public TimeSystem.TimeMode SavedTimeMode { get; private set; }
         public bool HasInputFocus { get { return OpenedPopUps.Count > 0; } }
 
         void Awake()
@@ -70,6 +72,15 @@ namespace Game.UI
             }
 
             OpenedPopUps.Add(popUp);
+            if (popUp.PausesGame)
+            {
+                if (OpenedPausingCount == 0)
+                {
+                    SavedTimeMode = WorldController.Instance.MainState.TimeSystem.CurrentMode;
+                    WorldController.Instance.MainState.TimeSystem.CurrentMode = TimeSystem.TimeMode.PAUSE;
+                }
+                OpenedPausingCount++;
+            }
 
             return true;
         }
@@ -77,6 +88,14 @@ namespace Game.UI
         public void OnPopUpClosed(PopUpWindow popUp)
         {
             OpenedPopUps.Remove(popUp);
+            if (popUp.PausesGame)
+            {
+                OpenedPausingCount--;
+                if(OpenedPausingCount == 0)
+                {
+                    WorldController.Instance.MainState.TimeSystem.CurrentMode = SavedTimeMode;
+                }
+            }
         }
 
         public bool HandleInput()

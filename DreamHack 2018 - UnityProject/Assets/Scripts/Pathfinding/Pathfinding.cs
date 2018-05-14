@@ -21,10 +21,10 @@ namespace Game.Pathfinding.Internal
                 return new List<TilePosition>();
             }
 
-            float[,] weightMap = new float[map.Width, map.Height];
+            float[,] weightMap = new float[map.Width, map.Length];
             for(int x = 0; x < map.Width; x++)
             {
-                for(int y = 0; y < map.Height; y++)
+                for(int y = 0; y < map.Length; y++)
                 {
                     weightMap[x, y] = -1;
                 }

@@ -14,6 +14,7 @@ namespace Game.UI.PopUp
 
         public abstract bool IsSingluar { get; }
         public abstract bool ShouldCloseOnFocusLost { get; }
+        public virtual bool PausesGame { get { return false; } }
 
         public bool IsMouseOver { get; set; }
         public bool IsOpen { get; private set; }

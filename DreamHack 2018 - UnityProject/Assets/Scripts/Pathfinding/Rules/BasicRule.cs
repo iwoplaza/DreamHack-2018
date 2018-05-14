@@ -1,8 +1,4 @@
 
-using Game.Pathfinding;
-using Game;
-using System;
-
 namespace Game.Pathfinding.Rules
 {
     public class BasicRule : IPathfindingRule

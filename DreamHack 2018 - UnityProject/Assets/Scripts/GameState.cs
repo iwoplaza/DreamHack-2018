@@ -5,6 +5,7 @@ using Game.Items;
 using Game.TileFloors;
 using Game.TileObjects;
 using Game.Utility;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
@@ -26,6 +27,8 @@ namespace Game
         public BuildModeManager BuildModeManager { get; private set; }
         public ItemStorage ItemStorage { get; private set; }
         public GameEnvironment GameEnvironment { get; private set; }
+
+        public TilePosition MainGeneratorPosition { get; private set; }
 
         public GameState(int worldIdentifier, string worldName, GameEnvironment gameEnvironment)
         {
@@ -59,25 +62,26 @@ namespace Game
             Seed = "glory";
 
             GameEnvironment.WorldSeed = Seed;
-            GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
+            GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Length);
             GameEnvironment.GenerateMap();
             GameEnvironment.PopulateMapForNewWorld();
             GameEnvironment.AfterSetup();
 
-            Worker worker1 = SpawnWorker(new Vector3(TileMap.Width / 2 + 2, 0, TileMap.Height / 2 + 1));
+            Worker worker1 = SpawnWorker(new Vector3(TileMap.Width / 2 + 2, 0, TileMap.Length / 2 + 1));
             worker1.FirstName = "James";
             worker1.LastName = "Marz";
-            Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 2, 0, TileMap.Height / 2 - 1));
+            Worker worker2 = SpawnWorker(new Vector3(TileMap.Width / 2 - 2, 0, TileMap.Length / 2 - 1));
             worker2.FirstName = "Hugo";
             worker2.LastName = "Ivanovicz";
 
-            EnergyLeech leech = SpawnEnergyLeech(new Vector3(TileMap.Width / 2 - 10, 0, TileMap.Height / 2));
+            EnergyLeech leech = SpawnEnergyLeech(new Vector3(TileMap.Width / 2 - 10, 0, TileMap.Length / 2));
             Debug.Log("Spawning " + leech);
 
             ItemStorage.ItemStacks.Add(new ItemStack(Item.METAL, 500));
 
             TilePosition center = new TilePosition(TileMap.Width / 2, TileMap.Width / 2);
-            TileMap.InstallAt(new MainGeneratorTileObject(), center.GetOffset(-1, -1));
+            MainGeneratorPosition = center.GetOffset(-1, -1);
+            TileMap.InstallAt(new MainGeneratorTileObject(), MainGeneratorPosition);
 
             int radiusX = 5;
             int radiusZ = 5;
@@ -139,7 +143,7 @@ namespace Game
                 return null;
             }
 
-            GameObject workerObject = Object.Instantiate(workerPrefab, Vector3.zero, Quaternion.identity);
+            GameObject workerObject = UnityEngine.Object.Instantiate(workerPrefab, Vector3.zero, Quaternion.identity);
             if(workerObject != null)
             {
                 Worker worker = workerObject.GetComponent<Worker>();
@@ -157,6 +161,11 @@ namespace Game
             return null;
         }
 
+        public void OnWorkerDeath(Worker worker)
+        {
+            Workers.Remove(worker);
+        }
+
         public EnergyLeech SpawnEnergyLeech(Vector3 position)
         {
             GameObject energyLeechPrefab = Resources.EnergyLeechPrefab;
@@ -166,7 +175,7 @@ namespace Game
                 return null;
             }
 
-            GameObject enemyObject = Object.Instantiate(energyLeechPrefab, Vector3.zero, Quaternion.identity);
+            GameObject enemyObject = UnityEngine.Object.Instantiate(energyLeechPrefab, Vector3.zero, Quaternion.identity);
             if (enemyObject != null)
             {
                 EnergyLeech enemy = enemyObject.GetComponent<EnergyLeech>();
@@ -184,6 +193,11 @@ namespace Game
             return null;
         }
 
+        public void OnEnergyLeachDeath(EnergyLeech energyLeech)
+        {
+            EnergyLeeches.Remove(energyLeech);
+        }
+
         public void Parse(XElement element)
         {
             if (element == null)
@@ -193,6 +207,11 @@ namespace Game
             if(seed != null)
                 Seed = seed.Value;
 
+            XElement mainGeneratorPosition = element.Element("MainGeneratorPosition");
+            MainGeneratorPosition = new TilePosition(TileMap.Width/2, TileMap.Length/2);
+            if(mainGeneratorPosition != null)
+                MainGeneratorPosition.Parse(mainGeneratorPosition);
+
             XElement timeElement = element.Element("TimeSystem");
             TimeSystem.Parse(timeElement);
 
@@ -200,7 +219,7 @@ namespace Game
             ItemStorage.Parse(itemStorageElement);
 
             GameEnvironment.WorldSeed = Seed;
-            GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Height);
+            GameEnvironment.WorldSize = new Vector2Int(TileMap.Width, TileMap.Length);
             GameEnvironment.GenerateMap();
             XElement gameEnvironmentElement = element.Element("GameEnvironment");
             if(gameEnvironmentElement != null)
@@ -216,7 +235,7 @@ namespace Game
             }
 
             XElement enemiesElement = element.Element("Enemies");
-            IEnumerable energyLeechElements = workersElement.Elements("EnergyLeech");
+            IEnumerable energyLeechElements = enemiesElement.Elements("EnergyLeech");
             foreach (XElement energyLeechElement in energyLeechElements)
             {
                 EnergyLeech enemy = SpawnEnergyLeech(Vector3.zero);
@@ -231,6 +250,12 @@ namespace Game
         {
             element.SetAttributeValue("seed", Seed);
 
+            Debug.Log("Saving MainGeneratorPosition...");
+            XElement mainGeneratorPosition = new XElement("MainGeneratorPosition");
+            element.Add(mainGeneratorPosition);
+            MainGeneratorPosition.Populate(mainGeneratorPosition);
+            Debug.Log("DONE");
+
             XElement timeElement = new XElement("TimeSystem");
             element.Add(timeElement);
             TimeSystem.Populate(timeElement);
@@ -239,6 +264,7 @@ namespace Game
             element.Add(itemStorageElement);
             ItemStorage.Populate(itemStorageElement);
 
+            Debug.Log("Saving workers...");
             XElement workersElement = new XElement("Workers");
             element.Add(workersElement);
             foreach (Worker worker in Workers)
@@ -247,7 +273,9 @@ namespace Game
                 workersElement.Add(workerElement);
                 worker.Populate(workerElement);
             }
+            Debug.Log("DONE");
 
+            Debug.Log("Saving enemies...");
             XElement enemiesElement = new XElement("Enemies");
             element.Add(enemiesElement);
             foreach (EnergyLeech enemy in EnergyLeeches)
@@ -256,6 +284,7 @@ namespace Game
                 enemiesElement.Add(enemyElement);
                 enemy.Populate(enemyElement);
             }
+            Debug.Log("DONE");
 
             XElement tileMapElement = new XElement("TileMap");
             element.Add(tileMapElement);

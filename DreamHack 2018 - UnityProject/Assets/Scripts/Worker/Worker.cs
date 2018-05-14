@@ -17,6 +17,7 @@ namespace Game
         override public string DisplayName { get { return FirstName + " " + LastName; } }
         override public int MaxHealth { get { return 100; } }
         Transform IFocusTarget.PortraitPivot { get { return transform; } }
+        public bool IsDestroyed { get { return !Alive; } }
 
         public TaskQueue TaskQueue { get; private set; }
         public PathfindingAgent PathfindingAgent { get; private set; }
@@ -48,6 +49,7 @@ namespace Game
         private CollisionFlags m_collisionFlags;
         private bool m_previouslyGrounded;
         private bool m_running = false;
+        private Focus m_focus;
 
         public void Setup(TileMap tileMap)
         {
@@ -55,7 +57,7 @@ namespace Game
 
             if (m_tileMap != null)
             {
-                PathfindingAgent = new PathfindingAgent(new Pathfinding.Rules.BasicRule(), m_tileMap);
+                PathfindingAgent = new PathfindingAgent(new Pathfinding.Rules.WorkerRule(), m_tileMap);
                 PathfindingAgent.RegisterStatusChangeHandler(OnPathfindingStatusChanged);
             }
         }
@@ -387,12 +389,14 @@ namespace Game
             }
         }
 
-        void IFocusTarget.OnFocusGained()
+        void IFocusTarget.OnFocusGained(Focus focus)
         {
+            m_focus = focus;
         }
 
-        void IFocusTarget.OnFocusLost()
+        void IFocusTarget.OnFocusLost(Focus focus)
         {
+            m_focus = null;
         }
 
         void IActor.PerformAction(ActionBase action, ISubject subject)
@@ -402,6 +406,15 @@ namespace Game
                 PerformTaskAction performTask = action as PerformTaskAction;
                 TaskQueue.AddTask(performTask.TaskToPerform);
             }
+        }
+
+        protected override void OnDeath()
+        {
+            base.OnDeath();
+            if (m_focus != null)
+                m_focus.On(null);
+            WorldController.Instance.MainState.OnWorkerDeath(this);
+            Destroy(gameObject);
         }
     }
 }

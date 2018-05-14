@@ -22,17 +22,17 @@ namespace Game
         public TileMapComponent Component { get; private set; }
 
         public int Width { get; private set; }
-        public int Height { get; private set; }
+        public int Length { get; private set; }
 
         public TileMap(int width, int height)
         {
             Width = width;
-            Height = height;
-            m_tiles = new Tile[Width, Height];
+            Length = height;
+            m_tiles = new Tile[Width, Length];
 
             for (int x = 0; x < Width; ++x)
             {
-                for (int y = 0; y < Height; ++y)
+                for (int y = 0; y < Length; ++y)
                 {
                     m_tiles[x, y] = new Tile(this, x, y);
                 }
@@ -50,12 +50,12 @@ namespace Game
             if (widthAttrib != null)
                 Width = Int32.Parse(widthAttrib.Value);
             if (heightAttrib != null)
-                Height = Int32.Parse(heightAttrib.Value);
+                Length = Int32.Parse(heightAttrib.Value);
 
-            m_tiles = new Tile[Width, Height];
+            m_tiles = new Tile[Width, Length];
             for (int x = 0; x < Width; ++x)
             {
-                for (int y = 0; y < Height; ++y)
+                for (int y = 0; y < Length; ++y)
                 {
                     m_tiles[x, y] = new Tile(this, x, y);
                 }
@@ -71,7 +71,7 @@ namespace Game
 
             for (int x = 0; x < Width; ++x)
             {
-                for (int y = 0; y < Height; ++y)
+                for (int y = 0; y < Length; ++y)
                 {
                     if (m_tiles[x, y] != null)
                         m_tiles[x, y].AfterParse();
@@ -82,11 +82,11 @@ namespace Game
         public void Populate(XElement element)
         {
             element.SetAttributeValue("width", Width);
-            element.SetAttributeValue("height", Height);
+            element.SetAttributeValue("height", Length);
 
             for (int x = 0; x < Width; ++x)
             {
-                for (int y = 0; y < Height; ++y)
+                for (int y = 0; y < Length; ++y)
                 {
                     if (m_tiles[x, y] != null && m_tiles[x, y].IsWorthSaving)
                     {
@@ -116,7 +116,7 @@ namespace Game
         public Tile TileAt(TilePosition position)
         {
             if (position.X < 0 || position.X >= Width ||
-                position.Z < 0 || position.Z >= Height)
+                position.Z < 0 || position.Z >= Length)
                 return null;
 
             return m_tiles[position.X, position.Z];
