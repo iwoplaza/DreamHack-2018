@@ -86,7 +86,14 @@ namespace Game.UI.PopUp
 
         protected override void Update()
         {
+            base.Update();
+
             UpdateView();
+
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                CloseWindow();
+            }
         }
 
         void UpdateView()

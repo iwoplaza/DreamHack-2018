@@ -32,5 +32,15 @@ namespace Game.UI.PopUp
             WorkerDetailsPopUp popUp = gameObject.GetComponent<WorkerDetailsPopUp>();
             return popUp;
         }
+
+        override protected void Update()
+        {
+            base.Update();
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                CloseWindow();
+            }
+        }
     }
 }

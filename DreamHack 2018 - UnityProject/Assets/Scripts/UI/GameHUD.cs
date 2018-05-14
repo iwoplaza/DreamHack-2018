@@ -42,7 +42,9 @@ namespace Game.UI
             TimePanel.Setup();
             ItemStoragePanel.Setup();
 
-            if(newWorld)
+            WorldController.Instance.MainState.RegisterOnGameOverHandler(OnGameOver);
+
+            if (newWorld)
             {
                 ControlsPopUp.Create(this).Open();
             }
@@ -118,6 +120,11 @@ namespace Game.UI
                 return true;
             }
             return false;
+        }
+
+        public void OnGameOver(GameState gameState)
+        {
+            GameOverPopUp.Create(this).Open();
         }
     }
 }
