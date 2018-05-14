@@ -46,7 +46,7 @@ namespace Game.UI
 
             if (newWorld)
             {
-                ControlsPopUp.Create(this).Open();
+                MissionBriefPopUp.Create(this).Open();
             }
         }
 
