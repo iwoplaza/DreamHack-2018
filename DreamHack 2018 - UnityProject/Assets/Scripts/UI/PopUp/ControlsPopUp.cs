@@ -23,5 +23,15 @@ namespace Game.UI.PopUp
             ControlsPopUp popUp = gameObject.GetComponent<ControlsPopUp>();
             return popUp;
         }
+
+        override protected void Update()
+        {
+            base.Update();
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                CloseWindow();
+            }
+        }
     }
 }

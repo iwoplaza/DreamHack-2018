@@ -15,6 +15,9 @@ namespace Game
 {
     public class GameState
     {
+        public delegate void OnGameOverHandler(GameState gameState);
+        OnGameOverHandler m_onGameOverHandlers;
+
         public int WorldIdentifier { get; private set; }
         public string WorldName { get; private set; }
         public string Seed { get; private set; }
@@ -298,6 +301,17 @@ namespace Game
         public void Update()
         {
             TimeSystem.Update();
+        }
+
+        public void GameOver()
+        {
+            if(m_onGameOverHandlers != null)
+                m_onGameOverHandlers(this);
+        }
+
+        public void RegisterOnGameOverHandler(OnGameOverHandler handler)
+        {
+            m_onGameOverHandlers += handler;
         }
     }
 }

@@ -141,6 +141,21 @@ namespace Game
             return null;
         }
 
+        public static bool RemoveSaveFile(GameState gameState)
+        {
+            SavedGame savedGame = GetSavedGame(gameState.WorldIdentifier);
+            if(savedGame != null)
+            {
+                string fileName = CreateFileNameForIdentifier(savedGame.WorldIdentifier);
+                string filePath = Path.Combine(SaveDirectoryPath, fileName);
+                File.Delete(filePath);
+
+                Debug.Log("Removed game: " + savedGame.WorldName);
+                return true;
+            }
+            return false;
+        }
+
         public static bool IsPotentialSaveFile(string fileName)
         {
             string filePath = Path.Combine(Path.Combine(Application.persistentDataPath, SAVES_DIRECTORY), fileName);

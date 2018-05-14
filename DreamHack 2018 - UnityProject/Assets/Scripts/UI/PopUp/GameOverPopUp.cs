@@ -6,47 +6,27 @@ using UnityEngine.UI;
 
 namespace Game.UI.PopUp
 {
-    public class PauseMenuPopUp : PopUpWindow
+    public class GameOverPopUp : PopUpWindow
     {
         public override bool IsSingluar { get { return true; } }
         public override bool ShouldCloseOnFocusLost { get { return false; } }
         public override bool PausesGame { get { return true; } }
 
-        void Awake()
-        {
-
-        }
-
-        public void Controls()
-        {
-            ControlsPopUp.Create(m_gameHud).Open();
-        }
-
         public void QuitToMainMenu()
         {
-            ApplicationState.Instance.GoToMainMenu();
+            ApplicationState.Instance.GameOver(WorldController.Instance.MainState);
         }
 
-        public static PauseMenuPopUp Create(GameHUD gameHud)
+        public static GameOverPopUp Create(GameHUD gameHud)
         {
-            GameObject prefab = Resources.PopUps.Find("PauseMenu");
+            GameObject prefab = Resources.PopUps.Find("GameOver");
             if (prefab == null)
             {
                 return null;
             }
             GameObject gameObject = Instantiate(prefab, gameHud.transform);
-            PauseMenuPopUp popUp = gameObject.GetComponent<PauseMenuPopUp>();
+            GameOverPopUp popUp = gameObject.GetComponent<GameOverPopUp>();
             return popUp;
-        }
-
-        override protected void Update()
-        {
-            base.Update();
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                CloseWindow();
-            }
         }
     }
 }

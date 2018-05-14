@@ -81,9 +81,18 @@ namespace Game
         public void Quit()
         {
             Application.Quit();
+
+            Debug.Log("Quitting...");
         }
 
         void OnApplicationQuit()
+        {
+            SaveCurrentGameState();
+
+            Debug.Log("Shutting down...");
+        }
+
+        void SaveCurrentGameState()
         {
             GameObject worldControllerObject = GameObject.FindGameObjectWithTag("WorldController");
             if (worldControllerObject == null)
@@ -93,12 +102,16 @@ namespace Game
             }
 
             WorldController worldController = worldControllerObject.GetComponent<WorldController>();
-            if(worldController.MainState != null)
+            if (worldController.MainState != null)
             {
                 SaveController.Save(worldController.MainState);
             }
+        }
 
-            Debug.Log("Shutting down...");
+        public void GameOver(GameState gameState)
+        {
+            SaveController.RemoveSaveFile(gameState);
+            StartCoroutine(GoToMainMenuCoroutine());
         }
 
         void SetupMainMenu()
@@ -163,6 +176,7 @@ namespace Game
 
         public void GoToMainMenu()
         {
+            SaveCurrentGameState();
             StartCoroutine(GoToMainMenuCoroutine());
         }
 

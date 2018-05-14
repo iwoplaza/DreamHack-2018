@@ -65,5 +65,12 @@ namespace Game.TileObjects
 
             return null;
         }
+
+        public override void OnHealthDepleted()
+        {
+            base.OnHealthDepleted();
+
+            WorldController.Instance.MainState.GameOver();
+        }
     }
 }
