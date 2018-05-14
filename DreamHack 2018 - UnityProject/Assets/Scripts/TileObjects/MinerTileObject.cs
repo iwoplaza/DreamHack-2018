@@ -42,6 +42,10 @@ namespace Game.TileObjects
             Vector3 origin = InstalledAt.Position.Vector3 + new Vector3(dimensions.x / 2.0F, 0.0F, dimensions.y / 2.0F);
 
             GameObject prefab = GetPrefab();
+            if(prefab.GetComponent<Miner>() != null)
+            {
+                prefab.GetComponent<Miner>().MinerTilePosition = InstalledAt.Position;
+            }
             if (prefab != null)
             {
                 InstalledGameObject = UnityEngine.Object.Instantiate(prefab);
