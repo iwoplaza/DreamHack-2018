@@ -24,6 +24,8 @@ namespace Game
         public int Width { get; private set; }
         public int Length { get; private set; }
 
+        public Vector3 Center { get { return new Vector3(Width / 2, 0, Length / 2); } }
+
         public TileMap(int width, int height)
         {
             Width = width;

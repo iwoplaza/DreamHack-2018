@@ -47,13 +47,12 @@ namespace Game
 
         void Spawn()
         {
-            Debug.Log("Spawning...");
-
             GameState gameState = WorldController.Instance.MainState;
 
-            float radius = (gameState.TileMap.Width / 2) * 0.2F;
+            float radius = (gameState.TileMap.Width / 2) * 0.1F;
             float angle = Random.value * Mathf.PI * 2;
-            Vector3 position = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * radius;
+            Vector3 center = gameState.TileMap.Center;
+            Vector3 position = center + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * radius;
 
             gameState.SpawnEnergyLeech(position);
         }
