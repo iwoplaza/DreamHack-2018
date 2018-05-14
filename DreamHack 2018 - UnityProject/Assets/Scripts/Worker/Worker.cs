@@ -203,7 +203,6 @@ namespace Game
                 m_moveDir += Physics.gravity * m_gravityMultiplier * timeMultiplier;
             }
             m_collisionFlags = m_characterController.Move(m_moveDir * timeMultiplier);
-            transform.position = new Vector3(transform.position.x, 0, transform.position.y);
         }
 
         void HandleTasks()

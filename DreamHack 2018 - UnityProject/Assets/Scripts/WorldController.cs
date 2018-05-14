@@ -14,6 +14,8 @@ namespace Game
 
         public bool Initialised { get; private set; }
 
+        [SerializeField] GameObject m_physicsPlane;
+
         void Awake()
         {
             ApplicationState.CreateIfDoesntExist();
@@ -71,6 +73,9 @@ namespace Game
             {
                 component.Initialize();
             }
+
+            m_physicsPlane.transform.position = new Vector3(MainState.TileMap.Width / 2, 0, MainState.TileMap.Length / 2);
+            m_physicsPlane.transform.localScale = new Vector3(MainState.TileMap.Width / 10, 0, MainState.TileMap.Length / 10);
 
             Initialised = true;
             Debug.Log("WorldController initialised.");
