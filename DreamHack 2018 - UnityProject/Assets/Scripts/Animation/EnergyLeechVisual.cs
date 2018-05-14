@@ -29,6 +29,15 @@ namespace Game.Animation
 
         }
 
+        public void OnAttack()
+        {
+            WorldController worldController = WorldController.Instance;
+            if (WorldController.Instance.Initialised)
+            {
+                m_animator.SetTrigger("Attack");
+            }
+        }
+
         public void UpdateAnimator()
         {
             WorldController worldController = WorldController.Instance;

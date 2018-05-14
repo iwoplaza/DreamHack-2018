@@ -48,7 +48,7 @@ namespace Game.Enemies
         {
             base.Awake();
 
-            AttackCooldown = 0.5F;
+            AttackCooldown = 1F;
             AttackPower = 10;
             m_characterController = GetComponent<CharacterController>();
         }
@@ -257,6 +257,7 @@ namespace Game.Enemies
                 while (!targetProp.IsDestroyed && Alive)
                 {
                     m_tileMap.TileAt(MainTarget).GetProp(PropType.OBJECT).Damage(AttackPower, this.gameObject);
+                    Visual.OnAttack();
                     yield return new WaitForSeconds(AttackCooldown);
                 }
             }
@@ -308,6 +309,8 @@ namespace Game.Enemies
             {
                 TurnTowards(target.Position + new Vector3(0.5F, 0, 0.5F));
                 target.Damage(AttackPower, GameObject);
+
+                Visual.OnAttack();
             }
         }
 
