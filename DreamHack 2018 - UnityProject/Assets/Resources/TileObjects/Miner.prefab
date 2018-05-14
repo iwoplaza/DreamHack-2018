@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 4622156105893676}
   - component: {fileID: 95801439539484452}
   - component: {fileID: 114025878455365786}
+  - component: {fileID: 114328654167108712}
   m_Layer: 0
   m_Name: Miner
   m_TagString: Untagged
@@ -310,6 +311,19 @@ MonoBehaviour:
   m_rotationAxis: {x: 0, y: 1, z: 0}
   m_maxRotationSpeed: 270
   m_acceleration: 9
+--- !u!114 &114328654167108712
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1027919768338878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2978b69eef0e84ebfe617801062d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_miningFrequency: 10
+  AmountGetPerMine: 50
 --- !u!114 &114396263033997372
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -321,8 +335,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3d4291d9b13bec488aa569566c10c70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_activatedPos: {x: 0, y: 0, z: 0}
+  m_activatedPos: {x: -0.253, y: 0.47, z: 0}
   m_activatedRot: {x: 0, y: 0, z: 0}
-  m_deactivatedPos: {x: -0, y: 0.462, z: 0}
+  m_deactivatedPos: {x: -0.253, y: 0.462, z: 0}
   m_deactivatedRot: {x: -0, y: -0, z: -0}
   m_transitionTime: 2

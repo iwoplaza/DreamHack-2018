@@ -24,7 +24,7 @@ public class AnimatedMovingObjects : AnimatedComponent {
 		m_transitionTime = 1;
 	}
 
-	void Start()
+	public override void InitializeComponent()
 	{
 		m_currentTransitionTime = m_transitionTime + 1;
 	}
